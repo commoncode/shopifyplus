@@ -1,6 +1,0 @@
-
-
-
-
-class ShopifyElement(object):
-    pass

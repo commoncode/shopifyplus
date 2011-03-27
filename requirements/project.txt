@@ -8,3 +8,6 @@
 
 -e git+http://github.com/penny-arcade/shopipy.git#egg=shopipy
 
+python-memcached
+beautifulsoup
+PIL

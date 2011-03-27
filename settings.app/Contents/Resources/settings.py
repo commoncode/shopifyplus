@@ -164,15 +164,11 @@ INSTALLED_APPS = [
     "staticfiles",
     
     # Shopify Plus
-    'aggregates', 
-    'products',
-    'ordering',
-    'shopifyable',
+    # 'aggregates',    
+    # 'products',
     'shops',
     # 'vendors',
 ]
-
-CACHE_BACKEND = 'memcached://127.0.0.1:8000'
 
 FIXTURE_DIRS = [
     os.path.join(PROJECT_ROOT, "fixtures"),
