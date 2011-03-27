@@ -86,8 +86,10 @@ class Command(BaseCommand):
                 'shopify_product_variant_id': product_variant.shopify_product_variant_id, }
             
             units = order_line_items.filter(**oli_kwargs).aggregate(Sum('quantity'))['quantity__sum']
-            grams = order_line_items.filter(**oli_kwargs).aggregate(Sum('grams'))['grams__sum']
+            grams = product_variant.grams
             order_weight = units * grams
+            
+            # ipdb.set_trace()
             
             
             aggregate_line_item_kwargs = {

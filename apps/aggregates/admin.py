@@ -26,7 +26,7 @@ class AggregateAdmin(admin.ModelAdmin):
 
 admin.site.register(get_model('aggregates', 'aggregate'), AggregateAdmin)
 
-class AggregateOrderAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(get_model('aggregates', 'aggregateorder'), AggregateOrderAdmin)
+# class AggregateOrderAdmin(admin.ModelAdmin):
+#     pass
+# 
+# admin.site.register(get_model('aggregates', 'aggregateorder'), AggregateOrderAdmin)
