@@ -107,7 +107,7 @@ MIDDLEWARE_CLASSES = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "pinax.middleware.security.HideSensistiveFieldsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "shopifyplus.urls"
@@ -152,7 +152,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     
     # Developer
-    "debug_toolbar",
+    # "debug_toolbar",
     "django_extensions",
     
     # Pinax
@@ -164,7 +164,9 @@ INSTALLED_APPS = [
     "staticfiles",
     
     # Shopify Plus
-    'aggregates', 
+    'fulfilment',
+    'invoices',
+    'procurement', 
     'products',
     'ordering',
     'shopifyable',

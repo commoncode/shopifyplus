@@ -3,7 +3,7 @@ from django.db import models
 from shopifyable.models import Shopifyable
 
 
-class OrderLineItem(models.Model):
+class OrderItem(models.Model):
             
     shopify_product_id = models.PositiveIntegerField(
         blank=True,
@@ -18,7 +18,7 @@ class OrderLineItem(models.Model):
     shopify_order_id = models.PositiveIntegerField(
         blank=True,
         null=True)
-    shopify_order_line_item_id = models.PositiveIntegerField(
+    shopify_order_item_id = models.PositiveIntegerField(
         blank=True,
         null=True)
         
@@ -81,7 +81,7 @@ class OrderLineItem(models.Model):
             "fulfillment-service": "fulfillment_service",
             "fulfillment-status": "fulfillment_status",
             "grams": "grams",
-            "id": "shopify_order_line_item_id",
+            "id": "shopify_order_item_id",
             "name": "name", 
             "price": "price",
             "product-id": "shopify_product_id",
@@ -245,11 +245,11 @@ class Order(Shopifyable):
             'shipping-lines': 'shipping_lines',
             'billing-address': 'billing_address',
             'note-attributes': 'note_attributes',
-            'line-items': OrderLineItem }
+            'line-items': OrderItem }
         shopify_arrays = {
-            'line-items': OrderLineItem,
+            'line-items': OrderItem,
         }
 
     def __unicode__(self):
-        return u'%s' % self.order_number
+        return u'%s :: %s' % (self.order_number, self.email)
         

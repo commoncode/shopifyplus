@@ -26,6 +26,9 @@ class Product(Product):
     
     shop = models.ForeignKey(
         Shop)
+        
+    class Meta:
+        ordering = ['title']
 
 class ProductVariant(ProductVariant):
     """
@@ -34,6 +37,9 @@ class ProductVariant(ProductVariant):
     
     product = models.ForeignKey(
         Product)
+        
+    class Meta:
+        ordering = ['title']
         
 
 

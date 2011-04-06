@@ -4,11 +4,11 @@ from django.core.management.base import BaseCommand, CommandError
 from orders.models import Order
 
 class Command(BaseCommand):
-    help = 'compile aggregates'
+    help = 'compile Procurements'
 
     def handle(self, *args, **options):
         """
-        Aggregates
+        Procurements
         """
 
         shop = Shop.objects.get()

@@ -1,8 +1,8 @@
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
 
-from ordering.models import OrderLineItem, Order
-from aggregates.models import Aggregate, AggregateOrder, AggregateLineItem
+from ordering.models import OrderItem, Order
+from procurement.models import Procurement, ProcurementOrder, ProcurementItem
 from products.models import ProductVariant
 
 from django.db.models import Sum
@@ -17,59 +17,56 @@ class Command(BaseCommand):
         """
         Reset first
         """
-        aggregate_orders = AggregateOrder.objects.all()
-        for aggregate_order in aggregate_orders:
-            aggregate_order.delete()
+        procurement_orders = ProcurementOrder.objects.all()
+        for procurement_order in procurement_orders:
+            procurement_order.delete()
         
-        aggregates = Aggregate.objects.all()
-        for aggregate in aggregates:
-            aggregate.delete()
-        
-        
-        # ipdb.set_trace()
+        procurements = Procurement.objects.all()
+        for procurement in procurements:
+            procurement.delete()
         
         """
-        Create a new Aggregate
+        Create a new Procurement
         """
-        aggregate = Aggregate()
-        aggregate.save()
+        procurement = Procurement()
+        procurement.save()
     
         """
         First, loop through the queryset and save the Orders
-        to the AggregateOrder model.
+        to the ProcurementOrder model.
         """
         queryset = Order.objects.all()
         
-        print '==== New Aggregate ===='
+        print '==== New Procurement ===='
         
         for order in queryset:
             
             print u'Order: %s' % order
             
-            aggregate_order = AggregateOrder(aggregate=aggregate, order=order)
+            procurement_order = ProcurementOrder(procurement=procurement, order=order)
             try:
-                aggregate_order.full_clean()
+                procurement_order.full_clean()
             except ValidationError, e:
                 print e
             else:
-                aggregate_order.save()
+                procurement_order.save()
             
                 """
-                If successful, add the Order's OrderLineItems, aggregated,
-                to the AggregateLineItem's
+                If successful, add the Order's OrderItems, Procurementd,
+                to the ProcurementItem's
                 """
         
         # Find the distinct product_variants    
      
-        order_line_item_kwargs = {
+        order_item_kwargs = {
             'order__in': queryset, }
-        order_line_items = OrderLineItem.objects.filter(**order_line_item_kwargs) 
+        order_items = OrderItem.objects.filter(**order_item_kwargs) 
         print "=== Order Line Items ==="
-        for oli in order_line_items:
+        for oli in order_items:
             print u'%s' % oli
         
         product_variant_kwargs = {
-            'shopify_product_variant_id__in': order_line_items.values_list('shopify_product_variant_id', flat=True).distinct()}
+            'shopify_product_variant_id__in': order_items.values_list('shopify_product_variant_id', flat=True).distinct()}
             
         product_variants = ProductVariant.objects.filter(**product_variant_kwargs).distinct().order_by('product__vendor')
         print "=== Product Variants ==="
@@ -85,14 +82,12 @@ class Command(BaseCommand):
             oli_kwargs = {
                 'shopify_product_variant_id': product_variant.shopify_product_variant_id, }
             
-            units = order_line_items.filter(**oli_kwargs).aggregate(Sum('quantity'))['quantity__sum']
+            units = order_items.filter(**oli_kwargs).aggregate(Sum('quantity'))['quantity__sum']
             grams = product_variant.grams
             order_weight = units * grams
             
-            # ipdb.set_trace()
-            
-            aggregate_line_item_kwargs = {
-                'aggregate': aggregate,
+            procurement_item_kwargs = {
+                'procurement': procurement,
                 'product_variant': product_variant,
                 'order_weight': order_weight,
                 'order_units': units, }
@@ -101,13 +96,13 @@ class Command(BaseCommand):
             print u'           units: %s' % units
             print u'    order_weight: %s' % order_weight
                 
-            aggregate_line_item = AggregateLineItem(**aggregate_line_item_kwargs)
+            procurement_item = ProcurementItem(**procurement_item_kwargs)
             try:
-                aggregate_line_item.full_clean()
+                procurement_item.full_clean()
             except ValidationError, e:
                 print e
             else:
-                aggregate_line_item.save()
+                procurement_item.save()
             
         
         
