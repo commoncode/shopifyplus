@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.contrib.auth.models import User
 
 from ordering.models import OrderItem, Order
 from procurement.models import Procurement, ProcurementOrder, ProcurementItem
@@ -8,7 +9,8 @@ from fulfilment.models import Packing, PackingItem
 
 from django.db.models import Sum
 
-import math, ipdb
+import math
+import datetime
 
 def calculate_packing_variable(procurement_order_variable,
                                procurement_variable, 
@@ -32,7 +34,7 @@ def calculate_packing_variable(procurement_order_variable,
             Total 'Procument Weight' = 9000g
             
             So #1000 gets 7 * 9 / 10 = 6300g &
-               #1001 gets 3 * 9 / 10 = 2700g 
+               #1001 gets 3 * 9 / 10 = 2700g
     """
     pov = procurement_order_variable
     prv = procurement_variable
@@ -120,34 +122,59 @@ def process_procurement_orders(queryset):
                     packing_item.save()
                     print packing_item
                     
+def packing_item_defaults(queryset):
+    """
+    For each PackingItem set the fulfilment values
+    to equal the packing values.
+    """
+    packing_items = queryset
+    
+    for packing_item in packing_items:
+        
+        product_variant = ProductVariant.objects.get(shopify_product_variant_id=packing_item.order_item.shopify_product_variant_id)
+        try:
+            fulfilment_weight_price = float(1000.00) / float(product_variant.grams) * product_variant.price
+        except:
+            fulfilment_weight_price = None
+            
+        packing_item.fulfilment_weight = packing_item.packing_weight
+        packing_item.fulfilment_quantity = packing_item.packing_quantity
+        packing_item.fulfilment_unit_weight = product_variant.grams
+        packing_item.fulfilment_weight_price = fulfilment_weight_price
+        packing_item.fulfilment_unit_price = product_variant.price
+        packing_item.fulfilled = True
+        packing_item.fulfilled_by = User.objects.get(pk=1)
+        packing_item.fulfilled_at = datetime.datetime.now()
+        packing_item.save()
+                    
 def packing_item_csv(queryset):
     
     """
     Dump all the packing items to a csv
     """
     packing_items = queryset
-    print 'Number, Quantity, Product, Variant, Item Weight, Order Weight, $ per kg, Item Price, Order Cost, Adjustments'
+    print 'Number, Quantity, Product, Order Weight, $ per kg, Item Price, Order Cost, Adjustments'
     for packing_item in packing_items:
         
         product_variant = ProductVariant.objects.get(shopify_product_variant_id=packing_item.order_item.shopify_product_variant_id)
         
         order_number = packing_item.order_item.order.name
         quantity = packing_item.packing_quantity if product_variant.option2 not in ['loose'] else ' '
-        product = product_variant.product
-        product_variant = product_variant
-        item_weight = packing_item.packing_unit_weight / float(1000.000) if product_variant.option2 in ['single',] else ' '
+        product = u'%s :: %s' % (product_variant.product, product_variant.option1)
+        # product_variant = product_variant.option1
+        # item_weight = packing_item.packing_unit_weight / float(1000.000) if product_variant.option2 in ['single',] else ' '
         order_weight = packing_item.packing_weight / float(1000.000) if packing_item.packing_weight else ' '
         weight_price = packing_item.packing_weight_price if packing_item.packing_weight_price else ' '
         item_price = packing_item.packing_unit_price if product_variant.option2 not in ['loose'] else ' '
         order_cost = packing_item.packing_unit_price * packing_item.packing_quantity
         
         
-        print '%s, %s, %s, %s, %s, %s, %s, %s, %s,' % (
+        print '%s,%s,%s,%s,%s,%s,%s,' % (
             order_number,
             quantity,
             product, 
-            product_variant, 
-            item_weight, 
+            # product_variant, 
+            # item_weight, 
             order_weight, 
             weight_price, 
             item_price, 

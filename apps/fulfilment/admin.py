@@ -4,9 +4,11 @@ from django.db.models import get_model
 class PackingItemAdmin(admin.ModelAdmin):
     
     list_filter = (
-        'packing',)
+        'packing',
+        'procurement_item', )
     
     list_display = (
+        'packing',
         'order_item',
         'packing_quantity',
         'packing_weight',
@@ -21,7 +23,10 @@ class PackingItemAdmin(admin.ModelAdmin):
         'notes',
         'fulfilled_by',
         'fulfilled_at',
-        'fulfilled',  )
+        'fulfilled', )
+
+    list_display_links = (
+        'order_item', )
         
     list_editable = (
         'fulfilment_weight',

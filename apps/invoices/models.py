@@ -10,6 +10,7 @@ class Invoice(models.Model):
     # order, customer thru packing ?
     packing = models.ForeignKey(
         Packing,
+        editable=False,
         unique=True)
     
     signed_off = models.BooleanField()
@@ -27,15 +28,17 @@ class Invoice(models.Model):
         default=datetime.datetime.now(),
         null=True)
     
-    """
-    Signing off an invoice will convert all
-    InvoiceItems to done=True
-    """
+    def __unicode__(self):
+        return u'%s' % self.packing
     
 class InvoiceItem(models.Model):
     
-    invoice = models.ForeignKey(Invoice)
-    packing_item = models.ForeignKey(PackingItem)
+    invoice = models.ForeignKey(
+        Invoice,
+        editable=False)
+    packing_item = models.ForeignKey(
+        PackingItem,
+        editable=False)
     
     invoice_weight = models.IntegerField(
         "i'weight",
@@ -63,6 +66,9 @@ class InvoiceItem(models.Model):
         null=True)
         
     done = models.BooleanField()
+    
+    def __unicode__(self):
+        return u'%s :: %s' % (self.invoice, self.packing_item)
         
     """
     If the invoice is signed_off, changes should

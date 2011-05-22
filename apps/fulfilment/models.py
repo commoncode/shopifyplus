@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 from ordering.models import Order, OrderItem
 from procurement.models import ProcurementItem
+from products.models import ProductVariant
 
 
 import datetime
@@ -39,6 +40,11 @@ class PackingItem(models.Model):
     procurement_item = models.ForeignKey(
         ProcurementItem,
         editable=False)
+    
+    substitue_product_variant = models.ForeignKey(
+        ProductVariant,
+        blank=True,
+        null=True)
     
     packing_weight = models.IntegerField(
         "p'weight",
@@ -107,7 +113,7 @@ class PackingItem(models.Model):
             'procurement_item', )
         
     def __unicode__(self):
-        return u'%s :: %s' % (self.order_item.order, self.order_item)
+        return u'%s' % (self.order_item)
         
     # def save(self):
     #     """ 

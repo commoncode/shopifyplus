@@ -19,8 +19,6 @@ def procurement_item_defaults(queryset):
     
     for procurement_item in procurement_items:
         
-        # ipdb.set_trace()
-        
         try:
             procurement_weight_price = float(1000.00) / float(procurement_item.product_variant.grams) * procurement_item.product_variant.price
         except:
@@ -33,7 +31,7 @@ def procurement_item_defaults(queryset):
         procurement_item.procurement_unit_price = procurement_item.product_variant.price
         procurement_item.procured = True
         procurement_item.procured_by = User.objects.get(pk=1)
-        procured_at = datetime.datetime.now()
+        procurement_item.procured_at = datetime.datetime.now()
         procurement_item.save()
 
 

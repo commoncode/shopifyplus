@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
 
-from procurement.models import ProcurementItem
+from procurement.models import ProcurementItem, Procurement
 from procurement.utils import procurement_item_defaults
 
 import ipdb
@@ -14,17 +14,22 @@ class Command(BaseCommand):
         Procurement Items CSV
         """
         
-        order_by_args = [
-            'product_variant__product__vendor', 
-            'product_variant', ]
+        for procurement in Procurement.objects.all():
         
-        procurement_items = ProcurementItem.objects.all().order_by(*order_by_args)
+            order_by_args = [
+                'product_variant__product__vendor', 
+                'product_variant', ]
         
-        for procurement_item in procurement_items:
-            print ', '.join([
-                procurement_item.product_variant.product.vendor,
-                str(procurement_item.product_variant.product),
-                str(procurement_item.product_variant),
-                str((procurement_item.order_units) or ''),
-                str((procurement_item.order_weight) or '')])
+            procurement_items = procurement.procurementitem_set.all().order_by(*order_by_args)
+            # ProcurementItem.objects.all().order_by(*order_by_args)
+            
+            print u'===== Procurement CSV :: START ======'
+            for procurement_item in procurement_items:
+                print ', '.join([
+                    procurement_item.product_variant.product.vendor,
+                    str(procurement_item.product_variant.product),
+                    str(procurement_item.product_variant),
+                    str((procurement_item.order_units) or ''),
+                    str((procurement_item.order_weight) or '')])
+            print u'===== Procurement CSV :: END ======'
             

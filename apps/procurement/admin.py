@@ -16,14 +16,16 @@ class ProcurementItemAdmin(admin.ModelAdmin):
         'procurement_quantity',
         'procurement_unit_weight',
         'procurement_weight_price',
-        'procurement_unit_price',  )
+        'procurement_unit_price',
+        'procured',  )
         
     list_editable = (
         'procurement_weight',
         'procurement_quantity',
         'procurement_unit_weight',
         'procurement_weight_price',
-        'procurement_unit_price', )
+        'procurement_unit_price',
+        'procured', )
         
 admin.site.register(get_model('procurement', 'procurementitem'), ProcurementItemAdmin)    
     

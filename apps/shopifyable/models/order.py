@@ -92,10 +92,9 @@ class OrderItem(models.Model):
             "variant-id": "shopify_product_variant_id",
             "variant-title": "variant_title",
             "vendor": "vendor", }
-
         
     def __unicode__(self):
-        return u'%s' % self.title 
+        return u'%s :: %s' % (self.title, self.variant_title)
 
 class Order(Shopifyable):
     """

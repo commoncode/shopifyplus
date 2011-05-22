@@ -43,9 +43,10 @@ class Command(BaseCommand):
         Products
         """
 
-        shop = Shop.objects.get()
-        shop.connect()
+        shops = Shop.objects.all()
         
-        fetch_products(shop)
+        for shop in shops:
+            shop.connect()
+            fetch_products(shop)
 
         

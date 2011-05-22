@@ -43,8 +43,10 @@ class Command(BaseCommand):
         """
         Orders
         """
+        
+        shops = Shop.objects.all()
 
-        shop = Shop.objects.get()
-        shop.connect()
-        fetch_orders(shop)
+        for shop in shops:
+            shop.connect()
+            fetch_orders(shop)
         
