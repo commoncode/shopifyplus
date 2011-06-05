@@ -13,3 +13,5 @@ beautifulsoup
 PIL
 
 python-dateutil
+django-taggit
+MySQL-python
