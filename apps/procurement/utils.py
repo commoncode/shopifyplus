@@ -7,7 +7,7 @@ from procurement.models import Procurement, ProcurementOrder, ProcurementItem
 from products.models import ProductVariant
 
 
-import datetime, ipdb
+import datetime
 
 
 def procurement_item_defaults(queryset):

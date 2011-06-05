@@ -4,10 +4,6 @@ from shopifyable.utils import element_kwargs
 from shops.models import Shop
 from products.models import Product, ProductVariant
 
-
-import ipdb
-
-
 def fetch_variants(product):
         
     product.variants()

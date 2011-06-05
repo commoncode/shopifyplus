@@ -6,8 +6,10 @@
 # Put project-specific requirements here.
 # See http://pip-installer.org/requirement-format.html for more information.
 
--e git+http://github.com/penny-arcade/shopipy.git#egg=shopipy
+# -e git+http://github.com/penny-arcade/shopipy.git#egg=shopipy
 
 python-memcached
 beautifulsoup
 PIL
+
+python-dateutil

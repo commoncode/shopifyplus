@@ -5,7 +5,6 @@ from shops.models import Shop
 from products.models import Product, ProductVariant
 
 import inspect
-import ipdb
 
 def fetch_products(shop):
     

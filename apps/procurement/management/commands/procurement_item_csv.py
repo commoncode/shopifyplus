@@ -4,8 +4,6 @@ from django.core.management.base import BaseCommand, CommandError
 from procurement.models import ProcurementItem, Procurement
 from procurement.utils import procurement_item_defaults
 
-import ipdb
-
 class Command(BaseCommand):
     help = 'process procurement orders'
 

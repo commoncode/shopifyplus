@@ -7,9 +7,6 @@ from products.models import ProductVariant
 
 from django.db.models import Sum
 
-import ipdb
-
-
 class Command(BaseCommand):
     help = 'collect orders from shopify and place in the Order model'
 

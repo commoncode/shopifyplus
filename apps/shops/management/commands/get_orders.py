@@ -5,7 +5,6 @@ from shops.models import Shop
 from ordering.models import Order, OrderItem
 
 import inspect
-import ipdb
 
 
 def fetch_orders(shop):

@@ -4,10 +4,6 @@ from django.core.management.base import BaseCommand, CommandError
 from fulfilment.utils import packing_item_csv
 from fulfilment.models import PackingItem
 
-
-import ipdb
-            
-
 class Command(BaseCommand):
     help = 'process packing items'
 

@@ -5,10 +5,6 @@ from fulfilment.utils import process_procurement_orders
 from fulfilment.models import Packing, PackingItem
 from procurement.models import Procurement
 
-
-import ipdb
-            
-
 class Command(BaseCommand):
     help = 'process procurement orders'
 
