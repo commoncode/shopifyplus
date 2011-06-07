@@ -2,7 +2,7 @@
     <pythonpath>/home/shopifyplus/webapps/alpha.shopifyplus/shopifyplus/</pythonpath>
     <pythonpath>/home/shopifyplus/webapps/alpha.shopifyplus/shopifyplus/deploy/</pythonpath>
     <pythonpath>/home/shopifyplus/webapps/alpha.shopifyplus/pinax-env/lib/python2.6/site-packages/</pythonpath>
-    <socket>/tmp/www.architecturemedia.sock</socket>
+    <socket>/tmp/shopifyplus.sock</socket>
     <home>/home/shopifyplus/webapps/alpha.shopifyplus/pinax-env/</home>
     
     <app mountpoint="/">
