@@ -8,7 +8,6 @@
     <app mountpoint="/">
         <script>wsgi</script>
     </app>
-    <chmod/>
     
     <workers>8</workers>
     <memory-report/>
