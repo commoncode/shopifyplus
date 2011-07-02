@@ -14,8 +14,6 @@ class Command(BaseCommand):
         """
         
         shops = Shop.objects.all()
-
-        for shop in shops:
-            shop.connect()
-            fetch_orders(shop)
+        
+        fetch_orders(shops)
         

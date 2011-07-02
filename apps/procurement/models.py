@@ -4,6 +4,8 @@ from ordering.models import Order
 from products.models import ProductVariant
 from django.db.models import Min, Max
 
+from shops.models import Shop
+
 import datetime
 
 class Procurement(models.Model):
@@ -17,18 +19,29 @@ class Procurement(models.Model):
     relationships
     """
     
-    # created_at = models.DateTimeField()
-    # 
-    # # def __unicode__(self):
-    # #     order_num_min = self.procurement_order.order.orderitem_set.all().aggregate(Min('order_number'))
-    # #     order_num_max = self.procurement_order.procurement_item.set.all().aggregate(Max('order_number'))
-    # #     return u'#%s :: #%s' % (order_num_min, order_num_max)
-    #     
-    # def save(self):
-    #     if not self.id:
-    #         self.created_at = datetime.datetime.now()
-    #     super(Procurment, self).save(*args, **kwargs)
-
+    # shops = models.ManyToManyField(
+    #     Shop,
+    #     help_text="Procurement for shops")
+    created_at = models.DateTimeField()
+    
+    def __unicode__(self):
+        return '%s :: %s' % (self._shops, self._order_numbers)
+    
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created_at = datetime.datetime.now()
+        super(Procurement, self).save(*args, **kwargs)
+        
+        # shop_kwargs = {
+        #     'id__in': self.procurementorder_set.all().values_list('order__shop__id', flat=True), }    
+        # self.shops = Shop.objects.filter(**shop_kwargs)
+        
+    def _order_numbers(self):
+        return ', '.join(set(self.procurementorder_set.all().values_list('order__order_number', flat=True)))
+        
+    def _shops(self):
+        return ', '.join(set(self.procurementorder_set.all().values_list('order__shop__title', flat=True)))
+    
 class ProcurementOrder(models.Model):
     """
     An intermediary table between an 

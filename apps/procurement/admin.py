@@ -36,6 +36,12 @@ class ProcurementItemInline(admin.StackedInline):
 class ProcurementAdmin(admin.ModelAdmin):
     inlines = [
         ProcurementItemInline, ]
+        
+    list_display = (
+        'created_at',)
+        
+    # list_editable = (
+    #     'shops', )
 
 admin.site.register(get_model('procurement', 'procurement'), ProcurementAdmin)
 

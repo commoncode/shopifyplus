@@ -250,5 +250,5 @@ class Order(Shopifyable):
         }
 
     def __unicode__(self):
-        return u'%s :: %s' % (self.order_number, self.email)
+        return u'%s' % (self.order_number)
         

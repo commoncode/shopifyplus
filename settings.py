@@ -96,8 +96,8 @@ SECRET_KEY = "d_b!f94h#ock%cao=9!@3k2y3*+a97%i2(ecv3oq^+3%&v(+f8"
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = [
-    "django.template.loaders.filesystem.load_template_source",
-    "django.template.loaders.app_directories.load_template_source",
+    "django.template.loaders.filesystem.Loader",
+    "django.template.loaders.app_directories.Loader",
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -118,7 +118,7 @@ TEMPLATE_DIRS = [
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = [
-    "django.core.context_processors.auth",
+    "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
@@ -209,12 +209,6 @@ GRAPPELLI_ADMIN_URL = '/admin'
 SHOPIFY_API_KEY = 'f0c97766b08a9d39a893b993c9469ee3'
 SHOPIFY_PASSWORD = '509151a955ab91e32a422dac01f60115'
 SHOPIFY_HOST_NAME = 'wholesaleplus.myshopify.com'
-
-# import shopipy
-
-# WSP = WholesalePlus = shopipy.Shopify(SHOPIFY_HOST_NAME, SHOPIFY_API_KEY, SHOPIFY_PASSWORD)
-# products = wsp.GET('/admin/products.xml')
-# orders = wsp.GET('/admin/orders.xml')
 
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.

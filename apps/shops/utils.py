@@ -24,7 +24,6 @@ def fetch_orders(shops):
                         related_objs.append(obj)
                     order_dict.pop(key)
                     break
-        
             order = Order(**order_dict)
             order.shop = shop
             order.save()
