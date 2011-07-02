@@ -83,9 +83,9 @@ def create_invoices(queryset):
         
         filename = os.path.join(settings.MEDIA_ROOT, "invoices", invoice.packing.order.order_number + ".pdf")
         
-    pdf = canvas.Canvas(
-        filename,
-        bottomup = 0)
+        pdf = canvas.Canvas(
+            filename,
+            bottomup = 0)
         pdf.setFont('VAGBlack', 24)
 
         # Header
@@ -99,11 +99,11 @@ def create_invoices(queryset):
         pdf.drawString(100, 150, header_string)
         
         # Logo
-    logo_image = Image(
-        "%s/images/wsp_logo.jpg" % settings.STATIC_ROOT,
-        width=200,
-        height=200) 
-    logo_image.drawOn(pdf, 100, 100)
+        # logo_image = Image(
+        #     "%s/images/wsp_logo.jpg" % settings.STATIC_ROOT,
+        #     width=200,
+        #     height=200) 
+        # logo_image.drawOn(pdf, 100, 100)
         
         # Invoice Table
         invoice_data = []
