@@ -24,9 +24,9 @@ class Procurement(models.Model):
     #     help_text="Procurement for shops")
     created_at = models.DateTimeField()
     
-    def __unicode__(self):
-        return '%s :: %s' % (self._shops, self._order_numbers)
-    
+    # def __unicode__(self):
+    #         return '%s :: %s' % (self._shops, self._order_numbers)
+        
     def save(self, *args, **kwargs):
         if not self.id:
             self.created_at = datetime.datetime.now()

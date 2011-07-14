@@ -66,7 +66,7 @@ def create_invoices(queryset):
     reportlab.rl_config.warnOnMissingFontGlyphs = 0 # we know some glyphs are missing, suppress warnings 
     
     folder = os.path.join(settings.STATIC_ROOT, "fonts")
-    
+    from reportlab.lib.pagesizes import A4
     from reportlab.pdfbase import pdfmetrics 
     from reportlab.pdfbase.ttfonts import TTFont 
     pdfmetrics.registerFont(TTFont('VAGBold', os.path.join(folder, 'VAGRoundedStd-Bold.ttf')))
@@ -85,18 +85,24 @@ def create_invoices(queryset):
         
         pdf = canvas.Canvas(
             filename,
-            bottomup = 0)
+            bottomup = 1)
+        pdf.setPageSize((A4[1], A4[0]))
+        
+        # (841.88976377952747, 595.27559055118104)
+        
+        # import ipdb; ipdb.set_trace()
+        
         pdf.setFont('VAGBlack', 24)
-
+        
         # Header
-        pdf.drawString(100, 100, "Wholesale Plus Organics")
+        pdf.drawString(40, 540, invoice.packing.order.shop.title)
         
         header_string = u'#%s - %s - %s' % (
             invoice.packing.order.order_number,
             invoice.packing.order.email,
             invoice.packing.order.billing_address)
         pdf.setFont('VAGLight', 14)
-        pdf.drawString(100, 150, header_string)
+        pdf.drawRightString(800, 540, header_string)
         
         # Logo
         # logo_image = Image(
@@ -119,10 +125,11 @@ def create_invoices(queryset):
             invoice_data.append(
                 [ qty, product, kg, price_per_kg, price_per_item, cost ] )
         
-        invoice_data_table = Table(invoice_data)
+        invoice_data_table = Table(
+            invoice_data)
         
-        invoice_data_table.wrapOn(pdf,800,800)
-        invoice_data_table.drawOn(pdf, 20, 300)
+        w, h = invoice_data_table.wrapOn(pdf, 760, 400)
+        invoice_data_table.drawOn(pdf, 40, 440 - h, 0)
         
         # Invoice Totals
         delivery_fee = 4.5

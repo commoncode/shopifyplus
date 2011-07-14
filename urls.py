@@ -14,6 +14,7 @@ urlpatterns = patterns("",
         "template": "homepage.html",
     }, name="home"),
     url(r"^admin/", include(admin.site.urls)),
+    (r'^grappelli/', include('grappelli.urls')),
 )
 
 

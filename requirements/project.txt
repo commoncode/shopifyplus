@@ -15,3 +15,6 @@ PIL
 python-dateutil
 django-taggit
 MySQL-python
+
+
+-e svn+http://django-grappelli.googlecode.com/svn/trunk/grappelli#egg=grappelli

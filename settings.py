@@ -89,7 +89,8 @@ STATICFILES_DIRS = [
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = posixpath.join(STATIC_URL, "admin/")
+# ADMIN_MEDIA_PREFIX = posixpath.join(STATIC_URL, "admin/")
+ADMIN_MEDIA_PREFIX = STATIC_URL + "grappelli/"
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = "d_b!f94h#ock%cao=9!@3k2y3*+a97%i2(ecv3oq^+3%&v(+f8"
@@ -129,17 +130,18 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     
     "pinax.core.context_processors.pinax_settings",
     
-    "grappelli.context_processors.admin_template_path",
+    # "grappelli.context_processors.admin_template_path",
 ]
 
 INSTALLED_APPS = [
     
     # Grappelli & Admin-tools
+    'grappelli.dashboard',
     'grappelli',
-    'admin_tools',
-    'admin_tools.theming',
-    'admin_tools.menu',
-    'admin_tools.dashboard',
+    # 'admin_tools',
+    # 'admin_tools.theming',
+    # 'admin_tools.menu',
+    # 'admin_tools.dashboard',
     'filebrowser',
     
     # Django
@@ -150,6 +152,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.humanize",
+    "django.contrib.staticfiles",
     
     # Developer
     # "debug_toolbar",
@@ -161,7 +164,7 @@ INSTALLED_APPS = [
     # External
     "taggit",
     "south",
-    "staticfiles",
+    # "staticfiles",
     
     # Shopify Plus
     'fulfilment',
@@ -172,6 +175,7 @@ INSTALLED_APPS = [
     'shopifyable',
     'shops',
     # 'vendors',
+    
 ]
 
 CACHE_BACKEND = 'memcached://127.0.0.1:8000'
@@ -199,11 +203,12 @@ FILEBROWSER_PATH_FILEBROWSER_MEDIA = STATIC_ROOT + 'filebrowser/'
 FILEBROWSER_DIRECTORY = 'files/'
 FILEBROWSER_SAVE_FULL_URL = False
 
-FILEBROWSER_VERSIONS_BASEDIR = "cache"
+FILEBROWSER_VERSIONS_BASEDIR = "versions"
 
 # Grappelli
 GRAPPELLI_ADMIN_TITLE = 'Shopify Plus' 
 GRAPPELLI_ADMIN_URL = '/admin'
+GRAPPELLI_INDEX_DASHBOARD = 'shopifyplus.dashboard.CustomIndexDashboard'
 
 # Shopify
 SHOPIFY_API_KEY = 'f0c97766b08a9d39a893b993c9469ee3'
