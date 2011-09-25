@@ -95,6 +95,129 @@ class OrderItem(models.Model):
         
     def __unicode__(self):
         return u'%s :: %s' % (self.title, self.variant_title)
+        
+class ShippingLine(models.Model):
+    
+    price = models.FloatField()
+    code = models.CharField(
+        blank=True,
+        max_length=255,
+        null=True)
+    title = models.CharField(
+        blank=True,
+        max_length=255,
+        null=True)
+        
+    class Meta: 
+        abstract = True
+        
+    class Shopify:
+        shopify_fields = {
+            "price": "price",
+            "code": "code",
+            "title": "title", }
+        
+    def __unicode__(self):
+        return u'%s' % (self.title)
+        
+class OrderAddress(models.Model):
+
+    name = models.CharField(
+        blank=True,
+        max_length=255,
+        null=True)
+    first_name = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+    last_name = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+    address1 = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+    address2 = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+    city = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+    company = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+    zip = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+    country_code = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+    country = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+    province_code = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+    latitude = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+    longitude = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+    phone = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
+        
+    class Meta: 
+        abstract = True
+        
+    class Shopify:
+        shopify_fields = {
+            "name": "name",
+            "address1": "address1",
+            "city": "city",
+            "company": "company",
+            "address2": "address2",
+            "latitude": "latitude",
+            "zip": "zip",
+            "country-code": "country_code",
+            "country": "country",
+            "province-code": "province_code",
+            "last-name": "last_name",
+            "phone": "phone",
+            "longitude": "longitude",
+            "province": "province",
+            "first-name": "first_name", }
+            
+    def __unicode__(self):
+        return u'%s' % (self.address1)
+            
+class BillingAddress(OrderAddress):
+    
+    class Meta:
+        abstract = True
+        
+    class Shopify:
+        shopify_fields = OrderAddress.Shopify.shopify_fields
+        
+class ShippingAddress(OrderAddress):
+    
+    class Meta:
+        abstract = True
+        
+    class Shopify:
+        shopify_fields = OrderAddress.Shopify.shopify_fields
 
 class Order(Shopifyable):
     """
@@ -106,9 +229,9 @@ class Order(Shopifyable):
         blank=True,
         null=True)
     
-    billing_address = models.TextField(
-        blank=True,
-        null=True)
+    # billing_address = models.TextField(
+    #     blank=True,
+    #     null=True)
     browser_ip = models.CharField(
         blank=True,
         max_length=255,
@@ -171,12 +294,12 @@ class Order(Shopifyable):
         blank=True,
         max_length=255,
         null=True)
-    shipping_address = models.TextField(
-        blank=True,
-        null=True)
-    shipping_lines = models.TextField(
-        blank=True,
-        null=True)
+    # shipping_address = models.TextField(
+    #     blank=True,
+    #     null=True)
+    # shipping_lines = models.TextField(
+    #     blank=True,
+    #     null=True)
     subtotal_price = models.FloatField(
         blank=True,
         null=True)
@@ -212,42 +335,47 @@ class Order(Shopifyable):
         
     class Shopify:
         shopify_fields = {
-            'number': 'number',
-            'name': 'name',
-            'created-at': 'created_at',
-            'total-discounts': 'total_discounts',
-            'token': 'token',
-            'updated-at': 'updated_at',
-            'total-price': 'total_price',
-            'landing-site': 'landing_site',
-            'taxes-included': 'taxes_included',
-            'id': 'shopify_order_id',
-            'referring-site': 'referring_site',
-            'total-line-items-price': 'total_line_items_price',
-            'subtotal-price': 'subtotal_price',
-            'note': 'note',
-            'gateway': 'gateway',
-            'fulfillment-status': 'fulfillment_status',
-            'financial-status': 'financial_status',
-            'currency': 'currency',
-            'closed-at': 'closed_at',
+            'billing-address': BillingAddress,
+            'browser-ip': 'browser_ip',
             'buyer-accepts-marketing': 'buyer_accepts_marketing',
+            'closed-at': 'closed_at',
+            'created-at': 'created_at',
+            'currency': 'currency',
+            'customer': 'customer',
+            'email': 'email',
+            'financial-status': 'financial_status',
+            'fulfillment-status': 'fulfillment_status',
+            'gateway': 'gateway',
+            'id': 'shopify_order_id',
+            'landing-site': 'landing_site',
+            'landing-site-ref': 'landing_site_ref',
+            'line-items': OrderItem,
+            'name': 'name',
+            'note': 'note',
+            'note-attributes': 'note_attributes',
+            'number': 'number',
+            'order-number': 'order_number',
+            'referring-site': 'referring_site',
+            'shipping-address': ShippingAddress,
+            'shipping-lines': ShippingLine,
+            'subtotal-price': 'subtotal_price',
+            'tax-lines': 'tax_lines',
+            'taxes-included': 'taxes_included',
+            'token': 'token',
+            'total-discounts': 'total_discounts',
+            'total-line-items-price': 'total_line_items_price',
+            'total-price': 'total_price',
             'total-tax': 'total_tax',
             'total-weight': 'total_weight',
-            'email': 'email',
-            'browser-ip': 'browser_ip',
-            'landing-site-ref': 'landing_site_ref',
-            'order-number': 'order_number',
-            'customer': 'customer',
-            'tax-lines': 'tax_lines',
-            'shipping-address': 'shipping_address',
-            'shipping-lines': 'shipping_lines',
-            'billing-address': 'billing_address',
-            'note-attributes': 'note_attributes',
-            'line-items': OrderItem }
+            'updated-at': 'updated_at', }
         shopify_arrays = {
             'line-items': OrderItem,
-        }
+            'shipping-lines': ShippingLine,
+            'billing-address': BillingAddress,
+            'shipping-address': ShippingAddress, }
+        shopify_dicts = {
+            'billing-address': BillingAddress,
+            'shipping-address': ShippingAddress, }
 
     def __unicode__(self):
         return u'%s' % (self.order_number)

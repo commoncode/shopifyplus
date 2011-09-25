@@ -57,6 +57,11 @@ def lookup_kwargs(klass, element):
     
 def parse_element(element, key):
     field_tag = None
+    
+    # print element
+    # print key
+    # import ipdb; ipdb.set_trace()
+    
     try:
         element_type = element.find(key).attrib['type']
         if element_type == 'datetime':
@@ -70,15 +75,31 @@ def parse_element(element, key):
         if element_type == 'array':
             field_value = None 
             field_tag = element.tag
+            
     except KeyError, e:
         element_type = None
         field_value = element.find(key).text
-    
-    # print element_type, field_value, field_tag
-    
+        
+    except AttributeError, e:
+        
+        if len(element):
+            """
+            If we are here, we have an element with children that
+            is not an type=array
+            """
+            element_type = 'dict' # assign it a dict type for our use
+            field_value = None
+            field_tag = element.tag
+        else:
+            element_type = None
+            try:
+                field_value = element.find(key).text
+            except:
+                field_value = None
+            field_tag = element.tag
     return element_type, field_value, field_tag
     
-def sub_element_kwargs_list(klass, element):
+def sub_element_kwargs_list(klass, element, element_type):
     """
     Recurse through the child sub-element and return
     a [] of {}'s assigned to the klass as the key, i.e.
@@ -86,12 +107,30 @@ def sub_element_kwargs_list(klass, element):
     """
     # kwargs = {}
     obj_kwargs_list = []
-    for sub_element in list(element):
-        obj_kwargs = {}
+    
+    if element_type == 'array':
+        """
+        Try to get the child elements, we might be dealing children w/ children
+        or just children themselves
+        """
+        sub_elements = list(element)
+        for sub_element in sub_elements:
+            obj_kwargs = {}
         
-        for key, value in klass.Shopify.shopify_fields.iteritems():
-            element_type, field_value, field_tag = parse_element(sub_element, key)
-            field_key = value
+            for key, value in klass.Shopify.shopify_fields.iteritems():
+                element_type, field_value, field_tag = parse_element(sub_element, key)
+                field_key = value
+                obj_kwargs.update({ field_key: field_value })
+
+    elif element_type == 'dict':
+
+        sub_elements = element.getchildren()
+
+        for sub_element in sub_elements:
+            
+            obj_kwargs = {}
+            element_type, field_value, field_tag = parse_element(sub_element, sub_element.tag)
+            field_key = sub_element.tag
             obj_kwargs.update({ field_key: field_value })
             
         obj_kwargs_list.append(obj_kwargs)
@@ -108,9 +147,9 @@ def element_kwargs(klass, element):
         Loop through the model's Shopify.shopify_fields that
         serve as a map for the API's xml elements.
         """
+        
         element_type, field_value, field_tag = parse_element(element, key)
         field_key = value
-        
         
         if element_type == 'array':
             """
@@ -125,11 +164,26 @@ def element_kwargs(klass, element):
                 
                 for k, v in klass.Shopify.shopify_arrays.iteritems():
                     if inspect.isclass(v):
-                        obj_dict_list = sub_element_kwargs_list(v, element.find(k))
+                        obj_dict_list = sub_element_kwargs_list(v, element.find(k), element_type)
                         kwargs.update({v: obj_dict_list})
+                        
+        elif element_type == 'dict':
+            """
+            If the element type is 'dict', then
+            we should pull out the child elements and 
+            build a singular {} -- almost the same as
+            element_type == 'array'
+            """
+            if klass.Shopify.shopify_dicts:
+                
+                for k, v in klass.Shopify.shopify_dicts.iteritems():
+                    if inspect.isclass(v):
+                        obj_dict_list = sub_element_kwargs_list(v, element.find(k), element_type)
+                        kwargs.update({v: obj_dict_list})
+            
         else:
             kwargs.update({ field_key: field_value })
-        
+    
     return kwargs
     
 def etree_kwargs(klass, etree):
