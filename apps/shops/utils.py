@@ -1,6 +1,10 @@
 import inspect
+import dateutil.parser as dateparser
+import datetime
 
-from shopifyable.utils import element_kwargs
+from django.core.exceptions import ValidationError
+
+from shopifyable.utils import resolve_relation
 
 from ordering.models import Order, OrderItem, ShippingLine, ShippingAddress, BillingAddress
 
@@ -12,47 +16,56 @@ def fetch_orders(shops):
         shop.orders()
         for _order in (shop._orders):
             
-            order_dict = element_kwargs(Order, _order)
+            order_dict = _order
             
-            related_objs = []
-            keys = []
+            obj_dict = {}
+            rel_objs = []
             for key, value in order_dict.iteritems():
                 
-                if inspect.isclass(key):
-                    if issubclass(OrderItem, key):
-                        klass = OrderItem
-                    elif issubclass(ShippingLine, key):
-                        klass = ShippingLine
-                    elif issubclass(ShippingAddress, key):
-                        klass = ShippingAddress
-                    elif issubclass(BillingAddress, key):
-                        klass = BillingAddress
+                if key in Order.Shopify.shopify_dicts:
+                    klass = resolve_relation(Order.Shopify.shopify_dicts[key])
+                    rel_obj_dict = {}
+                    for k, v in klass.Shopify.shopify_fields.iteritems():
+                        rel_obj_dict.update({ k: value[k] })
+                    rel_obj = klass(**rel_obj_dict)
+                    rel_objs.append(rel_obj)
+                    del(rel_obj)
                         
-                    obj_dicts = value
-                    obj_class = klass
-                    for obj_dict in obj_dicts:
-                        try:
-                            obj = obj_class(**obj_dict)
-                        except TypeError, e:
-                            print e
-                            print obj_class
-                        else:
-                            related_objs.append(obj)
-                            
-                    keys.append(key)
+                if key in Order.Shopify.shopify_arrays:
+                    klass = resolve_relation(Order.Shopify.shopify_arrays[key])
                     
-            for key in keys:
-                order_dict.pop(key)
+                    for _item in _order[key]:
+                        rel_obj_dict = {}
+                        for k, v in klass.Shopify.shopify_fields.iteritems():
+                            rel_obj_dict.update({ k: _item[k] })
+                        rel_obj = klass(**rel_obj_dict)
+                        rel_objs.append(rel_obj)
+                        del(rel_obj)
+                        
+                if key in Order.Shopify.shopify_fields:
+                    obj_dict.update({ key: value })
+                    
+                if key in Order.Shopify.shopify_date_fields:
+                    try:
+                        obj_dict.update({ key: dateparser.parse(value) })
+                    except:
+                        pass
+                        
+            obj = Order(**obj_dict)
+            obj.shop = shop
+            obj.save()
+            print u'%s' % obj
             
-            order = Order(**order_dict)
-            order.shop = shop
-            order.save()
-            print order
-            for obj in related_objs:
-                obj.order = order
-                obj.save()
-                print u'    %s' % obj
+            for rel_obj in rel_objs:
+                rel_obj.order = obj
+                try:
+                    rel_obj.full_clean()
+                except ValidationError, e:
+                    print e
+                else:
+                    rel_obj.save()
+                    print u'    %s' % rel_obj
             
-            orders.append(order)
+            orders.append(obj)
     
     return orders

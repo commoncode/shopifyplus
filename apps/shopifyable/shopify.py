@@ -4,7 +4,7 @@ import urllib2
 import platform
 import shopifyable
 
-from shopifyable.utils import generate_url, generate_request, parse_xml, serialize_xml
+from shopifyable.utils import generate_url, generate_request, parse_json
 
 class Shopify(object):
     DEFAULT_HEADERS = {
@@ -36,7 +36,7 @@ class Shopify(object):
         conn = urllib2.urlopen(request)
         
         # Parse HTTP Response (expecting a well-formed XML document)
-        root = parse_xml(conn)
+        root = parse_json(conn)
         return root
     
     def GET(self, path, **kwargs):
@@ -54,7 +54,7 @@ class Shopify(object):
         @return root - ElementTree root
         """
         return self._request('POST', path, kwargs, body, headers = {
-            'Content-Type': 'text/xml',
+            'Content-Type': 'text/json',
         })
     
     def PUT(self, path, body, **kwargs):
@@ -64,7 +64,7 @@ class Shopify(object):
         @return root - ElementTree root
         """
         return self._request('PUT', path, kwargs, body, headers = {
-            'Content-Type': 'text/xml',
+            'Content-Type': 'text/json',
         })
     
     def DELETE(self, path, **kwargs):

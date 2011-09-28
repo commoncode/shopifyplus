@@ -2,7 +2,6 @@ from django.db import models
 
 from shopifyable.models import Shopifyable
 
-
 class OrderItem(models.Model):
             
     shopify_product_id = models.PositiveIntegerField(
@@ -78,19 +77,19 @@ class OrderItem(models.Model):
         
     class Shopify:
         shopify_fields = {
-            "fulfillment-service": "fulfillment_service",
-            "fulfillment-status": "fulfillment_status",
+            "fulfillment_service": "fulfillment_service",
+            "fulfillment_status": "fulfillment_status",
             "grams": "grams",
-            "id": "shopify_order_item_id",
-            "name": "name", 
+            # "id": "shopify_order_item_id",
+            # "name": "name", 
             "price": "price",
-            "product-id": "shopify_product_id",
+            # "product_id": "shopify_product_id",
             "quantity": "quantity",
-            "requires-shipping": "requires_shipping",
+            "requires_shipping": "requires_shipping",
             "sku": "sku",
             "title": "title",
-            "variant-id": "shopify_product_variant_id",
-            "variant-title": "variant_title",
+            # "variant_id": "shopify_product_variant_id",
+            "variant_title": "variant_title",
             "vendor": "vendor", }
         
     def __unicode__(self):
@@ -162,6 +161,10 @@ class OrderAddress(models.Model):
         blank=True, 
         max_length=255,
         null=True)
+    province = models.CharField(
+        blank=True, 
+        max_length=255,
+        null=True)
     province_code = models.CharField(
         blank=True, 
         max_length=255,
@@ -191,14 +194,14 @@ class OrderAddress(models.Model):
             "address2": "address2",
             "latitude": "latitude",
             "zip": "zip",
-            "country-code": "country_code",
+            "country_code": "country_code",
             "country": "country",
-            "province-code": "province_code",
-            "last-name": "last_name",
+            "province_code": "province_code",
+            "last_name": "last_name",
             "phone": "phone",
             "longitude": "longitude",
             "province": "province",
-            "first-name": "first_name", }
+            "first_name": "first_name", }
             
     def __unicode__(self):
         return u'%s' % (self.address1)
@@ -335,47 +338,42 @@ class Order(Shopifyable):
         
     class Shopify:
         shopify_fields = {
-            'billing-address': BillingAddress,
-            'browser-ip': 'browser_ip',
-            'buyer-accepts-marketing': 'buyer_accepts_marketing',
-            'closed-at': 'closed_at',
-            'created-at': 'created_at',
+            'browser_ip': 'browser_ip',
+            'buyer_accepts_marketing': 'buyer_accepts_marketing',
             'currency': 'currency',
             'customer': 'customer',
             'email': 'email',
-            'financial-status': 'financial_status',
-            'fulfillment-status': 'fulfillment_status',
+            'financial_status': 'financial_status',
+            'fulfillment_status': 'fulfillment_status',
             'gateway': 'gateway',
             'id': 'shopify_order_id',
-            'landing-site': 'landing_site',
-            'landing-site-ref': 'landing_site_ref',
-            'line-items': OrderItem,
+            'landing_site': 'landing_site',
+            'landing_site_ref': 'landing_site_ref',
             'name': 'name',
             'note': 'note',
-            'note-attributes': 'note_attributes',
+            'note_attributes': 'note_attributes',
             'number': 'number',
-            'order-number': 'order_number',
-            'referring-site': 'referring_site',
-            'shipping-address': ShippingAddress,
-            'shipping-lines': ShippingLine,
-            'subtotal-price': 'subtotal_price',
-            'tax-lines': 'tax_lines',
-            'taxes-included': 'taxes_included',
+            'order_number': 'order_number',
+            'referring_site': 'referring_site',
+            'subtotal_price': 'subtotal_price',
+            'tax_lines': 'tax_lines',
+            'taxes_included': 'taxes_included',
             'token': 'token',
-            'total-discounts': 'total_discounts',
-            'total-line-items-price': 'total_line_items_price',
-            'total-price': 'total_price',
-            'total-tax': 'total_tax',
-            'total-weight': 'total_weight',
-            'updated-at': 'updated_at', }
+            'total_discounts': 'total_discounts',
+            'total_line_items_price': 'total_line_items_price',
+            'total_price': 'total_price',
+            'total_tax': 'total_tax',
+            'total_weight': 'total_weight', }
+        shopify_date_fields = {
+            'closed_at': 'closed_at',
+            'created_at': 'created_at',
+            'updated_at': 'updated_at', }
         shopify_arrays = {
-            'line-items': OrderItem,
-            'shipping-lines': ShippingLine,
-            'billing-address': BillingAddress,
-            'shipping-address': ShippingAddress, }
+            'line_items': 'ordering.OrderItem',
+            'shipping_lines': 'ordering.ShippingLine', }
         shopify_dicts = {
-            'billing-address': BillingAddress,
-            'shipping-address': ShippingAddress, }
+            'billing_address': 'ordering.BillingAddress',
+            'shipping_address': 'ordering.ShippingAddress', }
 
     def __unicode__(self):
         return u'%s' % (self.order_number)
