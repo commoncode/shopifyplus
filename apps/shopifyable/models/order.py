@@ -20,30 +20,24 @@ class OrderItem(models.Model):
     shopify_order_item_id = models.PositiveIntegerField(
         blank=True,
         null=True)
-        
     fulfillment_service = models.CharField(
         blank=True,
         max_length=255,
         null=True)
-        
     fulfillment_status = models.CharField(
         blank=True,
         max_length=255,
         null=True)
-    
     grams = models.PositiveIntegerField(
         blank=True,
         null=True)
-        
     name = models.CharField(
         blank=True,
         max_length=255,
         null=True)
-    
     price = models.FloatField(
         blank=True,
         null=True)
-    
     grams = models.PositiveIntegerField(
         blank=True,
         null=True)
@@ -76,19 +70,23 @@ class OrderItem(models.Model):
         abstract = True
         
     class Shopify:
+        """
+        Shopify field name on the left, and the corresponding
+        Django ORM model field (on the right)
+        """
         shopify_fields = {
             "fulfillment_service": "fulfillment_service",
             "fulfillment_status": "fulfillment_status",
             "grams": "grams",
-            # "id": "shopify_order_item_id",
-            # "name": "name", 
+            "id": "id",
+            "name": "name", 
             "price": "price",
-            # "product_id": "shopify_product_id",
+            "product_id": "shopify_product_id",
             "quantity": "quantity",
             "requires_shipping": "requires_shipping",
             "sku": "sku",
             "title": "title",
-            # "variant_id": "shopify_product_variant_id",
+            "variant_id": "shopify_product_variant_id",
             "variant_title": "variant_title",
             "vendor": "vendor", }
         
@@ -231,10 +229,6 @@ class Order(Shopifyable):
     shopify_order_id = models.PositiveIntegerField(
         blank=True,
         null=True)
-    
-    # billing_address = models.TextField(
-    #     blank=True,
-    #     null=True)
     browser_ip = models.CharField(
         blank=True,
         max_length=255,
@@ -243,7 +237,6 @@ class Order(Shopifyable):
     closed_at = models.DateTimeField(
         blank=True,
         null=True)
-    # created_at = models.DateTimeField()
     currency = models.CharField(
         blank=True,
         max_length=4,
@@ -276,7 +269,6 @@ class Order(Shopifyable):
         blank=True,
         max_length=255,
         null=True)
-    # line_items Inline FK
     name = models.CharField(
         max_length=10)
     note = models.TextField(
@@ -297,12 +289,6 @@ class Order(Shopifyable):
         blank=True,
         max_length=255,
         null=True)
-    # shipping_address = models.TextField(
-    #     blank=True,
-    #     null=True)
-    # shipping_lines = models.TextField(
-    #     blank=True,
-    #     null=True)
     subtotal_price = models.FloatField(
         blank=True,
         null=True)
@@ -326,9 +312,6 @@ class Order(Shopifyable):
     total_weight = models.PositiveIntegerField(
         blank=True,
         null=True)
-    # updated_at = models.DateTimeField(
-    #     blank=True,
-    #     null=True)
     total_tax = models.FloatField(
         blank=True,
         null=True)

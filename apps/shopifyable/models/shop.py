@@ -51,7 +51,10 @@ class Shop(models.Model):
         if kwargs:
             url += '?'+urllib.urlencode(kwargs)
         print url
-        self._products = self._connection.GET(url)
+        self._products_json = self._connection.GET(url)
+        
+        
+        self._products = self._products_json['products']
 
     def products_count(self, collection=None):
         self.connect()

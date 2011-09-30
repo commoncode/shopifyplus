@@ -9,6 +9,10 @@ class ProductVariant(Shopifyable):
         blank=True,
         null=True)
         
+    shopify_product_id = models.PositiveIntegerField(
+        blank=True,
+        null=True)
+        
     sku = models.CharField(
         blank=True,
         max_length=255,
@@ -68,24 +72,25 @@ class ProductVariant(Shopifyable):
         
     class Shopify:
         shopify_fields = {
-         "price": "price",
-         "position": "position",
-         "created-at": "created_at",
-         "title": "title",
-         "requires-shipping": "requires_shipping",
-         "updated-at": "updated_at",
-         "inventory-quantity": "inventory_quantity",
-         "inventory-policy": "inventory_policy",
-         "compare-at-price": "compare_at_price",
-         "inventory-management": "inventory_management",
-         "taxable": "taxable",
-         "id": "shopify_product_variant_id",
-         "grams": "grams",
-         "sku": "sku",
-         "option1": "option1",
-         "option2": "option2",
-         "fulfillment-service": "fulfillment_service",
-         "option3": "option3", }
+            "compare_at_price": "compare_at_price",
+            "fulfillment_service": "fulfillment_service",
+            "grams": "grams",
+            "id": "shopify_product_variant_id",
+            "inventory_management": "inventory_management",
+            "inventory_policy": "inventory_policy",
+            "inventory_quantity": "inventory_quantity",
+            "option1": "option1",
+            "option2": "option2",
+            "option3": "option3", 
+            "position": "position",
+            "price": "price",
+            "requires_shipping": "requires_shipping",
+            "sku": "sku",
+            "taxable": "taxable",
+            "title": "title", }
+        # shopify_date_fields = {
+        #     'created_at': 'created_at',
+        #     'updated_at': 'updated_at', }
         
     def __unicode__(self):
         return u'%s' % self.title
@@ -133,25 +138,24 @@ class Product(Shopifyable, Handleable, Taggable):
         
     class Shopify:
         shopify_fields = {
-            'product-type': 'product_type',
+            'body_html': 'body_html',
             'handle': 'handle',
-            'created-at': 'created_at',
-            'body-html': 'body_html',
-            'title': 'title',
-            'template-suffix': 'template_suffix',
-            'updated-at': 'updated_at',
             'id': 'shopify_product_id',
+            'product_type': 'product_type',
+            'template_suffix': 'template_suffix',
+            'title': 'title',
             'vendor': 'vendor',
-            'published-at': 'published_at',
-            'variants': ProductVariant
             # 'tags': 'tags',
             # 'variants': 'variants',
             # 'images': 'images',
             # 'options': 'options', 
             }
         shopify_arrays = {
-            'variants': ProductVariant,
-        }
+            'variants': 'products.ProductVariant', }
+        # shopify_date_fields = {
+        #     'created_at': 'created_at',
+        #     'published_at': 'published_at',
+        #     'updated_at': 'updated_at' }
         
     def __unicode__(self):
         return u'%s' % self.title
