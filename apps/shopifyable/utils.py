@@ -73,8 +73,9 @@ def parse_element(element, key):
     except KeyError, e:
         element_type = None
         field_value = element.find(key).text
-    
-    # print element_type, field_value, field_tag
+    except AttributeError:
+        element_type = None
+        field_value = u'errors'
     
     return element_type, field_value, field_tag
     

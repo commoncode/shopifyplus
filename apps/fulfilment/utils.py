@@ -80,7 +80,11 @@ def process_procurement_orders(queryset):
             
             for order_item in order_items:
                 
-                product_variant = ProductVariant.objects.get(shopify_product_variant_id=order_item.shopify_product_variant_id)
+                try:
+                    product_variant = ProductVariant.objects.get(shopify_product_variant_id=order_item.shopify_product_variant_id)
+                except Exception, e:
+                    print u'Product variant not found for order item :: %s' % order_item
+                    break
                 
                 procurement_item_kwargs = {
                     'procurement': procurement,

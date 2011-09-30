@@ -23,11 +23,15 @@ class Command(BaseCommand):
             
             print u'===== Procurement CSV :: START ======'
             for procurement_item in procurement_items:
-                print ', '.join([
-                    procurement_item.product_variant.product.vendor,
-                    str(procurement_item.product_variant.product),
-                    str(procurement_item.product_variant),
-                    str((procurement_item.order_units) or ''),
-                    str((procurement_item.order_weight) or '')])
-            print u'===== Procurement CSV :: END ======'
+                try:
+		    print '; '.join([
+                        procurement_item.product_variant.product.vendor,
+                        str(procurement_item.product_variant.product),
+                        str(procurement_item.product_variant),
+                        str((procurement_item.order_units) or ''),
+                        str((procurement_item.order_weight) or '')])
+                except:
+                    #import pdb; pdb.set_trace()
+                    print u'%s; %s; ; ; ' % (procurement_item.product_variant.product.vendor, str(procurement_item.product_variant.product))
+                print u'===== Procurement CSV :: END ======'
             
