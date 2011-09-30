@@ -32,7 +32,7 @@ class Shop(models.Model):
             self._connection = shopifyable.Shopify(self.host_name, self.api_key, self.password)
     
     def shop(self):
-        self._shop = self._connection.GET('/admin/shop.xml')
+        self._shop = self._connection.GET('/admin/shop.json')
         return self._shop
     
     # Products
@@ -47,15 +47,18 @@ class Shop(models.Model):
         kwargs.update({'limit': 250})
         
         self.connect()
-        url = '/admin/products.xml'
+        url = '/admin/products.json'
         if kwargs:
             url += '?'+urllib.urlencode(kwargs)
         print url
-        self._products = self._connection.GET(url)
+        self._products_json = self._connection.GET(url)
+        
+        
+        self._products = self._products_json['products']
 
     def products_count(self, collection=None):
         self.connect()
-        url = '/admin/products/count.xml'
+        url = '/admin/products/count.json'
         if collection:
             url += '?'+urllib.urlencode({'collection_id': collection.id})
         print url
@@ -65,11 +68,12 @@ class Shop(models.Model):
     
     def orders(self, **kwargs):
         self.connect()
-        url = '/admin/orders.xml'
+        url = '/admin/orders.json'
         if kwargs:
             url += '?'+urllib.urlencode(kwargs)
         print url
-        self._orders = self._connection.GET(url)
+        self._orders_json = self._connection.GET(url)
+        self._orders = self._orders_json['orders'] 
 
     def update(self, model, etree):
         """

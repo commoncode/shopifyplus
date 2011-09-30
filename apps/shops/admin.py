@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db.models import get_model
 
+from shops.forms import ShopForm
 from shops.utils import fetch_orders as fetch_shop_orders
 
 class ShopAdmin(admin.ModelAdmin):
@@ -9,6 +10,8 @@ class ShopAdmin(admin.ModelAdmin):
     
     list_display = (
         'title', )
+        
+    # form = ShopForm
     
     def fetch_orders(self, request, queryset):
         orders = fetch_shop_orders(queryset)

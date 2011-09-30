@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 from invoices.models import Invoice, InvoiceItem
 from fulfilment.models import Packing, PackingItem
+from products.models import ProductVariant
 
 import settings
 import os.path
@@ -74,8 +75,12 @@ def create_invoices(queryset):
     pdfmetrics.registerFont(TTFont('VAGLight', os.path.join(folder, 'VAGRoundedStd-Light.ttf'))) 
     pdfmetrics.registerFont(TTFont('VAGThin', os.path.join(folder, 'VAGRoundedStd-Thin.ttf')))
     
+    from reportlab.lib import colors
     from reportlab.pdfgen import canvas
-    from reportlab.platypus import Table, Image #SimpleDocTemplate, Paragraph, Spacer,
+    from reportlab.platypus import Table, Image, TableStyle #SimpleDocTemplate, Paragraph, Spacer,
+    
+    import locale # for currency
+    locale.setlocale(locale.LC_ALL, '' )
     
     invoices = queryset
     
@@ -112,21 +117,46 @@ def create_invoices(queryset):
         # logo_image.drawOn(pdf, 100, 100)
         
         # Invoice Table
-        invoice_data = []
+        invoice_data = [
+            ['Q', 'Product', 'Weight', 'Kg Price', 'Price', 'Cost', 'Adjust'],]
         sub_total = 0.00
+        invoice_data_rows = 1
         for invoice_item in invoice.invoiceitem_set.all():
+
+            product_variant_kwargs = {
+                'shopify_product_variant_id': invoice_item.packing_item.order_item.shopify_product_variant_id, }
+            product_variant = ProductVariant.objects.get(**product_variant_kwargs)
+
+            qty             = invoice_item.invoice_quantity if product_variant.option2 not in ['loose'] else None
             product         = invoice_item.packing_item.order_item.title
-            qty             = invoice_item.invoice_quantity
-            kg              = float(invoice_item.invoice_weight) / 1000.000 if invoice_item.invoice_weight else None
-            price_per_kg    = invoice_item.invoice_weight_price
-            price_per_item  = invoice_item.invoice_unit_price
-            cost            = invoice_item.invoice_unit_price * float(invoice_item.invoice_quantity)
+            kg              = round(float(invoice_item.invoice_weight), 3) / 1000.000 if invoice_item.invoice_weight else None
+            price_per_kg    = locale.currency(invoice_item.invoice_weight_price) if invoice_item.invoice_weight_price else None
+            price_per_item  = locale.currency(invoice_item.invoice_unit_price) if invoice_item.invoice_unit_price else None
+            cost            = invoice_item.invoice_unit_price * invoice_item.invoice_quantity
             sub_total       += cost
+            cost            = locale.currency(cost)
             invoice_data.append(
-                [ qty, product, kg, price_per_kg, price_per_item, cost ] )
+                [ qty, product, kg, price_per_kg, price_per_item, cost, ''] )
+            invoice_data_rows += 1
         
         invoice_data_table = Table(
-            invoice_data)
+            invoice_data,
+            colWidths=[40, 280, 80, 80, 80, 80, 120])
+            
+        invoice_data_table.setStyle(
+            TableStyle([
+                # All
+                ('GRID', (0,0), (6,invoice_data_rows), 0.5, colors.grey),
+                # Header
+                ('FONT', (0,0), (-1,0), 'VAGBold', 10),
+                ('ALIGNMENT', (0,0), (-1,0), 'CENTER'),
+                ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
+                # Body
+                ('ALIGNMENT', (0,0), (0,-1), 'CENTER'), # Quantity
+                ('ALIGNMENT', (2,1), (5,-1), 'RIGHT'), # Numerical
+                
+                
+                ]))
         
         w, h = invoice_data_table.wrapOn(pdf, 760, 400)
         invoice_data_table.drawOn(pdf, 40, 440 - h, 0)
@@ -140,12 +170,16 @@ def create_invoices(queryset):
             ['Sub-Total', sub_total + delivery_fee, ''],
         ]
         invoice_total_data.reverse()
+        
         invoice_total_table = Table(
             invoice_total_data, 
             # style=[
             #     ('SPAN',(-1,-1),(-1,-3)), 
             # ]
         )
+        
+        # invoice_total_table.setStyle(TableStyle([('BACKGROUND',(1,1),(-2,-2),colors.green),
+        #                 ('TEXTCOLOR',(0,0),(1,-1),colors.red)])
         invoice_total_table.wrapOn(pdf,400,500)
         invoice_total_table.drawOn(pdf, 210, 200)
 

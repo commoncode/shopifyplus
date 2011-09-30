@@ -7,7 +7,9 @@ class Shopifyable(models.Model):
     Base abstract Shopify Model.  Based on BaseShopifyElement.
     """
     
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(
+        blank=True,
+        null=True)
     
     pushed_at = models.DateTimeField(
         blank=True,

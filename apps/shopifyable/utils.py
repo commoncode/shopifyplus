@@ -4,6 +4,10 @@ import urlparse
 import inspect
 from dateutil.parser import parse
 
+from django.core.exceptions import ValidationError
+from django.db.models import get_model
+from django.utils import simplejson
+
 __all__ = ['generate_url', 'generate_request', 'parse_xml', 'serialize_xml']
 
 def _import_etree(packages=('lxml.etree', 'xml.etree.cElementTree',
@@ -40,9 +44,20 @@ def generate_request(action, url, body=None):
 
 def parse_xml(obj):
     return etree.parse(obj).getroot()
-
-def serialize_xml(obj):
-    return etree.tostring(obj)
+    
+def _decode_dict(dct):
+    """
+    Turn the dictionary keys into strings for Django ORM
+    """
+    newdict = {}
+    for k, v in dct.iteritems():
+        if isinstance(k, unicode):
+            k = k.encode('utf-8')
+        newdict[k] = v
+    return newdict    
+    
+def parse_json(obj):
+    return simplejson.load(obj, object_hook=_decode_dict)
   
 def format_datetime(dt):
     s = dt.strftime("%Y-%m-%dT%H:%M")
@@ -55,87 +70,93 @@ def lookup_kwargs(klass, element):
             return { 'id': element.find(key).text }
     return None
     
-def parse_element(element, key):
-    field_tag = None
+def resolve_relation(relation):
+    
+    # Look for an "app.Model" relation
     try:
-        element_type = element.find(key).attrib['type']
-        if element_type == 'datetime':
-            field_value = parse(element.find(key).text) if element.find(key).text else None
-        if element_type == 'boolean':
-            field_value = element.find(key).text.capitalize()
-        if element_type == 'decimal':
-            field_value = float(element.find(key).text) if element.find(key).text else None
-        if element_type == 'integer':
-            field_value = int(element.find(key).text) if element.find(key).text else None
-        if element_type == 'array':
-            field_value = None 
-            field_tag = element.tag
-    except KeyError, e:
-        element_type = None
-        field_value = element.find(key).text
+        app_label, model_name = relation.split(".")
+    except ValueError:
+        # If we can't split, assume a model in current app
+        # app_label = cls._meta.app_label
+        # model_name = relation
+        pass
     except AttributeError:
-        element_type = None
-        field_value = u'errors'
-    
-    return element_type, field_value, field_tag
-    
-def sub_element_kwargs_list(klass, element):
-    """
-    Recurse through the child sub-element and return
-    a [] of {}'s assigned to the klass as the key, i.e.
-    klass: [{...}, {...}, {...}]
-    """
-    # kwargs = {}
-    obj_kwargs_list = []
-    for sub_element in list(element):
-        obj_kwargs = {}
+        # If it doesn't have a split it's actually a model class
+        app_label = relation._meta.app_label
+        model_name = relation._meta.object_name
         
-        for key, value in klass.Shopify.shopify_fields.iteritems():
-            element_type, field_value, field_tag = parse_element(sub_element, key)
-            field_key = value
-            obj_kwargs.update({ field_key: field_value })
-            
-        obj_kwargs_list.append(obj_kwargs)
+    return get_model(app_label, model_name, False)
     
-    # kwargs.update({klass:obj_kwargs_list})    
-    return obj_kwargs_list
+def _parse_rel_objs(rel_objs, rel_klass, rel_obj_json):
     
-def element_kwargs(klass, element):
+    rel_obj_dict = {}
     
-    kwargs = {}
+    if hasattr(rel_klass, 'Shopify'):
+        if hasattr(rel_klass.Shopify, 'shopify_fields'):
+            fields_dict = rel_klass.Shopify.shopify_fields
+            for k, v in fields_dict.iteritems():
+                rel_obj_dict.update({ fields_dict[k]: rel_obj_json[k] })
     
-    for key, value in klass.Shopify.shopify_fields.iteritems():
-        """
-        Loop through the model's Shopify.shopify_fields that
-        serve as a map for the API's xml elements.
-        """
-        element_type, field_value, field_tag = parse_element(element, key)
-        field_key = value
-        
-        
-        if element_type == 'array':
-            """
-            If the element type is 'array' then traverse
-            into the child elements, building a list
-            of {}'s assigned to the klass, for later
-            recursing
-            """
-            obj_dict_list = []
-            
-            if klass.Shopify.shopify_arrays:
-                
-                for k, v in klass.Shopify.shopify_arrays.iteritems():
-                    if inspect.isclass(v):
-                        obj_dict_list = sub_element_kwargs_list(v, element.find(k))
-                        kwargs.update({v: obj_dict_list})
-        else:
-            kwargs.update({ field_key: field_value })
-        
-    return kwargs
+            rel_obj = rel_klass(**rel_obj_dict)
+            rel_objs.append(rel_obj)
+            del(rel_obj)
+    else:
+        import ipdb; ipdb.set_trace()
     
-def etree_kwargs(klass, etree):
-    kwargs_list = []
-    for element in list(etree):
-        kwargs_list.append(element_kwargs(klass, element))
-    return kwargs_list
+    return rel_objs
 
+def parse_shop_objects(shop, klass, obj_json):
+    
+    objs = []
+    obj_dict = {}
+    rel_objs = []
+    
+    if hasattr(klass, 'Shopify'):
+    
+        for key, value in obj_json.iteritems():
+                
+            if hasattr(klass.Shopify, 'shopify_dicts'):
+                if key in klass.Shopify.shopify_dicts:
+                    rel_klass = resolve_relation(klass.Shopify.shopify_dicts[key])
+                    rel_obj_json = value
+                    rel_objs = _parse_rel_objs(rel_objs, rel_klass, rel_obj_json)
+                    
+            if hasattr(klass.Shopify, 'shopify_arrays'):
+                if key in klass.Shopify.shopify_arrays:
+                    rel_klass = resolve_relation(klass.Shopify.shopify_arrays[key])
+                    for rel_obj_json in obj_json[key]:
+                        rel_objs = _parse_rel_objs(rel_objs, rel_klass, rel_obj_json)
+                        
+            if hasattr(klass.Shopify, 'shopify_fields'):
+                if key in klass.Shopify.shopify_fields:
+                    obj_dict.update({ key: value })
+                    
+            if hasattr(klass.Shopify, 'shopify_date_fields'):
+                if key in klass.Shopify.shopify_date_fields:
+                    
+                    try:
+                        obj_dict.update({ key: dateparser.parse(value) })
+                    except:
+                        pass
+            
+        obj = klass(**obj_dict)
+        obj.shop = shop
+        obj.save()
+        print u'%s' % obj
+        
+        for rel_obj in rel_objs:
+            """
+            Set the value of the rel_obj.parent_obj
+            """
+            setattr(rel_obj, obj._meta.module_name, obj)
+            try:
+                rel_obj.full_clean()
+            except ValidationError, e:
+                print e
+            else:
+                rel_obj.save()
+                print u'    %s' % rel_obj
+            
+        objs.append(obj)
+    
+    return objs

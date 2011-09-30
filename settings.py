@@ -83,7 +83,7 @@ STATICFILES_DIRS = [
     # os.path.join(PINAX_ROOT, "media", "default"),
     
     # include grappelli
-    ("admin", os.path.join(GRAPPELLI_ROOT, "media")),
+    # ("admin", os.path.join(GRAPPELLI_ROOT, "media")),
 ]
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
@@ -107,7 +107,7 @@ MIDDLEWARE_CLASSES = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "pinax.middleware.security.HideSensistiveFieldsMiddleware",
+    # "pinax.middleware.security.HideSensistiveFieldsMiddleware",
     # "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
