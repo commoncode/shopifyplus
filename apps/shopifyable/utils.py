@@ -133,7 +133,6 @@ def parse_shop_objects(shop, klass, obj_json):
                     
             if hasattr(klass.Shopify, 'shopify_date_fields'):
                 if key in klass.Shopify.shopify_date_fields:
-                    
                     try:
                         obj_dict.update({ key: dateparser.parse(value) })
                     except:
