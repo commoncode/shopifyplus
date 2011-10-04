@@ -17,6 +17,10 @@ urlpatterns = patterns("",
     (r'^grappelli/', include('grappelli.urls')),
 )
 
+# ShopifyPlus
+urlpatterns += patterns("",
+    url(r"^procurements/", include('procurement.urls')),
+)
 
 if settings.SERVE_MEDIA:
     urlpatterns += patterns("",

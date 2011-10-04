@@ -42,6 +42,13 @@ class Procurement(models.Model):
     def _shops(self):
         return ', '.join(set(self.procurementorder_set.all().values_list('order__shop__title', flat=True)))
     
+    @models.permalink
+    def get_csv_url(self):
+        return (
+            'procurement_csv',
+            (),
+            { 'procurement_id': self.id, })    
+    
 class ProcurementOrder(models.Model):
     """
     An intermediary table between an 

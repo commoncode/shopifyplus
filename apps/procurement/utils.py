@@ -15,24 +15,37 @@ def procurement_item_defaults(queryset):
     For each ProcurementItem set the procurement values
     to the aggregated order values
     """
-    procurement_items = queryset
-    
-    for procurement_item in procurement_items:
+    try:
+        if isinstance(queryset[0], Procurement):
+            procurement_items = []
+            for procurement in queryset:
+                 procurement_items += procurement.procurementitem_set.all()
+        else:
+            procurement_items = queryset
+    except IndexError:
+        """
+        queryset[0] throws IndexError?
+        """
+        pass
+    else:
+        for procurement_item in procurement_items:
         
-        try:
-            procurement_weight_price = float(1000.00) / float(procurement_item.product_variant.grams) * procurement_item.product_variant.price
-        except:
-            procurement_weight_price = None
+            try:
+                procurement_weight_price = float(1000.00) / float(procurement_item.product_variant.grams) * procurement_item.product_variant.price
+            except:
+                procurement_weight_price = None
             
-        procurement_item.procurement_weight = procurement_item.order_weight
-        procurement_item.procurement_quantity = procurement_item.order_quantity
-        procurement_item.procurement_unit_weight = procurement_item.product_variant.grams
-        procurement_item.procurement_weight_price = procurement_weight_price
-        procurement_item.procurement_unit_price = procurement_item.product_variant.price
-        procurement_item.procured = True
-        procurement_item.procured_by = User.objects.get(pk=1)
-        procurement_item.procured_at = datetime.datetime.now()
-        procurement_item.save()
+            procurement_item.procurement_weight = procurement_item.order_weight
+            procurement_item.procurement_quantity = procurement_item.order_quantity
+            procurement_item.procurement_unit_weight = procurement_item.product_variant.grams
+            procurement_item.procurement_weight_price = procurement_weight_price
+            procurement_item.procurement_unit_price = procurement_item.product_variant.price
+            procurement_item.procured = True
+            procurement_item.procured_by = User.objects.get(pk=1)
+            procurement_item.procured_at = datetime.datetime.now()
+            procurement_item.save()
+            
+    return procurement_items
 
 
 
