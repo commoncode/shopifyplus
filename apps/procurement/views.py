@@ -21,7 +21,6 @@ def procurement_csv(request, procurement_id):
         'Quantity', 
         'Grams'])
     
-    
     order_by_args = [
         'product_variant__product__vendor', 
         'product_variant', ]
@@ -31,7 +30,7 @@ def procurement_csv(request, procurement_id):
         writer.writerow([
             procurement_item.product_variant.product.vendor,
             str(procurement_item.product_variant.product),
-            str(procurement_item.product_variant.title),
+            str(procurement_item.product_variant.option1),
             str((procurement_item.order_units) or ''),
             str((procurement_item.order_weight) or '')])
             
