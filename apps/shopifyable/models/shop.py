@@ -44,6 +44,8 @@ class Shop(models.Model):
         comma separated list
         """
         
+        # TODO store the _products in a cache or session
+        
         kwargs.update({'limit': 250})
         
         self.connect()

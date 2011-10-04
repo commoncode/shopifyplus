@@ -10,16 +10,13 @@ handler500 = "pinax.views.server_error"
 
 
 urlpatterns = patterns("",
-    url(r"^$", direct_to_template, {
-        "template": "homepage.html",
-    }, name="home"),
-    url(r"^admin/", include(admin.site.urls)),
+    url(r"^", include(admin.site.urls)),
     (r'^grappelli/', include('grappelli.urls')),
 )
 
 # ShopifyPlus
 urlpatterns += patterns("",
-    url(r"^procurements/", include('procurement.urls')),
+    url(r"^procurement/", include('procurement.urls')),
 )
 
 if settings.SERVE_MEDIA:

@@ -105,9 +105,8 @@ def _parse_rel_objs(rel_objs, rel_klass, rel_obj_json):
     
     return rel_objs
 
-def parse_shop_objects(shop, klass, obj_json):
+def parse_shop_object(shop, klass, obj_json):
     
-    objs = []
     obj_dict = {}
     rel_objs = []
     
@@ -155,7 +154,11 @@ def parse_shop_objects(shop, klass, obj_json):
             else:
                 rel_obj.save()
                 print u'    %s' % rel_obj
-            
-        objs.append(obj)
     
+    return obj
+    
+def parse_shop_objects(shop, klass, objs_json):
+    objs = []
+    for obj_json in objs_json:
+        objs.append(parse_shop_object(shop, klass, obj_json))
     return objs

@@ -241,9 +241,8 @@ class Order(Shopifyable):
         blank=True,
         max_length=4,
         null=True)
-    customer = models.CharField(
+    customer = models.TextField(
         blank=True,
-        max_length=255,
         null=True)
     email = models.CharField(
         blank=True,
