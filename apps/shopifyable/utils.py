@@ -105,8 +105,15 @@ def _parse_rel_objs(rel_objs, rel_klass, rel_obj_json):
     
     return rel_objs
 
-def parse_shop_object(shop, klass, obj_json):
+def parse_shop_object(shop, klass, obj_json, sync=False):
+    """
     
+    
+        if sync=True
+        
+        compare the updated_at datetime, and which ever is more recent
+        then change.
+    """
     obj_dict = {}
     rel_objs = []
     
@@ -140,7 +147,6 @@ def parse_shop_object(shop, klass, obj_json):
         obj = klass(**obj_dict)
         obj.shop = shop
         obj.save()
-        print u'%s' % obj
         
         for rel_obj in rel_objs:
             """
@@ -153,7 +159,6 @@ def parse_shop_object(shop, klass, obj_json):
                 print e
             else:
                 rel_obj.save()
-                print u'    %s' % rel_obj
     
     return obj
     
