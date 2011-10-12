@@ -101,14 +101,13 @@ def _parse_rel_objs(rel_objs, rel_klass, rel_obj_json):
             rel_objs.append(rel_obj)
             del(rel_obj)
     else:
+        # Something amiss?
         import ipdb; ipdb.set_trace()
     
     return rel_objs
 
 def parse_shop_object(shop, klass, obj_json, sync=False):
     """
-    
-    
         if sync=True
         
         compare the updated_at datetime, and which ever is more recent

@@ -93,7 +93,7 @@ class ProductVariant(Shopifyable):
         #     'updated_at': 'updated_at', }
         
     def __unicode__(self):
-        return u'%s' % self.title
+        return u'%s' % self.option1
 
 class Product(Shopifyable, Handleable, Taggable):
     """

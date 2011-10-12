@@ -31,9 +31,8 @@ class OrderItem(models.Model):
     grams = models.PositiveIntegerField(
         blank=True,
         null=True)
-    name = models.CharField(
+    name = models.TextField(
         blank=True,
-        max_length=255,
         null=True)
     price = models.FloatField(
         blank=True,
