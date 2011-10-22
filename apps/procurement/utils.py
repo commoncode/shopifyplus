@@ -66,13 +66,14 @@ def procurement_orders(queryset):
         try:
             procurement_order.full_clean()
         except ValidationError, e:
-            print e
+            print u'*** ERROR %s' % e
             """
             Validation error is likely to be an Integrity Error
             due to the unique_together constraint on Procurement and Order
             
             TODO: assemble an error msg, and skip over the order.
             """
+            import ipdb; ipdb.set_trace()
         else:
             procurement_order.save()
             
@@ -106,6 +107,7 @@ def procurement_orders(queryset):
         try:
             procurement_item.full_clean()
         except ValidationError, e:
-            print e
+            print u'*** ERROR %s' % e
+            import ipdb; ipdb.set_trace()
         else:
             procurement_item.save()

@@ -83,48 +83,48 @@ def process_procurement_orders(queryset):
                 try:
                     product_variant = ProductVariant.objects.get(shopify_product_variant_id=order_item.shopify_product_variant_id)
                 except Exception, e:
-                    print u'Product variant not found for order item :: %s' % order_item
-                    break
-                
-                procurement_item_kwargs = {
-                    'procurement': procurement,
-                    'product_variant': product_variant, }
-                    
-                try:
-                    procurement_item = ProcurementItem.objects.get(**procurement_item_kwargs)
-                except ObjectDoesNotExist:
-                    # Should exist unless deleted from underneath
-                    print e
-                    break
-                    
-                order_weight = order_item.grams * order_item.quantity    
-                packing_weight = calculate_packing_variable(
-                    procurement_item.order_weight, 
-                    procurement_item.procurement_weight, 
-                    order_weight)
-                    
-                packing_quantity = calculate_packing_variable(
-                    procurement_item.order_quantity, 
-                    procurement_item.procurement_quantity, 
-                    order_item.quantity)
-                
-                packing_item_kwargs = {
-                    'packing': packing,
-                    'order_item': order_item,
-                    'procurement_item': procurement_item,
-                    'packing_weight': packing_weight,        
-                    'packing_quantity': packing_quantity,
-                    'packing_unit_weight': procurement_item.procurement_unit_weight,
-                    'packing_weight_price': procurement_item.procurement_weight_price,
-                    'packing_unit_price': procurement_item.procurement_unit_price, }
-                packing_item = PackingItem(**packing_item_kwargs)
-                try:
-                    packing_item.full_clean()
-                except ValidationError, e:
-                    print e
+                    print u'*** ERROR :: Product variant not found for order item :: %s' % order_item
                 else:
-                    packing_item.save()
-                    print packing_item
+                
+                    procurement_item_kwargs = {
+                        'procurement': procurement,
+                        'product_variant': product_variant, }
+                    
+                    try:
+                        procurement_item = ProcurementItem.objects.get(**procurement_item_kwargs)
+                    except ObjectDoesNotExist:
+                        # Should exist unless deleted from underneath
+                        print u'*** ERROR %s' % e
+                    else:
+                    
+                        order_weight = order_item.grams * order_item.quantity    
+                        packing_weight = calculate_packing_variable(
+                            procurement_item.order_weight, 
+                            procurement_item.procurement_weight, 
+                            order_weight)
+                    
+                        packing_quantity = calculate_packing_variable(
+                            procurement_item.order_quantity, 
+                            procurement_item.procurement_quantity, 
+                            order_item.quantity)
+                
+                        packing_item_kwargs = {
+                            'packing': packing,
+                            'order_item': order_item,
+                            'procurement_item': procurement_item,
+                            'packing_weight': packing_weight,        
+                            'packing_quantity': packing_quantity,
+                            'packing_unit_weight': procurement_item.procurement_unit_weight,
+                            'packing_weight_price': procurement_item.procurement_weight_price,
+                            'packing_unit_price': procurement_item.procurement_unit_price, }
+                        packing_item = PackingItem(**packing_item_kwargs)
+                        try:
+                            packing_item.full_clean()
+                        except ValidationError, e:
+                            print u'*** ERROR %s' % e
+                        else:
+                            packing_item.save()
+                            print packing_item
                     
 def packing_item_defaults(queryset):
     """

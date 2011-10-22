@@ -7,7 +7,7 @@ from shops.models import Shop
 from ordering.models import Order
 from products.models import Product
 
-def shops_procurement_csv(request):
+def shops_procurement_email_csv(request):
     """
     A Shortcut View to create procurements for
     all Shops, resetting and fetching Products 

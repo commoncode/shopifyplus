@@ -10,7 +10,6 @@ class OrderItem(models.Model):
     shopify_product_variant_id = models.PositiveIntegerField(
         blank=True,
         null=True)
-        
     """
     Derive shopify_order_id from the parent order.
     """    

@@ -100,9 +100,6 @@ def _parse_rel_objs(rel_objs, rel_klass, rel_obj_json):
             rel_obj = rel_klass(**rel_obj_dict)
             rel_objs.append(rel_obj)
             del(rel_obj)
-    else:
-        # Something amiss?
-        import ipdb; ipdb.set_trace()
     
     return rel_objs
 
