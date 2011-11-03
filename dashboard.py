@@ -97,6 +97,11 @@ class CustomIndexDashboard(Dashboard):
                     'url': '/procurement/csv?defaults=true',
                     'external': False,
                 },
+                {
+                    'title': _('5. Clear & Generate Procurements'),
+                    'url': '/shops/clear_and_gen_procurements/',
+                    'external': False,
+                },
             ]
         ))
         

@@ -1,11 +1,34 @@
 import csv
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 
 from procurement.models import Procurement
 from shops.models import Shop
 from ordering.models import Order
 from products.models import Product
+
+from django.core import management
+
+def shops_support_commands(request):
+    """
+    Chains together managment commands
+    for procurement work flow
+    
+    python manage.py reset products --noinput
+    python manage.py get_products
+    python manage.py reset ordering --noinput
+    python manage.py get_orders
+    python manage.py create_procurement_items
+    """
+    
+    management.call_command('reset', 'products', noinput=True, verbosity=0, interactive=False);
+    management.call_command('get_products', verbosity=0, interactive=False);
+    management.call_command('reset', 'ordering', noinput=True, verbosity=0, interactive=False);
+    management.call_command('get_orders', verbosity=0, interactive=False);
+    management.call_command('create_procurement_items', verbosity=0, interactive=False);
+    
+    return HttpResponseRedirect('/')
 
 def shops_procurement_email_csv(request):
     """
@@ -20,8 +43,8 @@ def shops_procurement_email_csv(request):
     procurements = Procurement.objects.all()
     
     if procurements:
-    response = HttpResponse(mimetype='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=procurement_%s.csv' % procurement_id
+        response = HttpResponse(mimetype='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=procurement_%s.csv' % procurement_id
 
     for procurement in procurements:
         

@@ -2,7 +2,8 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     url(
-        r'^procurements/csv/$',
-        'shops.views.shops_procurement_csv',
-        name="shops_procurement_csv"
-    ), )
+        r'^clear_and_gen_procurements/$',
+        'shops.views.shops_support_commands',
+        name='shop_commands',
+    ),
+)

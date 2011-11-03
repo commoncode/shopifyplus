@@ -19,6 +19,11 @@ urlpatterns += patterns("",
     url(r"^procurement/", include('procurement.urls')),
 )
 
+# ShopifyPlus
+urlpatterns += patterns("",
+    url(r"^shops/", include('shops.urls')),
+)
+
 if settings.SERVE_MEDIA:
     urlpatterns += patterns("",
         url(r"", include("staticfiles.urls")),

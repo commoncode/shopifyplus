@@ -211,9 +211,9 @@ GRAPPELLI_ADMIN_URL = '/admin'
 GRAPPELLI_INDEX_DASHBOARD = 'shopifyplus.dashboard.CustomIndexDashboard'
 
 # Shopify
-SHOPIFY_API_KEY = 'f0c97766b08a9d39a893b993c9469ee3'
-SHOPIFY_PASSWORD = '509151a955ab91e32a422dac01f60115'
-SHOPIFY_HOST_NAME = 'wholesaleplus.myshopify.com'
+SHOPIFY_API_KEY = '1a2c8995ba9a2ff76bf32fecebd23bb5'
+SHOPIFY_PASSWORD = '677b21a1588ad3b31f0e0f17b6e398d2'
+SHOPIFY_HOST_NAME = 'organicorigins.myshopify.com'
 
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
