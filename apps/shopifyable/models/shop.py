@@ -65,6 +65,7 @@ class Shop(models.Model):
             url += '?'+urllib.urlencode({'collection_id': collection.id})
         print url
         self._products_count = self._connection.GET(url)
+        print self._products_count
         
     # Orders
     

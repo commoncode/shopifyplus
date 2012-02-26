@@ -34,18 +34,19 @@ class Command(BaseCommand):
         """
         queryset = Order.objects.all()
         
-        print '==== New Procurement ===='
+        # print '==== New Procurement ===='
         
         for order in queryset:
             
-            print u'Order: %s' % order
+            # print u'Order: %s' % order
             
             procurement_order = ProcurementOrder(procurement=procurement, order=order)
             try:
                 procurement_order.full_clean()
             except ValidationError, e:
-                print u'*** ERROR %s' % e
-                import ipdb; ipdb.set_trace()
+                # print u'*** ERROR %s' % e
+                # import ipdb; ipdb.set_trace()
+                pass
             else:
                 procurement_order.save()
             
@@ -59,22 +60,23 @@ class Command(BaseCommand):
         order_item_kwargs = {
             'order__in': queryset, }
         order_items = OrderItem.objects.filter(**order_item_kwargs) 
-        print "=== Order Line Items ==="
+        # print "=== Order Line Items ==="
         for oli in order_items:
-            print u'%s' % oli
+            # print u'%s' % oli
+            pass
         
         product_variant_kwargs = {
             'shopify_product_variant_id__in': order_items.values_list('shopify_product_variant_id', flat=True).distinct()}
             
         product_variants = ProductVariant.objects.filter(**product_variant_kwargs).distinct().order_by('product__vendor')
-        print "=== Product Variants ==="
+        # print "=== Product Variants ==="
         
         last_vendor = None
         for product_variant in product_variants:
             
             vendor = product_variant.product.vendor
             if vendor != last_vendor:
-                print u'===== %s =====' % vendor
+                # print u'===== %s =====' % vendor
                 last_vendor = vendor
             
             oli_kwargs = {
@@ -90,17 +92,18 @@ class Command(BaseCommand):
                 'order_weight': order_weight,
                 'order_units': units, }
             
-            print u'%s' % product_variant
-            print u'           units: %s' % units
-            print u'    order_weight: %s' % order_weight
+            # print u'%s' % product_variant
+            # print u'           units: %s' % units
+            # print u'    order_weight: %s' % order_weight
                 
             procurement_item = ProcurementItem(**procurement_item_kwargs)
             try:
                 procurement_item.full_clean()
             except ValidationError, e:
-                print e
-                print u'*** ERROR %s' % e
-                import ipdb; ipdb.set_trace()
+                # print e
+                # print u'*** ERROR %s' % e
+                # import ipdb; ipdb.set_trace()
+                pass
             else:
                 procurement_item.save()
             

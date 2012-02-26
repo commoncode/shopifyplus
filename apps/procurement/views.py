@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import csv
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404

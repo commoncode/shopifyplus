@@ -74,7 +74,6 @@ def process_procurement_orders(queryset):
             
             order_items = OrderItem.objects.filter(order=procurement_order.order)
             
-            
             packing = Packing(order=procurement_order.order)
             packing.save()
             
@@ -84,6 +83,19 @@ def process_procurement_orders(queryset):
                     product_variant = ProductVariant.objects.get(shopify_product_variant_id=order_item.shopify_product_variant_id)
                 except Exception, e:
                     print u'*** ERROR :: Product variant not found for order item :: %s' % order_item
+                    try:
+                        product_variants = ProductVariant.objects.filter(title__startswith=order_item.variant_title[0:8])
+                        print '    searched on :: %s' % order_item.variant_title[0:8]
+                        print '    found %s product variants' % product_variants.count()
+                        print '    taking %s' % product_variants[0]
+                        product_variant = product_variants[0]
+                    except IndexError:
+                        print u'*** STILL NOT FOUND :: Product variant not found for order item :: %s' % order_item
+                    except TypeError:
+                        print u'    ++++ NO REPLACEMENT FOUND ++++'
+                    else:
+                        print u'    ==== SUBSTITUTE VARIANT USED ===='
+                        
                 else:
                 
                     procurement_item_kwargs = {
@@ -157,12 +169,13 @@ def packing_item_csv(queryset):
     Dump all the packing items to a csv
     """
     packing_items = queryset
-    print 'Number, Quantity, Product, Order Weight, $ per kg, Item Price, Order Cost, Adjustments'
+    print 'Number, SKU, Quantity, Product, Order Weight, $ per kg, Item Price, Order Cost, Adjustments'
     for packing_item in packing_items:
         
         product_variant = ProductVariant.objects.get(shopify_product_variant_id=packing_item.order_item.shopify_product_variant_id)
         
         order_number = packing_item.order_item.order.name
+        sku = packing_item.order_item.sku
         quantity = packing_item.packing_quantity if product_variant.option2 not in ['loose'] else ' '
         product = u'%s :: %s' % (product_variant.product, product_variant.option1)
         # product_variant = product_variant.option1
@@ -173,8 +186,9 @@ def packing_item_csv(queryset):
         order_cost = packing_item.packing_unit_price * packing_item.packing_quantity
         
         
-        print '%s,%s,%s,%s,%s,%s,%s,' % (
+        print '%s,%s,%s,%s,%s,%s,%s,%s,' % (
             order_number,
+            sku,
             quantity,
             product, 
             # product_variant, 

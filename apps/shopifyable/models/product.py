@@ -20,7 +20,7 @@ class ProductVariant(Shopifyable):
 
     title = models.CharField(
         blank=True,
-        max_length=255,
+        max_length=1024,
         null=True)
 
     position = models.IntegerField(
@@ -29,15 +29,15 @@ class ProductVariant(Shopifyable):
 
     option1 = models.CharField(
         blank=True,
-        max_length=255,
+        max_length=1024,
         null=True)
     option2 = models.CharField(
         blank=True,
-        max_length=255,
+        max_length=1024,
         null=True)
     option3 = models.CharField(
         blank=True,
-        max_length=255,
+        max_length=1024,
         null=True)
         
     grams = models.PositiveIntegerField(
@@ -107,7 +107,7 @@ class Product(Shopifyable, Handleable, Taggable):
     
     title = models.CharField(
         blank=True,
-        max_length=255,
+        max_length=1024,
         null=True)
         
     body_html = models.TextField(

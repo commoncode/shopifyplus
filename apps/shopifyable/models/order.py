@@ -3,7 +3,7 @@ from django.db import models
 from shopifyable.models import Shopifyable
 
 class OrderItem(models.Model):
-            
+
     shopify_product_id = models.PositiveIntegerField(
         blank=True,
         null=True)
