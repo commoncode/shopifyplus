@@ -32,6 +32,7 @@ class CustomIndexDashboard(Dashboard):
                     column=1,
                     collapsible=True,
                     models=(
+                        'customers.*',
                         'fulfilment.*',
                         'invoices.*', 
                         'ordering.models.Order',

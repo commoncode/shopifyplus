@@ -1,0 +1,82 @@
+{% extends "fulfilment/base.html" %}
+
+{% block content %}
+
+<style>
+	.packings {
+        margin: 40px;
+    }
+    thead td {
+        background-color: #ccc;
+    }
+    
+    @media print {
+        table {
+            page-break-after:always
+        }
+    }
+</style>
+
+<section class="packings">
+    
+    <header>
+        <h1>Packings</h1>
+    </header>
+
+    {% for packing in object_list %}
+    
+        <article class="packing">
+            <header>
+                <h2>#{{ packing }} - {{ packing.order.customer }} - {{ packing.order.shipping_address }}</h2>
+            </header>
+            <aside>
+				<dl>
+					{% if packing.order.customer.note %}
+					<dt>Customer note:</dt>
+					<dd>{{ packing.order.customer.note }}</dd>
+					{% endif %}
+					
+					{% if packing.order.note %}
+					<dt>Order note:</dt>
+					<dd>{{ packing.order.note }}</dd>
+					{% endif %}
+										
+					{% comment %}
+						{% if packing.order.note_attributes %}
+							{{ packing.order.note_attributes }}
+							{% for note_attr in packing.order.note_attributes %}
+								<dt>{{ note_attr }}</dt>
+								<dd>{{ note_attr }}</dd>
+							{% endfor %}
+						{% endif %}
+					{% endcomment %}
+				</dl>
+            </aside>
+            <table cellspacing="0" cellpadding="0" class="table table-striped table-bordered table-condensed" >
+
+                <tr>
+                    <thead>
+                    <td width="10%">Qty</td>
+					<td width="20%">Item</td>
+                    <td width="10%">Order weight</td>
+                    </thead>
+                </tr>
+
+            {% for packing_item in packing.packingitem_set.all %}
+            
+                <tr>
+                    <td>{% if packing_item.packing_quantity %}{{ packing_item.packing_quantity }}{% endif %}</td>
+					<td>{{ packing_item.order_item.short_name }}</td>
+                    <td>{% if packing_item.packing_weight %}{{ packing_item.packing_weight }}{% endif %}</td>
+                </tr>
+            
+            {% endfor %}
+            
+            </table>
+        </article>
+        
+    {% endfor %}
+    
+</section>
+    
+{% endblock %}

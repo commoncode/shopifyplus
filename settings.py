@@ -77,7 +77,7 @@ STATIC_URL = "/site_media/static/"
 
 # Additional directories which hold static files
 STATICFILES_DIRS = [
-    os.path.join(PROJECT_ROOT, "media"),
+    os.path.join(PROJECT_ROOT, "static"),
     # os.path.join(PROJECT_ROOT, "media", PINAX_THEME), # ship 'with' the project for now.
     # revert to the Pinax default whilst design_five is in development
     # os.path.join(PINAX_ROOT, "media", "default"),
@@ -167,6 +167,7 @@ INSTALLED_APPS = [
     # "staticfiles",
     
     # Shopify Plus
+    'customers',
     'fulfilment',
     'invoices',
     'procurement', 

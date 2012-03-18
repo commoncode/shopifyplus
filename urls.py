@@ -22,6 +22,7 @@ urlpatterns += patterns("",
 # ShopifyPlus
 urlpatterns += patterns("",
     url(r"^shops/", include('shops.urls')),
+    url(r"^fulfilment/", include('fulfilment.urls')), 
 )
 
 if settings.SERVE_MEDIA:

@@ -1,0 +1,29 @@
+from django.views import generic
+from django.views.generic.detail import SingleObjectMixin
+from django.core.urlresolvers import reverse
+from django.db.models import Count
+from django.http import HttpResponseRedirect
+
+from fulfilment.models import Packing, PackingItem
+
+class PackingMixin(object):
+    model = Packing
+    def get_queryset(self):
+        qset = super(PackingMixin, self).get_queryset().select_related().filter()
+        pa = qset[0]
+        return super(PackingMixin, self).get_queryset().select_related().filter()
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        return queryset.get()
+
+class PackingList(PackingMixin, generic.ListView):
+    paginate_by = 24
+
+packing_list = PackingList.as_view()
+
+class PackingDetail(PackingMixin, generic.DetailView):
+    pass
+
+packing_detail = PackingDetail.as_view()

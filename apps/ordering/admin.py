@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db.models import get_model
 
+from customers.admin import CustomerInline
 from ordering.models import OrderItem
 from procurement.models import Procurement, ProcurementOrder, ProcurementItem
 from products.models import ProductVariant
@@ -29,6 +30,7 @@ class BillingAddressInline(admin.StackedInline):
 
 class OrderAdmin(admin.ModelAdmin):
     inlines = [
+        CustomerInline,
         BillingAddressInline,
         ShippingAddressInline,
         OrderItemInline,

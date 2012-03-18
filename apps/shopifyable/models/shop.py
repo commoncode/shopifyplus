@@ -34,6 +34,30 @@ class Shop(models.Model):
     def shop(self):
         self._shop = self._connection.GET('/admin/shop.json')
         return self._shop
+        
+    def customers(self, **kwargs):
+        
+        self.customers_count()
+        
+        kwargs.update({
+            'limit': 250,
+            'page': 2
+        })
+        
+        self.connect()
+        url = '/admin/customers.json'
+        if kwargs:
+            url += '?'+urllib.urlencode(kwargs)
+        print url
+        self._customers_json = self._connection.GET(url)
+        self._customers = self._customers_json['customers']
+        
+    def customers_count(self):
+        self.connect()
+        url = '/admin/customers/count.json'
+        print url
+        self._customers_count = self._connection.GET(url)
+        print self._customers_count
     
     # Products
         

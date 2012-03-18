@@ -96,7 +96,6 @@ def _parse_rel_objs(rel_objs, rel_klass, rel_obj_json):
             fields_dict = rel_klass.Shopify.shopify_fields
             for k, v in fields_dict.iteritems():
                 rel_obj_dict.update({ fields_dict[k]: rel_obj_json[k] })
-
             rel_obj = rel_klass(**rel_obj_dict)
             rel_objs.append(rel_obj)
             del(rel_obj)

@@ -239,9 +239,6 @@ class Order(Shopifyable):
         blank=True,
         max_length=4,
         null=True)
-    customer = models.TextField(
-        blank=True,
-        null=True)
     email = models.CharField(
         blank=True,
         max_length=255,
@@ -321,7 +318,6 @@ class Order(Shopifyable):
             'browser_ip': 'browser_ip',
             'buyer_accepts_marketing': 'buyer_accepts_marketing',
             'currency': 'currency',
-            'customer': 'customer',
             'email': 'email',
             'financial_status': 'financial_status',
             'fulfillment_status': 'fulfillment_status',
@@ -352,6 +348,7 @@ class Order(Shopifyable):
             'line_items': 'ordering.OrderItem',
             'shipping_lines': 'ordering.ShippingLine', }
         shopify_dicts = {
+            'customer': 'customers.Customer',
             'billing_address': 'ordering.BillingAddress',
             'shipping_address': 'ordering.ShippingAddress', }
 
