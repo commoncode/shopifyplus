@@ -9,8 +9,6 @@ from fulfilment.models import Packing, PackingItem
 class PackingMixin(object):
     model = Packing
     def get_queryset(self):
-        qset = super(PackingMixin, self).get_queryset().select_related().filter()
-        pa = qset[0]
         return super(PackingMixin, self).get_queryset().select_related().filter()
 
     def get_object(self, queryset=None):
@@ -18,12 +16,18 @@ class PackingMixin(object):
             queryset = self.get_queryset()
         return queryset.get()
 
+
 class PackingList(PackingMixin, generic.ListView):
     paginate_by = 24
-
 packing_list = PackingList.as_view()
+
+    
+class ShippingList(PackingMixin, generic.ListView):
+    paginate_by = 24
+    template_name = "fulfilment/shipping_list.html"
+shipping_list = ShippingList.as_view()
+
 
 class PackingDetail(PackingMixin, generic.DetailView):
     pass
-
 packing_detail = PackingDetail.as_view()

@@ -40,6 +40,11 @@
 					<dt>Order note:</dt>
 					<dd>{{ packing.order.note }}</dd>
 					{% endif %}
+					
+					{% if packing.order.customer.shipping_notes %}
+					<dt>Customer Shipping notes:</dt>
+					<dd>{{ packing.order.customer.shipping_notes }}</dd>
+					{% endif %}
 										
 					{% comment %}
 						{% if packing.order.note_attributes %}
@@ -56,8 +61,8 @@
 
                 <tr>
                     <thead>
-                    <td width="10%">Qty</td>
 					<td width="20%">Item</td>
+					<td width="10%">Qty</td>
                     <td width="10%">Order weight</td>
                     </thead>
                 </tr>
@@ -65,8 +70,8 @@
             {% for packing_item in packing.packingitem_set.all %}
             
                 <tr>
-                    <td>{% if packing_item.packing_quantity %}{{ packing_item.packing_quantity }}{% endif %}</td>
 					<td>{{ packing_item.order_item.short_name }}</td>
+					<td>{% if packing_item.packing_quantity %}{{ packing_item.packing_quantity }}{% endif %}</td>
                     <td>{% if packing_item.packing_weight %}{{ packing_item.packing_weight }}{% endif %}</td>
                 </tr>
             

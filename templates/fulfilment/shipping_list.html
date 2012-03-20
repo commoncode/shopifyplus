@@ -1,0 +1,41 @@
+{% extends "fulfilment/base.html" %}
+
+{% block content %}
+
+<style>
+	.shippings {
+        margin: 40px;
+    }
+    @media print {
+        article {
+            page-break-after:always
+        }
+    }
+</style>
+
+<section class="packings">
+    
+    <header>
+        <h1>Shippings</h1>
+    </header>
+
+    {% for packing in object_list %}
+    
+        <article class="shippings">
+            <header>
+                <h2>#{{ packing }} - {{ packing.order.customer }} - {{ packing.order.shipping_address }}</h2>
+            </header>
+            <aside>
+				<dl>
+					{% if packing.order.customer.shipping_notes %}
+					<dt>Customer Shipping notes:</dt>
+					<dd>{{ packing.order.customer.shipping_notes }}</dd>
+					{% endif %}
+				</dl>
+            </aside>
+		</article>
+	{% endfor %}
+
+</section>
+
+{% endblock %}

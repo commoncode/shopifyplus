@@ -19,5 +19,9 @@ class Customer(Customer):
         blank=True,
         null=True)
         
+    shipping_notes = models.TextField(
+        blank=True,
+        default='')
+        
     class Meta:
         ordering = ['last_name',]
