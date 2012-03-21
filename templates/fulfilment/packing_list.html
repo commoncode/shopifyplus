@@ -9,6 +9,10 @@
     thead td {
         background-color: #ccc;
     }
+	small {
+		float: right;
+		font-size: 8px;
+	}
     
     @media print {
         table {
@@ -70,7 +74,7 @@
             {% for packing_item in packing.packingitem_set.all %}
             
                 <tr>
-					<td>{{ packing_item.order_item.short_name }}</td>
+					<td>{{ packing_item.order_item.short_name }}<small>{{ packing_item.order_item.sku }}</small></td>
 					<td>{% if packing_item.packing_quantity %}{{ packing_item.packing_quantity }}{% endif %}</td>
                     <td>{% if packing_item.packing_weight %}{{ packing_item.packing_weight }}{% endif %}</td>
                 </tr>

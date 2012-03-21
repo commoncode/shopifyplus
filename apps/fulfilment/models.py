@@ -111,6 +111,8 @@ class PackingItem(models.Model):
             'packing',
             'order_item',
             'procurement_item', )
+        ordering = (
+            'order_item__sku',)
         
     def __unicode__(self):
         return u'%s' % (self.order_item)
