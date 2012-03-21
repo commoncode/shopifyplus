@@ -18,12 +18,11 @@ class PackingMixin(object):
 
 
 class PackingList(PackingMixin, generic.ListView):
-    paginate_by = 24
+    pass
 packing_list = PackingList.as_view()
 
     
 class ShippingList(PackingMixin, generic.ListView):
-    paginate_by = 24
     template_name = "fulfilment/shipping_list.html"
 shipping_list = ShippingList.as_view()
 
