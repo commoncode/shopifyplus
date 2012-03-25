@@ -28,6 +28,14 @@ class Invoice(models.Model):
         default=datetime.datetime.now(),
         null=True)
     
+    @property
+    def invoice_order_cost(self):
+        invoice_items = InvoiceItem.objects.filter(invoice=self)
+        cost = 0
+        for invoice_item in invoice_items:
+            cost = cost + invoice_item.invoice_item_cost
+        return cost
+    
     def __unicode__(self):
         return u'%s' % self.packing
     
@@ -36,6 +44,7 @@ class InvoiceItem(models.Model):
     invoice = models.ForeignKey(
         Invoice,
         editable=False)
+        
     packing_item = models.ForeignKey(
         PackingItem,
         editable=False)
@@ -66,6 +75,10 @@ class InvoiceItem(models.Model):
         null=True)
         
     done = models.BooleanField()
+    
+    @property
+    def invoice_item_cost(self):
+        return self.invoice_unit_price * self.invoice_quantity
     
     def __unicode__(self):
         return u'%s :: %s' % (self.invoice, self.packing_item)
