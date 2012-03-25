@@ -1,5 +1,5 @@
 from django.db import models
-from shopifyable.models import BillingAddress, Order, OrderItem, ShippingLine, ShippingAddress
+from shopifyable.models import BillingAddress, Order, OrderItem, ShippingLine, ShippingAddress, DiscountCode
 
 from shops.models import Shop
 
@@ -62,3 +62,8 @@ class ShippingLine(ShippingLine):
 
     order = models.ForeignKey(
         Order)
+        
+class DiscountCode(DiscountCode):
+
+    order = models.ForeignKey(
+        Order)    
