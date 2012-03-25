@@ -11,7 +11,6 @@ def fetch_orders(shops):
         
         for _order in (shop._orders):
             
-            import ipdb; ipdb.set_trace()            
             orders.append(parse_shop_object(shop, Order, _order))
     
     return orders
