@@ -6,7 +6,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns("invoices.views",
-    url(r"^",
+    url(r"^list/",
         'invoice_list',
         name='invoice-list'),
     url(r"^invoice/(?P<order_number>[-\d]+)/$",
