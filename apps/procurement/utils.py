@@ -45,7 +45,7 @@ def procurement_item_defaults(queryset):
             procurement_item.procured_at = datetime.datetime.now()
             procurement_item.save()
             
-    return procurement_items
+        return procurement_items
 
 
 
