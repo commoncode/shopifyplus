@@ -21,8 +21,6 @@ class ShopAdmin(admin.ModelAdmin):
     
     def fetch_products(self, request, queryset):
         products = fetch_shop_products(queryset)
-        
-        import ipdb; ipdb; ipdb.set_trace()
         self.message_user(request, "Fetched products :: %s" % ', '.join([product.title for product in products]))
     fetch_products.short_description = "Fetch products for selected shops"
     

@@ -31,7 +31,6 @@ class Command(BaseCommand):
                         str((procurement_item.order_units) or ''),
                         str((procurement_item.order_weight) or '')])
                 except:
-                    #import pdb; pdb.set_trace()
                     print u'%s; %s; ; ; ' % (procurement_item.product_variant.product.vendor, str(procurement_item.product_variant.product))
                 print u'===== Procurement CSV :: END ======'
             

@@ -45,7 +45,7 @@ def procurement_item_defaults(queryset):
             procurement_item.procured_at = datetime.datetime.now()
             procurement_item.save()
             
-    return procurement_items
+        return procurement_items
 
 
 
@@ -73,7 +73,6 @@ def procurement_orders(queryset):
             
             TODO: assemble an error msg, and skip over the order.
             """
-            import ipdb; ipdb.set_trace()
         else:
             procurement_order.save()
             
@@ -108,6 +107,5 @@ def procurement_orders(queryset):
             procurement_item.full_clean()
         except ValidationError, e:
             print u'*** ERROR %s' % e
-            import ipdb; ipdb.set_trace()
         else:
             procurement_item.save()

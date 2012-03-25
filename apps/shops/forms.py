@@ -6,8 +6,6 @@ class ShopForm(forms.ModelForm):
     """
     
     def clean(self):
-        
-        # import ipdb; ipdb.set_trace()
         raise forms.ValidationError("This account is currently inactive.")
         # ct = ContentType.objects.get_for_model(self)
         # if len(ct.model_class().objects.all()) > 0:
