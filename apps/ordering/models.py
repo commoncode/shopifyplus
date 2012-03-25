@@ -32,6 +32,17 @@ class Order(Order):
         except IndexError:
             return ''
 
+    @property
+    def billing_address(self):
+        try:
+            sa = self.billingaddress_set.all()[0]
+            return '%s, %s' % (
+                sa.address1,
+                sa.city)
+        except IndexError:
+            return ''
+    
+
 class OrderItem(OrderItem):
     """
     An Order Item
