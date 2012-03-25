@@ -23,7 +23,6 @@ class Command(BaseCommand):
             orders = Order.objects.all()
             if number_of_orders <= orders.count():
                 for order in orders[number_of_orders:]:
-                    #import ipdb; ipdb.set_trace()
                     order.updated_at = order.updated_at - timedelta(seconds=10)
                     order.save() 
                 print "Edited", number_of_orders, "orders"

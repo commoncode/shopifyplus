@@ -28,4 +28,3 @@ class Command(BaseCommand):
                 print "Can't delete that many orders."
         else:
             print "There are", Order.objects.all().count(), "orders."
-            #import ipdb; ipdb.set_trace()

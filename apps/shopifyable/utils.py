@@ -135,7 +135,7 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                 if key in klass.Shopify.shopify_fields:
                     obj_dict.update({ key: value })
                     if key == 'shopify_product_variant_id':
-                        import pdb; pdb.set_trace()
+                        pass
 
             if hasattr(klass.Shopify, 'shopify_date_fields'):
                 if key in klass.Shopify.shopify_date_fields:

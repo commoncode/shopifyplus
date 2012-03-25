@@ -95,8 +95,6 @@ def create_invoices(queryset):
         
         # (841.88976377952747, 595.27559055118104)
         
-        # import ipdb; ipdb.set_trace()
-        
         pdf.setFont('VAGBlack', 24)
         
         # Header

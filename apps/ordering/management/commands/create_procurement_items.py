@@ -45,7 +45,6 @@ class Command(BaseCommand):
                 procurement_order.full_clean()
             except ValidationError, e:
                 # print u'*** ERROR %s' % e
-                # import ipdb; ipdb.set_trace()
                 pass
             else:
                 procurement_order.save()
@@ -102,7 +101,6 @@ class Command(BaseCommand):
             except ValidationError, e:
                 # print e
                 # print u'*** ERROR %s' % e
-                # import ipdb; ipdb.set_trace()
                 pass
             else:
                 procurement_item.save()
