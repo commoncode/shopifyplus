@@ -1,0 +1,23 @@
+ssh -o ServerAliveInterval=30 root@180.235.130.11
+Xahp8Hae
+
+activate_shopifyplus
+# Aggregates
+
+cd /home/shopifyplus/webapps/alpha.shopifyplus/shopifyplus/
+source ../pinax-env/bin/activate
+python manage.py reset products --noinput
+python manage.py get_products
+python manage.py reset ordering --noinput
+python manage.py get_orders
+
+python manage.py create_procurement_items
+python manage.py procurement_item_csv
+
+python manage.py procurement_item_defaults
+python manage.py process_procurement_orders
+
+python manage.py packing_item_defaults
+python manage.py packing_item_csv
+
+python manage.py create_invoices
