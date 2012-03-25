@@ -217,6 +217,26 @@ class ShippingAddress(OrderAddress):
         
     class Shopify:
         shopify_fields = OrderAddress.Shopify.shopify_fields
+        
+class DiscountCode(models.Model):
+    
+    code = models.CharField(
+        blank=True,
+        max_length=255,
+        null=True)
+   
+    amount = models.PositiveIntegerField(
+        blank=True,
+        null=True)
+    
+    class Meta:
+        abstract = True
+        
+    class Shopify:
+        shopify_fields = {
+            "code": "code",
+            "amount": "amount",
+        }  
 
 class Order(Shopifyable):
     """
@@ -345,6 +365,7 @@ class Order(Shopifyable):
             'created_at': 'created_at',
             'updated_at': 'updated_at', }
         shopify_arrays = {
+            'discount_codes': 'ordering.DiscountCode',
             'line_items': 'ordering.OrderItem',
             'shipping_lines': 'ordering.ShippingLine', }
         shopify_dicts = {

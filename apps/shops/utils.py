@@ -16,7 +16,7 @@ def fetch_orders(shops):
             #     variant_id = oi['variant_id']
             #     print 'ID ::: %s' % variant_id
             #     if variant_id is None:
-            #         # import pdb; pdb.set_trace()
+            #import ipdb; ipdb.set_trace()
             #         pass
             
             orders.append(parse_shop_object(shop, Order, _order))

@@ -2,7 +2,9 @@ import urllib
 import urllib2
 import urlparse
 import inspect
+from dateutil import tz
 from dateutil.parser import parse
+from datetime import *
 
 from django.core.exceptions import ValidationError
 from django.db.models import get_model
@@ -109,6 +111,7 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
         compare the updated_at datetime, and which ever is more recent
         then change.
     """
+    
     obj_dict = {}
     rel_objs = []
 
@@ -136,21 +139,36 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
 
             if hasattr(klass.Shopify, 'shopify_date_fields'):
                 if key in klass.Shopify.shopify_date_fields:
-                    try:
-                        obj_dict.update({ key: dateparser.parse(value) })
-                    except:
-                        pass
-
+                    
+                    if value is not None:                
+                        obj_dict.update({ key: parse(value) })
+                    
         obj = klass(**obj_dict)
-        obj.shop = shop
-        try:
+        obj.shop = shop        
+        
+        db_order = None
+        # Get a database entry based on the obj
+        if (hasattr(obj, 'order_number')):
+            db_order = klass.objects.filter(order_number=obj.order_number)
+        
+        if db_order: 
+            db_order = db_order[0]
+                             
+        # Save object if it doesn't exist
+        if not db_order:
+            print "Doesn't exist, creating new object"
             obj.save()
-        except Exception, e:
-            print e
-        else:
-            pass
-            # print obj
-
+        else: # Update object if the date is newer
+            # Remove timezone information for date comparison
+            # TODO: Convert into local timezone if possible
+            obj.updated_at = obj.updated_at.replace(tzinfo=None)
+                
+            print '(%s): Server: %s, Ours: %s' % (obj, obj.updated_at, db_order.updated_at)
+            # If date is newer, update the object
+            if obj.updated_at > db_order.updated_at:
+               obj.save()
+               print "Updated object"
+               
         for rel_obj in rel_objs:
             """
             Set the value of the rel_obj.parent_obj
@@ -159,10 +177,16 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             try:
                 rel_obj.full_clean()
             except ValidationError, e:
-                print e
+                pass
+                #print "ValidationError ({0}): {1}".format(rel_obj.title, e)
             else:
                 try:
-                    rel_obj.save()
+                    if (db_order):
+                        if (rel_obj._order_cache.updated_at > db_order.updated_at):
+                            rel_obj.save()
+                    else:
+                        rel_obj.save()
+
                 except Exception, e:
                     print e
                 else:
