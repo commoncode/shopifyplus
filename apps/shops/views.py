@@ -28,12 +28,9 @@ def shops_support_commands(request):
     management.call_command('get_orders', verbosity=0, interactive=False);
     management.call_command('create_procurement_items', verbosity=0, interactive=False);
     
-    
-    
     management.call_command('procurement_item_defaults', verbosity=0, interactive=False);
     management.call_command('process_procurement_orders', verbosity=0, interactive=False);
     management.call_command('packing_item_defaults', verbosity=0, interactive=False);
-    
     
     return HttpResponseRedirect('/')
 
