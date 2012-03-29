@@ -134,12 +134,12 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             if hasattr(klass.Shopify, 'shopify_fields'):
                 if key in klass.Shopify.shopify_fields:
                     obj_dict.update({ key: value })
+
                     if key == 'shopify_product_variant_id':
                         pass
 
             if hasattr(klass.Shopify, 'shopify_date_fields'):
                 if key in klass.Shopify.shopify_date_fields:
-                    
                     if value is not None:                
                         obj_dict.update({ key: parse(value) })
                     
@@ -150,24 +150,19 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
 
         try:
             # Get a database entry based on the obj
-            if (hasattr(obj, 'order_number')):
-                db_obj = klass.objects.get(order_number=obj.order_number)
-            if (hasattr(obj, 'shopify_customer_id')):
-                db_obj = klass.objects.get(shopify_customer_id=obj.shopify_customer_id)
+                db_obj = klass.objects.get(id=obj.id)
         except MultipleObjectsReturned:
             pass
         except ObjectDoesNotExist:
             pass
 
-
-
         #import ipdb; ipdb.set_trace() 
 
         # Save object if it doesn't exist
-        if not db_obj:
+        if db_obj is None:
             print "Doesn't exist, creating new object"
             obj.save()
-            print obj.__dict__
+            #print obj.__dict__
         else: # Update object if the date is newer
             # Remove timezone information for date comparison
             # TODO: Convert into local timezone if possible
