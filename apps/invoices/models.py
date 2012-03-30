@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib import admin
 
 from fulfilment.models import Packing, PackingItem
 
@@ -77,10 +78,6 @@ class InvoiceItem(models.Model):
     done = models.BooleanField()
 
     @property
-    def invoice_item_name(self):
-        return self.packing_item
-
-    @property
     def invoice_item_cost(self):
         return self.invoice_unit_price * self.invoice_quantity
     
@@ -91,4 +88,3 @@ class InvoiceItem(models.Model):
     If the invoice is signed_off, changes should
     not be allowed to the InvoiceItems
     """
-    
