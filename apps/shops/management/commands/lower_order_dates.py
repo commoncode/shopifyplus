@@ -2,8 +2,7 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
 from datetime import *
 
-from ordering.models import Order
-       
+from ordering.models import Order       
 
 class Command(BaseCommand):
     args = '<number-of-orders>'
@@ -22,7 +21,7 @@ class Command(BaseCommand):
                 return
             orders = Order.objects.all()
             if number_of_orders <= orders.count():
-                for order in orders[number_of_orders:]:
+                for order in orders[0:number_of_orders]:
                     order.updated_at = order.updated_at - timedelta(seconds=10)
                     order.save() 
                 print "Edited", number_of_orders, "orders"

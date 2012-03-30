@@ -13,8 +13,16 @@ class Packing(models.Model):
     """
     Based on Orders & ProcurementItem
     """
-    order = models.ForeignKey(Order, unique=True)
-    
+    order = models.ForeignKey(Order, unique=True)    
+
+    @property
+    def packing_order_cost(self):
+        packing_items = PackingItem.objects.filter(packing=self)
+        cost = 0
+        for packing_item in packing_items:
+            cost = cost + packing_item.packing_item_cost
+        return cost
+
     def __unicode__(self):
         return u'%s' % self.order
     
@@ -116,6 +124,10 @@ class PackingItem(models.Model):
         
     def __unicode__(self):
         return u'%s' % (self.order_item)
+
+    @property
+    def packing_item_cost(self):
+        return self.packing_unit_price * self.packing_quantity
         
     # def save(self):
     #     """ 
