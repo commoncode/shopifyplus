@@ -95,9 +95,10 @@ class Customer(Shopifyable, Taggable):
             "state": "state",
             "total_spent": "total_spent",
         }
-        # shopify_date_fields = {
-        #     'created_at': 'created_at',
-        #     'updated_at': 'updated_at', }
+        
+        shopify_date_fields = {
+            'created_at': 'created_at',
+            'updated_at': 'updated_at', }
 
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
