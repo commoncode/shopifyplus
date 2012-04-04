@@ -150,22 +150,21 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
 
         try:
             # Get a database entry based on the obj
-                db_obj = klass.objects.get(id=obj.id)
+            db_obj = klass.objects.get(id=obj.id)
         except MultipleObjectsReturned:
             pass
         except ObjectDoesNotExist:
             pass
 
-        #import ipdb; ipdb.set_trace() 
-
-        # Save object if it doesn't exist
-        if db_obj is None:
-            print "Doesn't exist, creating new object"
+        # Save object if it doesn't exist or has no updated_at time
+        if (db_obj is None) or (obj.updated_at is None) \
+            or (db_obj.updated_at is None):
+            print obj, ": Doesn't exist, creating new object"
             obj.save()
-            #print obj.__dict__
-        else: # Update object if the date is newer
-            # Remove timezone information for date comparison
+        else: # Update object if the date is different
             # TODO: Convert into local timezone if possible
+
+            # Remove timezone information for date comparison
             obj.updated_at = obj.updated_at.replace(tzinfo=None)
                 
             print '(%s): Server: %s, Ours: %s' % (obj, obj.updated_at, db_obj.updated_at)
@@ -183,20 +182,18 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                 rel_obj.full_clean()
             except ValidationError, e:
                 pass
-                #print "ValidationError ({0}): {1}".format(rel_obj.title, e)
             else:
                 try:
-                    if (db_obj):
-                        if (rel_obj._order_cache.updated_at > db_obj.updated_at):
-                            rel_obj.save()
-                    else:
+                    # Save object if it doesn't exist or has no update_at time
+                    if (db_obj is None) or (rel_obj.updated_at is None) \
+                        or (db_obj.updated_at is None):
                         rel_obj.save()
+                    else: # Update object if the date is different
+                        if (rel_obj.updated_at != db_obj.updated_at):
+                            rel_obj.save()                        
 
                 except Exception, e:
                     print e
-                else:
-                    # print rel_obj
-                    pass
 
     return obj
 
