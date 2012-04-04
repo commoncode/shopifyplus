@@ -169,8 +169,8 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             obj.updated_at = obj.updated_at.replace(tzinfo=None)
                 
             print '(%s): Server: %s, Ours: %s' % (obj, obj.updated_at, db_obj.updated_at)
-            # If date is newer, update the object
-            if obj.updated_at > db_obj.updated_at:
+            # If date is different, update the object
+            if obj.updated_at != db_obj.updated_at:
                obj.save()
                print "Updated object"
                
