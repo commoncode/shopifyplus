@@ -77,6 +77,8 @@
 					<td>{{ packing_item.order_item.short_name }}<small>{{ packing_item.order_item.sku }}</small></td>
 					<td>{% if packing_item.packing_quantity %}{{ packing_item.packing_quantity }}{% endif %}</td>
                     <td>{% if packing_item.packing_weight %}{{ packing_item.packing_weight }}{% endif %}</td>
+					
+					<td>{% if packing_item.packing_unit_price %}{{ packing_item.packing_unit_price|floatformat:2|safe }}
                 </tr>
             
             {% endfor %}
