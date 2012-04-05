@@ -13,7 +13,19 @@
 		float: right;
 		font-size: 8px;
 	}
-    
+    .totals {
+        width: 30%;
+        margin: 0px 0px 20px 0px
+    }
+    .totals th {
+        width: 20%;
+        background: #CCCCCC;
+    }
+    .totals th, td {
+        padding: 4px 5px;
+        border: 1px solid #DDDDDD;
+        line-height: 18px;
+    }
     @media print {
         table {
             page-break-after:always
@@ -65,25 +77,53 @@
 
                 <tr>
                     <thead>
-					<td width="20%">Item</td>
-					<td width="10%">Qty</td>
-                    <td width="10%">Order weight</td>
+						<td width="30%">Item</td>
+						<td width="10%">Qty</td>
+	                    <td width="10%">Order weight</td>
+				        <td width="10%">$ per kg</td>
+				        <td width="10%">U Price</td>
+				        <td width="10%">Order Cost</td>
+					    <td width="20%"></td>
                     </thead>
                 </tr>
 
             {% for packing_item in packing.packingitem_set.all %}
             
                 <tr>
-					<td>{{ packing_item.order_item.short_name }}<small>{{ packing_item.order_item.sku }}</small></td>
-					<td>{% if packing_item.packing_quantity %}{{ packing_item.packing_quantity }}{% endif %}</td>
-                    <td>{% if packing_item.packing_weight %}{{ packing_item.packing_weight }}{% endif %}</td>
-					
-					<td>{% if packing_item.packing_unit_price %}{{ packing_item.packing_unit_price|floatformat:2|safe }}
+					<td>
+						{% comment %} If there is a variant short title, use that  {% endcomment %}
+
+						{% if packing_item.order_item.variant_short_title %}
+							{{ packing_item.order_item.variant_short_title|default:"&nbsp;" }}							
+						{% else %}
+							{{ packing_item.order_item.short_name|default:"&nbsp;" }}
+						{% endif %}
+						<small>{{ packing_item.order_item.sku|default:"&nbsp;" }}</small>
+					</td>
+					<td>{{ packing_item.packing_quantity|default:"&nbsp;" }}</td>
+                    <td>{{ packing_item.packing_weight|default:"&nbsp;" }}</td>
+                    <td>{% filter floatformat:2|default:"&nbsp;" %}{{ packing_item.packing_weight_price }}{% endfilter %}</td>
+                    <td>{% filter floatformat:2|default:"&nbsp;" %}{{ packing_item.packing_unit_price }}{% endfilter %}</td>
+                    <td>{% filter floatformat:2|default:"&nbsp;" %}{{ packing_item.packing_item_cost }}{% endfilter %}</td>
+                    <td>&nbsp;</td>
                 </tr>
             
             {% endfor %}
             
             </table>
+            <table cellspacing="0" cellpadding="0" class="totals" align="right">
+                
+                <tr>
+                    <th>Order</th><td>${{ packing.packing_order_cost }}</td>
+                </tr>
+                <tr>
+                    <th>Delivery</th><td></td>
+                </tr>
+                <tr>
+                    <th>Total</th><td></td>                    
+                </tr>                
+            </table>
+            <div style="padding-bottom:100px;"></div>
         </article>
         
     {% endfor %}

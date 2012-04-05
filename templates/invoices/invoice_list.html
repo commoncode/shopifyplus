@@ -47,8 +47,39 @@
         <article class="invoice">
             <header>
                 <h2>#{{ invoice }} - {{ invoice.packing.order.customer }} - {{ invoice.packing.order.shipping_address }}</h2>
-            </header>
+            </header>      
             
+            <table cellspacing="0" cellpadding="0" class="table table-striped table-bordered table-condensed" >
+
+                <tr>
+                    <thead>					    
+				        <td width="30%">Item</td>
+                        <td width="10%">Qty</td>
+				        <td width="15%">Order Weight</td>
+				        <td width="10%">$ per kg</td>
+				        <td width="10%">Unit Price</td>
+				        <td width="10%">Order Cost</td>
+				        <td width="25%"></td>
+                    </thead>
+                </tr>
+
+            
+            {% for invoice_item in invoice.invoiceitem_set.all %}
+            
+                <tr>
+                    <td>{{ invoice_item.packing_item.order_item.short_name|default:"&nbsp;" }}</td>
+                    <td>{{ invoice_item.invoice_quantity|default:"&nbsp;" }}</td>
+                    <td>{{ invoice_item.invoice_weight|default:"&nbsp;" }}</td>
+                    <td>{% filter floatformat:2|default:"&nbsp;" %}{{ invoice_item.invoice_weight_price }}{% endfilter %}</td>
+                    <td>{% filter floatformat:2|default:"&nbsp;" %}{{ invoice_item.invoice_unit_price }}{% endfilter %}</td>
+                    <td>{% filter floatformat:2|default:"&nbsp;" %}{{ invoice_item.invoice_item_cost }}{% endfilter %}</td>
+                    <td>&nbsp;</td>
+                </tr>
+
+            {% endfor %}
+            
+            </table>
+
             <table cellspacing="0" cellpadding="0" class="totals" align="right">
                 
                 <tr>
@@ -60,38 +91,8 @@
                 <tr>
                     <th>Total</th><td></td>                    
                 </tr>                
-            </table>          
-            
-            <table cellspacing="0" cellpadding="0" class="table table-striped table-bordered table-condensed" >
-
-                <tr>
-                    <thead>
-					    <td width="5%">Qty</td>
-				        <td width="30%">Product</td>
-				        <td width="15%">Order Weight</td>
-				        <td width="10%">$ per kg</td>
-				        <td width="10%">Item Price</td>
-				        <td width="10%">Order Cost</td>
-				        <td width="20%"></td>
-                    </thead>
-                </tr>
-
-            
-            {% for invoice_item in invoice.invoiceitem_set.all %}
-            
-                <tr>
-                    <td>{{ invoice_item.invoice_quantity|default:"&nbsp;" }}</td>
-                    <td>{{ invoice_item.packing_item.order_item.short_name|default:"&nbsp;" }}</td>
-                    <td>{{ invoice_item.invoice_weight|default:"&nbsp;" }}</td>
-                    <td>{% filter floatformat:2|default:"&nbsp;" %}{{ invoice_item.invoice_weight_price }}{% endfilter %}</td>
-                    <td>{% filter floatformat:2|default:"&nbsp;" %}{{ invoice_item.invoice_unit_price }}{% endfilter %}</td>
-                    <td>{% filter floatformat:2|default:"&nbsp;" %}{{ invoice_item.invoice_item_cost }}{% endfilter %}</td>
-                    <td>&nbsp</td>
-                </tr>
-
-            {% endfor %}
-            
             </table>
+            <div style="padding-bottom:100px;"></div>
         </article>
         
     {% endfor %}

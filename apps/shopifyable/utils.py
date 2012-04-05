@@ -6,7 +6,7 @@ from dateutil import tz
 from dateutil.parser import parse
 from datetime import *
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, MultipleObjectsReturned, ObjectDoesNotExist
 from django.db.models import get_model
 from django.utils import simplejson
 
@@ -134,38 +134,42 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             if hasattr(klass.Shopify, 'shopify_fields'):
                 if key in klass.Shopify.shopify_fields:
                     obj_dict.update({ key: value })
+
                     if key == 'shopify_product_variant_id':
                         pass
 
             if hasattr(klass.Shopify, 'shopify_date_fields'):
                 if key in klass.Shopify.shopify_date_fields:
-                    
                     if value is not None:                
                         obj_dict.update({ key: parse(value) })
                     
         obj = klass(**obj_dict)
         obj.shop = shop        
         
-        db_order = None
-        # Get a database entry based on the obj
-        if (hasattr(obj, 'order_number')):
-            db_order = klass.objects.filter(order_number=obj.order_number)
-        
-        if db_order: 
-            db_order = db_order[0]
-                             
-        # Save object if it doesn't exist
-        if not db_order:
-            print "Doesn't exist, creating new object"
+        db_obj = None
+
+        try:
+            # Get a database entry based on the obj
+            db_obj = klass.objects.get(id=obj.id)
+        except MultipleObjectsReturned:
+            pass
+        except ObjectDoesNotExist:
+            pass
+
+        # Save object if it doesn't exist or has no updated_at time
+        if (db_obj is None) or (obj.updated_at is None) \
+            or (db_obj.updated_at is None):
+            print obj, ": Doesn't exist, creating new object"
             obj.save()
-        else: # Update object if the date is newer
-            # Remove timezone information for date comparison
+        else: # Update object if the date is different
             # TODO: Convert into local timezone if possible
+
+            # Remove timezone information for date comparison
             obj.updated_at = obj.updated_at.replace(tzinfo=None)
                 
-            print '(%s): Server: %s, Ours: %s' % (obj, obj.updated_at, db_order.updated_at)
-            # If date is newer, update the object
-            if obj.updated_at > db_order.updated_at:
+            print '(%s): Server: %s, Ours: %s' % (obj, obj.updated_at, db_obj.updated_at)
+            # If date is different, update the object
+            if obj.updated_at != db_obj.updated_at:
                obj.save()
                print "Updated object"
                
@@ -178,20 +182,18 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                 rel_obj.full_clean()
             except ValidationError, e:
                 pass
-                #print "ValidationError ({0}): {1}".format(rel_obj.title, e)
             else:
                 try:
-                    if (db_order):
-                        if (rel_obj._order_cache.updated_at > db_order.updated_at):
-                            rel_obj.save()
-                    else:
+                    # Save object if it doesn't exist or has no update_at time
+                    if (db_obj is None) or (rel_obj.updated_at is None) \
+                        or (db_obj.updated_at is None):
                         rel_obj.save()
+                    else: # Update object if the date is different
+                        if (rel_obj.updated_at != db_obj.updated_at):
+                            rel_obj.save()                        
 
                 except Exception, e:
                     print e
-                else:
-                    # print rel_obj
-                    pass
 
     return obj
 
