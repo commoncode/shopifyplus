@@ -5,6 +5,29 @@ import platform
 import shopifyable
 
 from shopifyable.utils import generate_url, generate_request, parse_json
+import ssl
+import httplib
+
+import socket
+
+class HTTPSConnectionV3(httplib.HTTPSConnection):
+    def __init__(self, *args, **kwargs):
+        httplib.HTTPSConnection.__init__(self, *args, **kwargs)
+        
+    def connect(self):
+        sock = socket.create_connection((self.host, self.port), self.timeout)
+        if self._tunnel_host:
+            self.sock = sock
+            self._tunnel()
+        try:
+            self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_SSLv3)
+        except ssl.SSLError, e:
+            print("Trying SSLv3.")
+            self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_SSLv23)
+            
+class HTTPSHandlerV3(urllib2.HTTPSHandler):
+    def https_open(self, req):
+        return self.do_open(HTTPSConnectionV3, req)
 
 class Shopify(object):
     DEFAULT_HEADERS = {
@@ -30,9 +53,12 @@ class Shopify(object):
         # Create and send HTTP Request
         url = generate_url(self.protocol, self.domain, path, get_params)
         req_headers = dict(self.headers, **headers)
+        #import rpdb2; rpdb2.start_embedded_debugger('0')
         request = generate_request(method, url, body)
         for name, value in req_headers.items():
             request.add_header(name, value)
+        urllib2.install_opener(urllib2.build_opener(HTTPSHandlerV3()))
+
         conn = urllib2.urlopen(request)
         
         # Parse HTTP Response (expecting a well-formed XML document)
