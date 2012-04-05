@@ -156,6 +156,8 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
         except ObjectDoesNotExist:
             pass
 
+        #import rpdb2; rpdb2.start_embedded_debugger('0')
+
         # Save object if it doesn't exist or has no updated_at time
         if (db_obj is None) or (obj.updated_at is None) \
             or (db_obj.updated_at is None):
@@ -185,11 +187,11 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             else:
                 try:
                     # Save object if it doesn't exist or has no update_at time
-                    if (db_obj is None) or (rel_obj.updated_at is None) \
+                    if (db_obj is None) or (obj.updated_at is None) \
                         or (db_obj.updated_at is None):
                         rel_obj.save()
                     else: # Update object if the date is different
-                        if (rel_obj.updated_at != db_obj.updated_at):
+                        if (db_obj.updated_at != obj.updated_at):
                             rel_obj.save()                        
 
                 except Exception, e:
