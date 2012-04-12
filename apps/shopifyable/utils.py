@@ -1,10 +1,8 @@
 import urllib
 import urllib2
 import urlparse
-import inspect
-from dateutil import tz
+
 from dateutil.parser import parse
-from datetime import *
 
 from django.core.exceptions import ValidationError, MultipleObjectsReturned, ObjectDoesNotExist
 from django.db.models import get_model
@@ -143,9 +141,12 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                     if value is not None:                
                         obj_dict.update({ key: parse(value) })
                     
-        obj = klass(**obj_dict)
-        obj.shop = shop        
-        
+        try:
+            obj = klass(**obj_dict)
+            obj.shop = shop        
+        except TypeError, e:
+            import ipdb; ipdb.set_trace()
+
         db_obj = None
 
         try:
@@ -155,8 +156,6 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             pass
         except ObjectDoesNotExist:
             pass
-
-        #import rpdb2; rpdb2.start_embedded_debugger('0')
 
         # Save object if it doesn't exist or has no updated_at time
         if (db_obj is None) or (obj.updated_at is None) \
@@ -183,16 +182,20 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             try:
                 rel_obj.full_clean()
             except ValidationError, e:
-                pass
+                print e
             else:
                 try:
                     # Save object if it doesn't exist or has no update_at time
                     if (db_obj is None) or (obj.updated_at is None) \
                         or (db_obj.updated_at is None):
                         rel_obj.save()
+                        print "Created rel obj:  %s" % rel_obj 
                     else: # Update object if the date is different
                         if (db_obj.updated_at != obj.updated_at):
-                            rel_obj.save()                        
+                            rel_obj.save()
+                            print "Updated rel obj: %s" % rel_obj
+                        else:
+                            print "Rel obj not changed: %s" % rel_obj                
 
                 except Exception, e:
                     print e
