@@ -96,6 +96,17 @@ def _parse_rel_objs(rel_objs, rel_klass, rel_obj_json):
             fields_dict = rel_klass.Shopify.shopify_fields
             for k, v in fields_dict.iteritems():
                 rel_obj_dict.update({ fields_dict[k]: rel_obj_json[k] })
+
+            
+            if hasattr(rel_klass.Shopify, 'shopify_date_fields'):
+                date_fields = rel_klass.Shopify.shopify_date_fields
+                for key, value in date_fields.iteritems():
+                    if key in rel_klass.Shopify.shopify_date_fields:
+                        if value is not None:
+                            #print value
+                            #import ipdb; ipdb.set_trace()
+                            rel_obj_dict.update({ key: parse(rel_obj_json[value]) })
+
             rel_obj = rel_klass(**rel_obj_dict)
             rel_objs.append(rel_obj)
             del(rel_obj)
@@ -183,9 +194,23 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                 rel_obj.full_clean()
             except ValidationError, e:
                 print e
+
+                if hasattr(rel_obj, 'updated_at'):
+                    
+                    try:
+                        test_obj = rel_obj.__class__.objects.get(id=rel_obj.id)
+                    except ObjectDoesNotExist:
+                        pass
+                    else:
+                        rel_obj.updated_at = rel_obj.updated_at.replace(tzinfo=None)
+                        if rel_obj.updated_at != test_obj.updated_at:
+                            print "rel_obj updated"
+                            rel_obj.save() # replaces the test_obj?
+                            continue
             else:
                 try:
                     # Save object if it doesn't exist or has no update_at time
+                            
                     if (db_obj is None) or (obj.updated_at is None) \
                         or (db_obj.updated_at is None):
                         rel_obj.save()
