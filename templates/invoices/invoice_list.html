@@ -4,6 +4,10 @@
 {% block content %}
 
 <style>
+    body {
+        margin-top: 20px;
+    }
+
 	.invoices {
         width: 80%;
         margin-left:auto;
@@ -64,8 +68,9 @@
     </header>
 
     {% for invoice in object_list %}
-    
-        <h2>#{{ invoice }} - {{ invoice.packing.order.customer }} - {{ invoice.packing.order.shipping_address }}</h2>    
+        <header>
+            <h2>#{{ invoice }} - {{ invoice.packing.order.customer }} - {{ invoice.packing.order.shipping_address }}</h2>    
+        </header>
 
         <article class="invoice">
             
