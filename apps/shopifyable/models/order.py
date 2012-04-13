@@ -222,10 +222,9 @@ class DiscountCode(models.Model):
     
     code = models.CharField(
         blank=True,
-        max_length=255,
-        null=True)
+        max_length=255)
    
-    amount = models.PositiveIntegerField(
+    amount = models.FloatField(
         blank=True,
         null=True)
     
@@ -236,7 +235,37 @@ class DiscountCode(models.Model):
         shopify_fields = {
             "code": "code",
             "amount": "amount",
-        }  
+        }
+
+    def __unicode__(self):
+        return u'%s' % (self.code)
+
+class TaxLine(models.Model):
+
+    price = models.FloatField(
+        blank=True,
+        null=True)
+
+    rate = models.FloatField(
+        blank=True,
+        null=True)
+
+    title = models.CharField(
+        blank=True,
+        max_length=255)
+
+    class Meta:
+        abstract = True
+
+    class Shopify:
+        shopify_fields = {
+            "price": "price",
+            "rate": "rate",
+            "title": "title",
+        }
+
+    def __unicode__(self):
+        return u'%s' % (self.title)
 
 class Order(Shopifyable):
     """
@@ -307,9 +336,6 @@ class Order(Shopifyable):
         blank=True,
         null=True)
     taxes_included = models.BooleanField()
-    tax_lines = models.TextField(
-        blank=True,
-        null=True)
     token = models.CharField(
         blank=True,
         max_length=255,
@@ -352,7 +378,6 @@ class Order(Shopifyable):
             'order_number': 'order_number',
             'referring_site': 'referring_site',
             'subtotal_price': 'subtotal_price',
-            'tax_lines': 'tax_lines',
             'taxes_included': 'taxes_included',
             'token': 'token',
             'total_discounts': 'total_discounts',
@@ -367,7 +392,9 @@ class Order(Shopifyable):
         shopify_arrays = {
             'discount_codes': 'ordering.DiscountCode',
             'line_items': 'ordering.OrderItem',
-            'shipping_lines': 'ordering.ShippingLine', }
+            'shipping_lines': 'ordering.ShippingLine',
+            'tax_lines': 'ordering.TaxLine',
+            }
         shopify_dicts = {
             'customer': 'customers.Customer',
             'billing_address': 'ordering.BillingAddress',

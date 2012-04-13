@@ -12,7 +12,6 @@ class Command(BaseCommand):
         """
         Orders
         """
-        
         shops = Shop.objects.all()
         
         fetch_orders(shops)

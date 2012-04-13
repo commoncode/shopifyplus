@@ -28,13 +28,23 @@ class BillingAddressInline(admin.StackedInline):
     model = get_model('ordering', 'billingaddress')
     extra = 0
 
+class DiscountCodeInline(admin.StackedInline):
+    model = get_model('ordering', 'discountcode')
+    extra = 0
+
+class TaxLineInline(admin.StackedInline):
+    model = get_model('ordering', 'taxline')
+    extra = 0
+
 class OrderAdmin(admin.ModelAdmin):
     inlines = [
         CustomerInline,
         BillingAddressInline,
         ShippingAddressInline,
         OrderItemInline,
-        ShippingLineInline, ]
+        ShippingLineInline, 
+        DiscountCodeInline,
+        TaxLineInline, ]
         
     actions = [procurement_orders]
 

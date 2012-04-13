@@ -1,35 +1,50 @@
 {% extends "fulfilment/base.html" %}
+{% load custom_filters %}
 
 {% block content %}
 
 <style>
-	.packings {
-        margin: 40px;
+    body {
+        margin-top: 20px;
+    }
+
+    .packings {
+        width: 80%;
+        margin-left:auto;
+        margin-right:auto;
     }
     thead td {
         background-color: #ccc;
     }
-	small {
-		float: right;
-		font-size: 8px;
-	}
+    small {
+        float: right;
+        font-size: 8px;
+    }
     .totals {
-        width: 30%;
-        margin: 0px 0px 20px 0px
+        margin-left: auto;
+        margin-bottom: 20px;
     }
     .totals th {
-        width: 20%;
-        background: #CCCCCC;
+        font-weight:normal;
     }
     .totals th, td {
         padding: 4px 5px;
-        border: 1px solid #DDDDDD;
         line-height: 18px;
+        text-align: right;
+    }
+    .totals td {
+        padding-left: 100px;
     }
     @media print {
         table {
             page-break-after:always
         }
+    }
+    .quantity {
+        text-align: center !important;
+    }
+    .rightalign {
+        text-align: right !important;
     }
 </style>
 
@@ -46,84 +61,73 @@
                 <h2>#{{ packing }} - {{ packing.order.customer }} - {{ packing.order.shipping_address }}</h2>
             </header>
             <aside>
-				<dl>
-					{% if packing.order.customer.note %}
-					<dt>Customer note:</dt>
-					<dd>{{ packing.order.customer.note }}</dd>
-					{% endif %}
-					
-					{% if packing.order.note %}
-					<dt>Order note:</dt>
-					<dd>{{ packing.order.note }}</dd>
-					{% endif %}
-					
-					{% if packing.order.customer.shipping_notes %}
-					<dt>Customer Shipping notes:</dt>
-					<dd>{{ packing.order.customer.shipping_notes }}</dd>
-					{% endif %}
-										
-					{% comment %}
-						{% if packing.order.note_attributes %}
-							{{ packing.order.note_attributes }}
-							{% for note_attr in packing.order.note_attributes %}
-								<dt>{{ note_attr }}</dt>
-								<dd>{{ note_attr }}</dd>
-							{% endfor %}
-						{% endif %}
-					{% endcomment %}
-				</dl>
+                <dl>
+                    {% if packing.order.customer.note %}
+                    <dt>Customer note:</dt>
+                    <dd>{{ packing.order.customer.note }}</dd>
+                    {% endif %}
+                    
+                    {% if packing.order.note %}
+                    <dt>Order note:</dt>
+                    <dd>{{ packing.order.note }}</dd>
+                    {% endif %}
+                    
+                    {% if packing.order.customer.shipping_notes %}
+                    <dt>Customer Shipping notes:</dt>
+                    <dd>{{ packing.order.customer.shipping_notes }}</dd>
+                    {% endif %}
+                                        
+                    {% comment %}
+                        {% if packing.order.note_attributes %}
+                            {{ packing.order.note_attributes }}
+                            {% for note_attr in packing.order.note_attributes %}
+                                <dt>{{ note_attr }}</dt>
+                                <dd>{{ note_attr }}</dd>
+                            {% endfor %}
+                        {% endif %}
+                    {% endcomment %}
+                </dl>
             </aside>
             <table cellspacing="0" cellpadding="0" class="table table-striped table-bordered table-condensed" >
 
                 <tr>
                     <thead>
-						<td width="30%">Item</td>
-						<td width="10%">Qty</td>
-	                    <td width="10%">Order weight</td>
-				        <td width="10%">$ per kg</td>
-				        <td width="10%">U Price</td>
-				        <td width="10%">Order Cost</td>
-					    <td width="20%"></td>
+                        <td width="30%">Item</td>
+                        <td class="quantity" width="5%">Qty</td>
+                        <td class="rightalign" width="10%">Order weight</td>
+                        <td class="rightalign" width="10%">$ per kg</td>
+                        <td class="rightalign" width="10%">U Price</td>
+                        <td class="rightalign" width="35%">Order Cost</td>
                     </thead>
                 </tr>
 
             {% for packing_item in packing.packingitem_set.all %}
             
                 <tr>
-					<td>
-						{% comment %} If there is a variant short title, use that  {% endcomment %}
-
-						{% if packing_item.order_item.variant_short_title %}
-							{{ packing_item.order_item.variant_short_title|default:"&nbsp;" }}							
-						{% else %}
-							{{ packing_item.order_item.short_name|default:"&nbsp;" }}
-						{% endif %}
-						<small>{{ packing_item.order_item.sku|default:"&nbsp;" }}</small>
-					</td>
-					<td>{{ packing_item.packing_quantity|default:"&nbsp;" }}</td>
-                    <td>{{ packing_item.packing_weight|default:"&nbsp;" }}</td>
-                    <td>{% filter floatformat:2|default:"&nbsp;" %}{{ packing_item.packing_weight_price }}{% endfilter %}</td>
-                    <td>{% filter floatformat:2|default:"&nbsp;" %}{{ packing_item.packing_unit_price }}{% endfilter %}</td>
-                    <td>{% filter floatformat:2|default:"&nbsp;" %}{{ packing_item.packing_item_cost }}{% endfilter %}</td>
-                    <td>&nbsp;</td>
+                    <td>
+                        {% comment %} If there is a variant short title, use that  {% endcomment %}
+                        {% if packing_item.order_item.variant_short_title %}
+                            {{ packing_item.order_item.variant_short_title|default:"&nbsp;" }}                          
+                        {% else %}
+                            {{ packing_item.order_item.short_name|default:"&nbsp;" }}
+                        {% endif %}
+                        <small>{{ packing_item.order_item.sku|default:"&nbsp;" }}</small>
+                    </td>
+                    <td class="quantity">{{ packing_item.packing_quantity|default:"&nbsp;" }}</td>
+                    <td class="rightalign">{{ packing_item.packing_weight|default:"&nbsp;" }}</td>
+                    <td class="rightalign">{{ packing_item.packing_weight_price|currency_filter:1|default:"&nbsp;" }}</td>
+                    <td class="rightalign">{{ packing_item.packing_unit_price|currency_filter:1|default:"&nbsp;" }}</td>
+                    <td class="rightalign">{{ packing_item.packing_item_cost|currency_filter:1|default:"&nbsp;" }}</td>
                 </tr>
             
             {% endfor %}
             
             </table>
-            <table cellspacing="0" cellpadding="0" class="totals" align="right">
-                
+            <table cellspacing="0" cellpadding="0" class="totals">
                 <tr>
-                    <th>Order</th><td>${{ packing.packing_order_cost }}</td>
+                    <th><b>Total:</b></th><td>{{ packing.packing_order_cost|currency_filter:1 }}</td>                    
                 </tr>
-                <tr>
-                    <th>Delivery</th><td></td>
-                </tr>
-                <tr>
-                    <th>Total</th><td></td>                    
-                </tr>                
             </table>
-            <div style="padding-bottom:100px;"></div>
         </article>
         
     {% endfor %}
