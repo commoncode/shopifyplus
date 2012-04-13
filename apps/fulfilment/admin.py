@@ -41,7 +41,7 @@ class PackingItemAdmin(admin.ModelAdmin):
 
 admin.site.register(get_model('fulfilment', 'packingitem'), PackingItemAdmin)
 
-class PackingItemInline(admin.StackedInline):
+class PackingItemInline(admin.TabularInline):
     model = get_model('fulfilment', 'packingitem')
     extra = 0
     fields = (

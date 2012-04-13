@@ -24,8 +24,8 @@ class Procurement(models.Model):
     #     help_text="Procurement for shops")
     created_at = models.DateTimeField()
     
-    # def __unicode__(self):
-    #         return '%s :: %s' % (self._shops, self._order_numbers)
+    def __unicode__(self):
+        return '%s' % self.created_at
         
     def save(self, *args, **kwargs):
         if not self.id:
@@ -37,7 +37,7 @@ class Procurement(models.Model):
         # self.shops = Shop.objects.filter(**shop_kwargs)
         
     def _order_numbers(self):
-        return ', '.join(set(self.procurementorder_set.all().values_list('order__order_number', flat=True)))
+        return self.procurementorder_set.all().values_list('order__order_number', flat=True)
         
     def _shops(self):
         return ', '.join(set(self.procurementorder_set.all().values_list('order__shop__title', flat=True)))

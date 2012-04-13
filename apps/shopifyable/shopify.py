@@ -16,7 +16,7 @@ class HTTPSConnectionV3(httplib.HTTPSConnection):
         
     def connect(self):
         sock = socket.create_connection((self.host, self.port), self.timeout)
-        if self._tunnel_host:
+        if hasattr(self, '_tunnel_host') and self._tunnel_host:
             self.sock = sock
             self._tunnel()
         try:
