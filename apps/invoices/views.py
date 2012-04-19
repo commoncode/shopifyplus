@@ -15,11 +15,35 @@ class InvoiceMixin(object):
         if queryset is None:
             queryset = self.get_queryset()
         return queryset.get()
+
+class InvoiceDetailMixin(object):
+    model = Invoice
+    def get_queryset(self):
+        return super(InvoiceDetailMixin, self).get_queryset().select_related().filter(invoice=invoice)
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        return queryset.get()
         
+        
+
 class InvoiceList(InvoiceMixin, generic.ListView):
     template_name = "invoices/invoice_list.html"
 invoice_list = InvoiceList.as_view()
 
-class InvoiceDetail(InvoiceMixin, generic.ListView):
-    pass
-invoice_detail = InvoiceDetail.as_view()
+#class InvoiceDetail(InvoiceDetailMixin, generic.DetailView):
+#	pass
+#invoice_detail = InvoiceDetail.as_view()
+
+class InvoiceDetailView(generic.DetailView):
+
+	model = Invoice
+	slug_field = "id"
+
+	def render(self, context):
+		context['invoice'] = object
+
+invoice_detail = InvoiceDetailView.as_view()
+
+
