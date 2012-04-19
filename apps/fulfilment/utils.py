@@ -137,6 +137,15 @@ def process_procurement_orders(queryset):
                         else:
                             packing_item.save()
                             print packing_item
+
+def packing_defaults(queryset):
+
+    packings = queryset
+
+    for packing in packings:
+        items = PackingItem.objects.filter(packing=packing)
+        packing_item_defaults(items)
+        
                     
 def packing_item_defaults(queryset):
     """

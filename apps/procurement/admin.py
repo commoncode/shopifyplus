@@ -59,10 +59,6 @@ class ProcurementAdmin(admin.ModelAdmin):
     procurement_item_defaults.short_description = "Set procurement item defaults"
 
     def generate_packing(self, request, queryset):
-        # TODO: Find a good place to default the procurement...
-        # If not defaulted already...?
-        print "Setting procurement defaults"
-        set_procurement_item_defaults(queryset)
         procurement_items = generate_packing_from_procurement(queryset)
         self.message_user(request, "Packing created for %s procurement item(s)" % len(procurement_items))
     generate_packing.short_description = "Generate packing from procurementss"

@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.db.models import get_model
 from fulfilment.models import PackingItem
+from invoices.utils import process_packings
+from fulfilment.utils import packing_defaults
 
 class PackingItemAdmin(admin.ModelAdmin):
 
@@ -78,9 +80,17 @@ class PackingAdmin(admin.ModelAdmin):
         'order', )
 
     actions = [
-        'generate_invoices']
+        'packing_item_defaults',
+        'generate_invoices',]
 
     def generate_invoices(self, request, queryset):
-        pass
+        process_packings(queryset)
+    generate_invoices.short_description = "Generate Invoices from Packing"
+
+    def packing_item_defaults(self, request, queryset):
         
+        packing_defaults(queryset)
+        self.message_user(request, "Defaults set for %s packing item(s)" % len(queryset))
+    packing_item_defaults.short_description = "Set packing item defaults"
+
 admin.site.register(get_model('fulfilment', 'packing'), PackingAdmin)

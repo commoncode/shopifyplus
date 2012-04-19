@@ -18,35 +18,36 @@ def process_packings(queryset):
     
     for packing in packings:
         
-        packing_items = PackingItem.objects.filter(packing=packing)
-        
-        invoice_kwargs = {
-            'packing': packing, }
+        if packing.fulfilled:
+            packing_items = PackingItem.objects.filter(packing=packing)
             
-        invoice = Invoice(**invoice_kwargs)
-        invoice.save()
-        print u'%s' % invoice
-        
-        for packing_item in packing_items:
+            invoice_kwargs = {
+                'packing': packing, }
+                
+            invoice = Invoice(**invoice_kwargs)
+            invoice.save()
+            print u'%s' % invoice
             
-            invoice_item_kwargs = {
-                'invoice': invoice,
-                'packing_item': packing_item,
-                'invoice_weight': packing_item.fulfilment_weight,
-                'invoice_quantity': packing_item.fulfilment_quantity,
-                'invoice_unit_weight': packing_item.fulfilment_unit_weight,
-                'invoice_weight_price': packing_item.fulfilment_weight_price,
-                'invoice_unit_price': packing_item.fulfilment_unit_price,
-                'notes': packing_item.notes, }
-            invoice_item = InvoiceItem(**invoice_item_kwargs)
-            
-            try:
-                invoice_item.full_clean()
-            except ValidationError, e:
-                print e
-            else:
-                invoice_item.save()
-                print u'    %s' % invoice_item
+            for packing_item in packing_items:
+                
+                invoice_item_kwargs = {
+                    'invoice': invoice,
+                    'packing_item': packing_item,
+                    'invoice_weight': packing_item.fulfilment_weight,
+                    'invoice_quantity': packing_item.fulfilment_quantity,
+                    'invoice_unit_weight': packing_item.fulfilment_unit_weight,
+                    'invoice_weight_price': packing_item.fulfilment_weight_price,
+                    'invoice_unit_price': packing_item.fulfilment_unit_price,
+                    'notes': packing_item.notes, }
+                invoice_item = InvoiceItem(**invoice_item_kwargs)
+                
+                try:
+                    invoice_item.full_clean()
+                except ValidationError, e:
+                    print e
+                else:
+                    invoice_item.save()
+                    print u'    %s' % invoice_item
                 
 def create_invoices(queryset):
     
