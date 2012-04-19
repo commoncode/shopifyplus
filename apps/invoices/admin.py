@@ -37,7 +37,7 @@ class InvoiceItemAdmin(admin.ModelAdmin):
     readonly_fields = (
         'invoice',
         'invoice_item_name',)
-
+    
     def invoice_item_name (self, obj):
         return obj.packing_item
 

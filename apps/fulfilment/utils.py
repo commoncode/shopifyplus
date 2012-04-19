@@ -202,8 +202,25 @@ def packing_item_csv(queryset):
             order_cost)
     
     
-    
-    
-    
+def generate_packing_from_procurement(queryset):
+    """
+    Generates packing and packing items from procurements
+    """
+    try:
+        if isinstance(queryset[0], Procurement):
+            procurement_items = []
+            for procurement in queryset:
+                 procurement_items += procurement.procurementitem_set.all()
+        else:
+            procurement_items = queryset
+    except IndexError:
+        """
+        queryset[0] throws IndexError?
+        """
+        pass
+    else:
+        process_procurement_orders(procurement_items)
+        return procurement_items
+
     
             

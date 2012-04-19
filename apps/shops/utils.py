@@ -13,10 +13,11 @@ def fetch_orders(shops):
             orders.append(parse_shop_object(shop, Order, _order))
 
     # Close orders that weren't fetched from the shopify server
-    #queryset = Order.objects.filter(id__not__in=[order.id for order in orders].save(opened=False))
+    # TODO: Check if this works
+    Order.objects.filter(id__not__in=[order.id for order in orders].save(opened=False))
 
     return orders
-    
+
 def fetch_products(shops):
     
     products = []

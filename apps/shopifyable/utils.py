@@ -173,10 +173,6 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             or (db_obj.updated_at is None):
             print obj, ": Doesn't exist, creating new object"
 
-            # If object is an Order (has the open attribute), set it to an open Order
-            if hasattr(obj, 'opened'):
-                obj.opened = True
-
             obj.save()
         else: # Update object if the date is different
             # TODO: Convert into local timezone if possible

@@ -12,7 +12,7 @@ class Order(Order):
     shop = models.ForeignKey(
         Shop)
 
-    opened = models.BooleanField()
+    opened = models.BooleanField(default=True)
 
     # customer = models.ForeignKey(
     #     'customers.Customer',

@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.db.models import get_model
 
 from procurement.utils import procurement_item_defaults as set_procurement_item_defaults
+from fulfilment.utils import generate_packing_from_procurement
 
 class ProcurementItemAdmin(admin.ModelAdmin):
     list_filter = (
@@ -35,7 +36,9 @@ class ProcurementItemInline(admin.StackedInline):
 
 class ProcurementAdmin(admin.ModelAdmin):
     
-    actions = ['procurement_item_defaults']
+    actions = [
+        'procurement_item_defaults',
+        'generate_packing']
     
     inlines = [
         ProcurementItemInline, ]
@@ -54,6 +57,15 @@ class ProcurementAdmin(admin.ModelAdmin):
         procurement_items = set_procurement_item_defaults(queryset)
         self.message_user(request, "Defaults set for %s procurement item(s)" % len(procurement_items))
     procurement_item_defaults.short_description = "Set procurement item defaults"
+
+    def generate_packing(self, request, queryset):
+        # TODO: Find a good place to default the procurement...
+        # If not defaulted already...?
+        print "Setting procurement defaults"
+        set_procurement_item_defaults(queryset)
+        procurement_items = generate_packing_from_procurement(queryset)
+        self.message_user(request, "Packing created for %s procurement item(s)" % len(procurement_items))
+    generate_packing.short_description = "Generate packing from procurementss"
 
 admin.site.register(get_model('procurement', 'procurement'), ProcurementAdmin)
 

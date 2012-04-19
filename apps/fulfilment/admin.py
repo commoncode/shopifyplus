@@ -75,6 +75,12 @@ class PackingAdmin(admin.ModelAdmin):
         PackingItemInline, ]
             
     readonly_fields = (
-        'order', )       
+        'order', )
+
+    actions = [
+        'generate_invoices']
+
+    def generate_invoices(self, request, queryset):
+        pass
         
 admin.site.register(get_model('fulfilment', 'packing'), PackingAdmin)
