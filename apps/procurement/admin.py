@@ -30,9 +30,12 @@ class ProcurementItemAdmin(admin.ModelAdmin):
         
 admin.site.register(get_model('procurement', 'procurementitem'), ProcurementItemAdmin)    
     
-class ProcurementItemInline(admin.StackedInline):
+class ProcurementItemInline(admin.TabularInline):
     model = get_model('procurement', 'procurementitem')
     extra = 0
+    
+    readonly_fields = (
+        'order_weight',)
 
 class ProcurementAdmin(admin.ModelAdmin):
     
@@ -45,8 +48,16 @@ class ProcurementAdmin(admin.ModelAdmin):
         
     list_display = (
         'created_at',
+        'order_numbers',
         'procurement_csv', )
         
+    def order_numbers(self, obj):
+        html = ''
+        for order_number in obj._order_numbers():
+            html += '<a href="%s">%s</a> ' % ('ordering/order/%s' % obj.id, order_number)
+        return html
+    order_numbers.allow_tags=True
+    
     def procurement_csv(self, obj):
         return u'Download <a href="%s">csv</a>' % (
             obj.get_csv_url())
@@ -65,7 +76,7 @@ class ProcurementAdmin(admin.ModelAdmin):
 
 admin.site.register(get_model('procurement', 'procurement'), ProcurementAdmin)
 
-# class ProcurementOrderAdmin(admin.ModelAdmin):
-#     pass
-# 
-# admin.site.register(get_model('Procurements', 'Procurementorder'), ProcurementOrderAdmin)
+class ProcurementOrderAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(get_model('procurement', 'procurementorder'), ProcurementOrderAdmin)
