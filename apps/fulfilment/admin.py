@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.db.models import get_model
+from fulfilment.models import PackingItem
 
 class PackingItemAdmin(admin.ModelAdmin):
-    
+
     list_filter = (
         'packing',
         'procurement_item', )
@@ -37,11 +38,14 @@ class PackingItemAdmin(admin.ModelAdmin):
         'notes',
         'fulfilled_by',
         'fulfilled_at',
-        'fulfilled', ) 
+        'fulfilled', )
+
+    def _order_item(self, obj):
+        return obj.order_item
 
 admin.site.register(get_model('fulfilment', 'packingitem'), PackingItemAdmin)
 
-class PackingItemInline(admin.StackedInline):
+class PackingItemInline(admin.TabularInline):
     model = get_model('fulfilment', 'packingitem')
     extra = 0
     fields = (
@@ -64,14 +68,13 @@ class PackingItemInline(admin.StackedInline):
         'packing_weight',
         'packing_unit_weight',
         'packing_weight_price',
-        'packing_unit_price', ) 
-    
+        'packing_unit_price', )
+
 class PackingAdmin(admin.ModelAdmin):
     inlines = [
         PackingItemInline, ]
             
     readonly_fields = (
-        'order', )   
-       
+        'order', )       
         
 admin.site.register(get_model('fulfilment', 'packing'), PackingAdmin)

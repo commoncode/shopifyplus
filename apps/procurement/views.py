@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import csv
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 
 from procurement.models import Procurement
+from procurement.utils import procurement_orders
+from ordering.models import Order
+from shops.models import Shop
 
 def procurement_csv(request, procurement_id):
     
@@ -36,3 +39,14 @@ def procurement_csv(request, procurement_id):
             str((procurement_item.order_weight) or '')])
             
     return response
+
+def create_procurement_orders(request):
+    """
+    Generates procurements from open orders
+    """
+
+    shop = Shop.objects.get()        
+    orders = Order.objects.filter(opened=True, shop=shop)
+    procurement_orders(orders)
+
+    return HttpResponseRedirect('/')

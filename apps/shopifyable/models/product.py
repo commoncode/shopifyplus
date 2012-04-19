@@ -88,9 +88,9 @@ class ProductVariant(Shopifyable):
             "sku": "sku",
             "taxable": "taxable",
             "title": "title", }
-        # shopify_date_fields = {
-        #     'created_at': 'created_at',
-        #     'updated_at': 'updated_at', }
+        shopify_date_fields = {
+            'created_at': 'created_at',
+            'updated_at': 'updated_at', }
         
     def __unicode__(self):
         return u'%s' % self.option1
@@ -152,10 +152,10 @@ class Product(Shopifyable, Handleable, Taggable):
             }
         shopify_arrays = {
             'variants': 'products.ProductVariant', }
-        # shopify_date_fields = {
-        #     'created_at': 'created_at',
-        #     'published_at': 'published_at',
-        #     'updated_at': 'updated_at' }
+        shopify_date_fields = {
+            'created_at': 'created_at',
+            'published_at': 'published_at',
+            'updated_at': 'updated_at' }
         
     def __unicode__(self):
         return u'%s' % self.title
