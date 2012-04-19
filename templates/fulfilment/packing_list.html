@@ -3,51 +3,6 @@
 
 {% block content %}
 
-<style>
-    body {
-        margin-top: 20px;
-    }
-
-    .packings {
-        width: 80%;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    thead td {
-        background-color: #ccc;
-    }
-    small {
-        float: right;
-        font-size: 8px;
-    }
-    .totals {
-        margin-left: auto;
-        margin-bottom: 20px;
-    }
-    .totals th {
-        font-weight:normal;
-    }
-    .totals th, td {
-        padding: 4px 5px;
-        line-height: 18px;
-        text-align: right;
-    }
-    .totals td {
-        padding-left: 100px;
-    }
-    @media print {
-        table {
-            page-break-after:always
-        }
-    }
-    .quantity {
-        text-align: center !important;
-    }
-    .rightalign {
-        text-align: right !important;
-    }
-</style>
-
 <section class="packings">
     
     <header>
@@ -56,6 +11,10 @@
 
     {% for packing in object_list %}
     
+        <header>
+            <h2><a href="{% url packing-detail packing.id %}">#{{ packing }} - {{ packing.order.customer }} - {{ packing.order.shipping_address }}</a></h2>
+        </header>
+        
         {% include "fulfilment/includes/_packing_item.html" %}
         
     {% endfor %}

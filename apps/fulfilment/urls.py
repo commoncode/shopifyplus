@@ -9,9 +9,10 @@ urlpatterns = patterns("fulfilment.views",
     url(r"^packings/",
         'packing_list',
         name='packing-list'),
-    url(r"^packing/(?P<order_number>[-\d]+)/$",
+
+    url (r"^/packing/detail/(?P<slug>[-\d]+)/$",
         'packing_detail',
-        name='packing-detail'),
+        name='packing-detail'),   
     
     # Shipping    
     url(r"^shippings/",

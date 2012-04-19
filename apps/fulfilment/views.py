@@ -27,6 +27,16 @@ class ShippingList(PackingMixin, generic.ListView):
 shipping_list = ShippingList.as_view()
 
 
-class PackingDetail(PackingMixin, generic.DetailView):
-    pass
-packing_detail = PackingDetail.as_view()
+# class PackingDetail(PackingMixin, generic.DetailView):
+#     pass
+# packing_detail = PackingDetail.as_view()
+
+class PackingDetailView(generic.DetailView):
+
+    model = Packing
+    slug_field = "id"
+
+    def render(self, context):
+        context['packing'] = object
+
+packing_detail = PackingDetailView.as_view()

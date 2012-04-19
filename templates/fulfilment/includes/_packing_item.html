@@ -1,9 +1,6 @@
 {% load custom_filters %}
 
         <article class="packing">
-            <header>
-                <h2>#{{ packing }} - {{ packing.order.customer }} - {{ packing.order.shipping_address }}</h2>
-            </header>
             <aside>
                 <dl>
                     {% if packing.order.customer.note %}
