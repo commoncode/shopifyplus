@@ -77,11 +77,33 @@ class PackingAdmin(admin.ModelAdmin):
         PackingItemInline, ]
             
     readonly_fields = (
-        'order', )
+        'order',
+        'customer',
+        'customer_notes',
+        'order_notes',
+        'order_note_attributes', )
 
     actions = [
         'packing_item_defaults',
         'generate_invoices',]
+        
+    def customer(self, obj):
+        return str(obj.order.customer).title()
+        
+    def customer_notes(self, obj):
+        return obj.order.customer.note or ''
+        
+    def order_notes(self, obj):
+        return obj.order.note or ''
+        
+    def order_note_attributes(self, obj):
+        note_attributes = eval(obj.order.note_attributes)
+        html = ''
+        if note_attributes:
+            for note in note_attributes:
+                html += '<strong>%s</strong>: <span>%s</span><br>' % (note['name'].replace('_', ' ').title(), note['value'].title())
+        return html
+    order_note_attributes.allow_tags = True
 
     def generate_invoices(self, request, queryset):
         packing_count = process_packings(queryset)
