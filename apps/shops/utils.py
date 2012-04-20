@@ -14,7 +14,7 @@ def fetch_orders(shops):
 
     # Close orders that weren't fetched from the shopify server
     # TODO: Check if this works
-    Order.objects.filter(id__not__in=[order.id for order in orders]).update(opened=False)
+    Order.objects.exclude(id__in=[order.id for order in orders]).update(opened=False)
 
     return orders
 
