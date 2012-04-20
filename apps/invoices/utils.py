@@ -15,21 +15,23 @@ def process_packings(queryset):
     """
     
     packings = queryset
+    packing_count = 0
     
     for packing in packings:
+
+        packing_items = PackingItem.objects.filter(packing=packing)
         
-        if packing.fulfilled:
-            packing_items = PackingItem.objects.filter(packing=packing)
+        invoice_kwargs = {
+            'packing': packing, }
             
-            invoice_kwargs = {
-                'packing': packing, }
-                
-            invoice = Invoice(**invoice_kwargs)
-            invoice.save()
-            print u'%s' % invoice
-            
-            for packing_item in packing_items:
-                
+        invoice = Invoice(**invoice_kwargs)
+        invoice.save()
+        print u'%s' % invoice
+
+        packing_item_count = 0
+        
+        for packing_item in packing_items:
+            if packing_item.fulfilled:
                 invoice_item_kwargs = {
                     'invoice': invoice,
                     'packing_item': packing_item,
@@ -47,7 +49,18 @@ def process_packings(queryset):
                     print e
                 else:
                     invoice_item.save()
+                    packing_item_count += 1
                     print u'    %s' % invoice_item
+            else:
+                break
+
+        if len(packing_items) == packing_item_count:
+            packing_count += 1
+
+    # Delete empty invoices
+    if packing_count == 0:
+        invoice.delete()
+    return packing_count
                 
 def create_invoices(queryset):
     

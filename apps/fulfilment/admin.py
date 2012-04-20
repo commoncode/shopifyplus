@@ -84,7 +84,17 @@ class PackingAdmin(admin.ModelAdmin):
         'generate_invoices',]
 
     def generate_invoices(self, request, queryset):
-        process_packings(queryset)
+        packing_count = process_packings(queryset)
+        packing_errors = len(queryset) - packing_count
+
+        success_message = "Generated invoices for %s packing item(s)" % packing_count
+        error_message = "Could not create invoices for %s packing item(s) because they were not fulfilled" % packing_errors
+        if packing_count > 0:
+            self.message_user(request, success_message)
+        if packing_errors > 0:
+            self.message_user(request, error_message)
+
+
     generate_invoices.short_description = "Generate Invoices from Packing"
 
     def packing_item_defaults(self, request, queryset):
