@@ -24,6 +24,8 @@ urlpatterns += patterns("",
     url(r"^shops/", include('shops.urls')),
     url(r"^fulfilment/", include('fulfilment.urls')),
     url(r"^invoices/", include('invoices.urls')),
+    url(r"^products/", include('products.urls')),
+    url(r"^ordering/", include('ordering.urls')),
 )
 
 if settings.SERVE_MEDIA:

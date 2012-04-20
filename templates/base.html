@@ -1,8 +1,13 @@
 <html>
     <head>
         <title></title>
+		
 		<link rel="stylesheet/less" href="{{ STATIC_URL }}bootstrap/less/bootstrap.less" type="text/less" media="all" title="Bootstrap CSS" charset="utf-8">
 		<script src="{{ STATIC_URL }}js/libs/less-1.3.0.min.js"></script>
+
+        {% block headercss %}
+        {% endblock headercss %}
+
     </head>
     <body>
         {% block content %}

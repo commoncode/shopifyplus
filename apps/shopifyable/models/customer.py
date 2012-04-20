@@ -88,7 +88,7 @@ class Customer(Shopifyable, Taggable):
             "accepts_marketing": "accepts_marketing",
             "email": "email",
             "first_name": "first_name",
-            "id": "shopify_customer_id",
+            "id": "id", #"shopify_customer_id",  #TODO: Determine if this works
             "last_name": "last_name",
             "note": "note",
             "orders_count": "orders_count",

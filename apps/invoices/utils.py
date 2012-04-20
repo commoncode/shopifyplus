@@ -15,9 +15,10 @@ def process_packings(queryset):
     """
     
     packings = queryset
+    packing_count = 0
     
     for packing in packings:
-        
+
         packing_items = PackingItem.objects.filter(packing=packing)
         
         invoice_kwargs = {
@@ -26,27 +27,40 @@ def process_packings(queryset):
         invoice = Invoice(**invoice_kwargs)
         invoice.save()
         print u'%s' % invoice
+
+        packing_item_count = 0
         
         for packing_item in packing_items:
-            
-            invoice_item_kwargs = {
-                'invoice': invoice,
-                'packing_item': packing_item,
-                'invoice_weight': packing_item.fulfilment_weight,
-                'invoice_quantity': packing_item.fulfilment_quantity,
-                'invoice_unit_weight': packing_item.fulfilment_unit_weight,
-                'invoice_weight_price': packing_item.fulfilment_weight_price,
-                'invoice_unit_price': packing_item.fulfilment_unit_price,
-                'notes': packing_item.notes, }
-            invoice_item = InvoiceItem(**invoice_item_kwargs)
-            
-            try:
-                invoice_item.full_clean()
-            except ValidationError, e:
-                print e
+            if packing_item.fulfilled:
+                invoice_item_kwargs = {
+                    'invoice': invoice,
+                    'packing_item': packing_item,
+                    'invoice_weight': packing_item.fulfilment_weight,
+                    'invoice_quantity': packing_item.fulfilment_quantity,
+                    'invoice_unit_weight': packing_item.fulfilment_unit_weight,
+                    'invoice_weight_price': packing_item.fulfilment_weight_price,
+                    'invoice_unit_price': packing_item.fulfilment_unit_price,
+                    'notes': packing_item.notes, }
+                invoice_item = InvoiceItem(**invoice_item_kwargs)
+                
+                try:
+                    invoice_item.full_clean()
+                except ValidationError, e:
+                    print e
+                else:
+                    invoice_item.save()
+                    packing_item_count += 1
+                    print u'    %s' % invoice_item
             else:
-                invoice_item.save()
-                print u'    %s' % invoice_item
+                break
+
+        if len(packing_items) == packing_item_count:
+            packing_count += 1
+
+    # Delete empty invoices
+    if packing_count == 0:
+        invoice.delete()
+    return packing_count
                 
 def create_invoices(queryset):
     

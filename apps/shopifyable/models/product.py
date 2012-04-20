@@ -88,9 +88,9 @@ class ProductVariant(Shopifyable):
             "sku": "sku",
             "taxable": "taxable",
             "title": "title", }
-        # shopify_date_fields = {
-        #     'created_at': 'created_at',
-        #     'updated_at': 'updated_at', }
+        shopify_date_fields = {
+            'created_at': 'created_at',
+            'updated_at': 'updated_at', }
         
     def __unicode__(self):
         return u'%s' % self.option1

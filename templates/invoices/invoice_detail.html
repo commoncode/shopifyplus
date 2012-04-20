@@ -1,0 +1,15 @@
+{% extends "invoices/base.html" %}
+
+{% block content %}
+
+	<section class="invoices">
+    
+        <header>
+            <h2>#{{ invoice }} - {{ invoice.packing.order.customer }} - {{ invoice.packing.order.shipping_address }}</h2>    
+        </header>
+
+        {% include "invoices/includes/_invoice_item.html" %}
+
+    </section>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "fulfilment/base.html" %}
+
+{% block content %}
+
+	<section class="packings">
+   
+        <header>
+        	<h2>#{{ packing }} - {{ packing.order.customer }} - {{ packing.order.shipping_address }}</h2>
+        </header>
+
+        {% include "fulfilment/includes/_packing_item.html" %}
+
+    </section>
+
+{% endblock %}

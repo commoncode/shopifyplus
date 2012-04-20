@@ -1,8 +1,11 @@
 from django.contrib import admin
 from django.db.models import get_model
+from fulfilment.models import PackingItem
+from invoices.utils import process_packings
+from fulfilment.utils import packing_defaults
 
 class PackingItemAdmin(admin.ModelAdmin):
-    
+
     list_filter = (
         'packing',
         'procurement_item', )
@@ -37,7 +40,10 @@ class PackingItemAdmin(admin.ModelAdmin):
         'notes',
         'fulfilled_by',
         'fulfilled_at',
-        'fulfilled', ) 
+        'fulfilled', )
+
+    def _order_item(self, obj):
+        return obj.order_item
 
 admin.site.register(get_model('fulfilment', 'packingitem'), PackingItemAdmin)
 
@@ -64,14 +70,37 @@ class PackingItemInline(admin.TabularInline):
         'packing_weight',
         'packing_unit_weight',
         'packing_weight_price',
-        'packing_unit_price', ) 
-    
+        'packing_unit_price', )
+
 class PackingAdmin(admin.ModelAdmin):
     inlines = [
         PackingItemInline, ]
             
     readonly_fields = (
-        'order', )   
-       
+        'order', )
+
+    actions = [
+        'packing_item_defaults',
+        'generate_invoices',]
+
+    def generate_invoices(self, request, queryset):
+        packing_count = process_packings(queryset)
+        packing_errors = len(queryset) - packing_count
+
+        success_message = "Generated invoices for %s packing item(s)" % packing_count
+        error_message = "Could not create invoices for %s packing item(s) because they were not fulfilled" % packing_errors
+        if packing_count > 0:
+            self.message_user(request, success_message)
+        if packing_errors > 0:
+            self.message_user(request, error_message)
+
+
+    generate_invoices.short_description = "Generate Invoices from Packing"
+
+    def packing_item_defaults(self, request, queryset):
         
+        packing_defaults(queryset)
+        self.message_user(request, "Defaults set for %s packing item(s)" % len(queryset))
+    packing_item_defaults.short_description = "Set packing item defaults"
+
 admin.site.register(get_model('fulfilment', 'packing'), PackingAdmin)

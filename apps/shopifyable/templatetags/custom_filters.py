@@ -7,8 +7,8 @@ def currency_filter(value, zero_allowed):
 
 	if value is not None:
 	
-		if value > 0 or bool(zero_allowed):
-			return "$%.2f" % (value)
+		if (value > 0 or bool(zero_allowed)) and type(value) is float:
+				return "$%.2f" % (value)
 		else: return None
 	
 	else:

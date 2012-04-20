@@ -9,7 +9,6 @@ from products.models import ProductVariant
 
 import datetime
 
-
 def procurement_item_defaults(queryset):
     """
     For each ProcurementItem set the procurement values
@@ -75,6 +74,7 @@ def procurement_orders(queryset):
             """
         else:
             procurement_order.save()
+            print "Saved procurement order:", procurement_order
             
     # Retrieve the OrderItems for later use
     order_item_kwargs = {
@@ -109,3 +109,4 @@ def procurement_orders(queryset):
             print u'*** ERROR %s' % e
         else:
             procurement_item.save()
+            print "Saved procurement item", procurement_item
