@@ -47,15 +47,27 @@ class PackingItemAdmin(admin.ModelAdmin):
 
 admin.site.register(get_model('fulfilment', 'packingitem'), PackingItemAdmin)
 
+
+def _packing_func(field, short_desc, allow_tags=True):
+    def wrapped(self, obj):
+        attr = getattr(obj, field)
+        if attr is not None:
+            return '<strong>%s</strong>' % attr
+        return ''
+    wrapped.short_description = short_desc
+    wrapped.allow_tags = allow_tags
+    return wrapped
+    
 class PackingItemInline(admin.TabularInline):
     model = get_model('fulfilment', 'packingitem')
     extra = 0
-    fields = (
-        'packing_quantity',
-        'packing_weight',
-        'packing_unit_weight',
-        'packing_weight_price',
-        'packing_unit_price',
+    fields = [
+        '_packing_item',
+        '_packing_quantity',
+        '_packing_weight',
+        '_packing_unit_weight',
+        '_packing_weight_price',
+        '_packing_unit_price',
         'fulfilment_weight',
         'fulfilment_quantity',
         'fulfilment_unit_weight',
@@ -64,13 +76,46 @@ class PackingItemInline(admin.TabularInline):
         'notes',
         'fulfilled_by',
         'fulfilled_at',
-        'fulfilled', )
-    readonly_fields = (
-        'packing_quantity',
-        'packing_weight',
-        'packing_unit_weight',
-        'packing_weight_price',
-        'packing_unit_price', )
+        'fulfilled', ]
+    
+    readonly_fields = [
+        '_packing_item',
+        '_packing_quantity',
+        '_packing_weight',
+        '_packing_unit_weight',
+        '_packing_weight_price',
+        '_packing_unit_price', ]
+        
+    # fieldsets = (
+    #     (None, {
+    #         'fields': (
+    #             ('_packing_item',
+    #             '_packing_quantity',
+    #             '_packing_weight',
+    #             '_packing_unit_weight',
+    #             '_packing_weight_price',
+    #             '_packing_unit_price',
+    #             'fulfilment_weight',
+    #             'fulfilment_quantity',
+    #             'fulfilment_unit_weight',
+    #             'fulfilment_weight_price',
+    #             'fulfilment_unit_price',
+    #             ),
+    #             ('notes',
+    #             'fulfilled_by',
+    #             'fulfilled_at',
+    #             'fulfilled',),
+    #         ),
+    #     }),
+    # )
+    
+
+    _packing_item = _packing_func("order_item_short_name", "PI")
+    _packing_weight = _packing_func("packing_weight", "PW (g)")
+    _packing_quantity = _packing_func("packing_quantity", "PQ")
+    _packing_unit_weight = _packing_func("packing_unit_weight", "PUW (g)")
+    _packing_weight_price = _packing_func("packing_weight_price", "PWP ($/kg)")
+    _packing_unit_price = _packing_func("packing_unit_price", "PUP $")
 
 class PackingAdmin(admin.ModelAdmin):
     inlines = [

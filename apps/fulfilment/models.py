@@ -129,6 +129,10 @@ class PackingItem(models.Model):
     def packing_item_cost(self):
         return self.packing_unit_price * self.packing_quantity
         
+    @property
+    def order_item_short_name(self):
+        return self.order_item.short_name
+        
     # def save(self):
     #     """ 
     #     Raise an Integrity Error or like if
