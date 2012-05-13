@@ -47,7 +47,6 @@ class PackingItemAdmin(admin.ModelAdmin):
 
 admin.site.register(get_model('fulfilment', 'packingitem'), PackingItemAdmin)
 
-
 def _packing_func(field, short_desc, allow_tags=True):
     def wrapped(self, obj):
         attr = getattr(obj, field)
