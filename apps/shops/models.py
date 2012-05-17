@@ -20,9 +20,13 @@ class ShopLogo(models.Model):
         return os.path.join(
             "shoplogos/%s_%d/" % (instance.shop.title, instance.shop.id), filename)
 
-    shop = models.OneToOneField(Shop, primary_key=True)
+    shop = models.ForeignKey(
+            Shop,
+            blank=True,
+            null=True,
+            unique=True)
+
     image = models.ImageField(upload_to=get_upload_path)
 
     def __unicode__(self):
         return u'%s' % self.shop
-
