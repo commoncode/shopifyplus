@@ -2,17 +2,10 @@
 # Django settings for shopifyplus project.
 
 import os.path
-import posixpath
-import pinax
-import grappelli
 import sys
 
-PINAX_ROOT = os.path.abspath(os.path.dirname(pinax.__file__))
-GRAPPELLI_ROOT = os.path.abspath(os.path.dirname(grappelli.__file__))
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-
-# tells Pinax to use the default theme
-PINAX_THEME = "default"
+PROJECT_DIR = os.path.dirname(__file__).split('/')[-1]
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -37,7 +30,8 @@ DATABASES = {
         "USER": "",                             # Not used with sqlite3.
         "PASSWORD": "",                         # Not used with sqlite3.
         "HOST": "",                             # Set to empty string for localhost. Not used with sqlite3.
-        "PORT": "",                             # Set to empty string for default. Not used with sqlite3.
+        "PORT": "",     
+                                # Set to empty string for default. Not used with sqlite3.
     }
 }
 
@@ -47,6 +41,7 @@ DATABASES = {
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
 TIME_ZONE = "Australia/Melbourne"
+USE_TZ = True
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -78,19 +73,9 @@ STATIC_URL = "/site_media/static/"
 # Additional directories which hold static files
 STATICFILES_DIRS = [
     os.path.join(PROJECT_ROOT, "static"),
-    # os.path.join(PROJECT_ROOT, "media", PINAX_THEME), # ship 'with' the project for now.
-    # revert to the Pinax default whilst design_five is in development
-    # os.path.join(PINAX_ROOT, "media", "default"),
-    
-    # include grappelli
-    # ("admin", os.path.join(GRAPPELLI_ROOT, "media")),
 ]
 
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-# ADMIN_MEDIA_PREFIX = posixpath.join(STATIC_URL, "admin/")
-ADMIN_MEDIA_PREFIX = STATIC_URL + "grappelli/"
+ADMIN_MEDIA_PREFIX = os.path.join(STATIC_URL, "grappelli/")
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = "d_b!f94h#ock%cao=9!@3k2y3*+a97%i2(ecv3oq^+3%&v(+f8"
@@ -107,15 +92,13 @@ MIDDLEWARE_CLASSES = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    # "pinax.middleware.security.HideSensistiveFieldsMiddleware",
     # "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
-ROOT_URLCONF = "shopifyplus.urls"
+ROOT_URLCONF = "%s.urls" % PROJECT_DIR
 
 TEMPLATE_DIRS = [
     os.path.join(PROJECT_ROOT, "templates"),
-    os.path.join(PINAX_ROOT, "templates", PINAX_THEME),
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = [
@@ -123,14 +106,9 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
+    "django.core.context_processors.static",
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages",
-    
-    "staticfiles.context_processors.static_url",
-    
-    "pinax.core.context_processors.pinax_settings",
-    
-    # "grappelli.context_processors.admin_template_path",
 ]
 
 INSTALLED_APPS = [
@@ -138,10 +116,6 @@ INSTALLED_APPS = [
     # Grappelli & Admin-tools
     'grappelli.dashboard',
     'grappelli',
-    # 'admin_tools',
-    # 'admin_tools.theming',
-    # 'admin_tools.menu',
-    # 'admin_tools.dashboard',
     'filebrowser',
     
     # Django
@@ -158,13 +132,9 @@ INSTALLED_APPS = [
     # "debug_toolbar",
     "django_extensions",
     
-    # Pinax
-    "pinax.templatetags",
-    
     # External
     "taggit",
     "south",
-    # "staticfiles",
     
     # Shopify Plus
     'customers',
@@ -179,8 +149,6 @@ INSTALLED_APPS = [
     
 ]
 
-CACHE_BACKEND = 'memcached://127.0.0.1:8000'
-
 FIXTURE_DIRS = [
     os.path.join(PROJECT_ROOT, "fixtures"),
 ]
@@ -190,10 +158,6 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 DEBUG_TOOLBAR_CONFIG = {
     "INTERCEPT_REDIRECTS": False,
 }
-
-# Admin Tools
-# ADMIN_TOOLS_INDEX_DASHBOARD = 'shopifyplus.dashboard.CustomIndexDashboard'
-# ADMIN_TOOLS_APP_INDEX_DASHBOARD = 'shopifyplus.dashboard.CustomAppIndexDashboard'
 
 # Filebrowser
 FILEBROWSER_DEBUG = False

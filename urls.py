@@ -6,13 +6,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 admin.autodiscover()
 
-
-handler500 = "pinax.views.server_error"
-
+from filebrowser.sites import site
 
 urlpatterns = patterns("",
     url(r"^", include(admin.site.urls)),
     (r'^grappelli/', include('grappelli.urls')),
+    url(r'^admin/filebrowser/', include(site.urls)),
 )
 
 # ShopifyPlus
@@ -30,7 +29,17 @@ urlpatterns += patterns("",
 )
 
 if settings.SERVE_MEDIA:
+<<<<<<< HEAD
     urlpatterns += patterns("",
         url(r"", include("staticfiles.urls")),
 
     ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+=======
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    urlpatterns += patterns('django.views.static',
+        url(r'^media/(?P<path>.*)$',
+            'serve',
+            { 'document_root': settings.MEDIA_ROOT, },
+        ),
+    ) + staticfiles_urlpatterns()
+>>>>>>> 2e4b2ecfcd6ed3e5f6330dc02251495a0df401bb
