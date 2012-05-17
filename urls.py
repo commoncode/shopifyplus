@@ -5,13 +5,12 @@ from django.views.generic.simple import direct_to_template
 from django.contrib import admin
 admin.autodiscover()
 
-
-handler500 = "pinax.views.server_error"
-
+from filebrowser.sites import site
 
 urlpatterns = patterns("",
     url(r"^", include(admin.site.urls)),
     (r'^grappelli/', include('grappelli.urls')),
+    url(r'^admin/filebrowser/', include(site.urls)),
 )
 
 # ShopifyPlus
@@ -29,6 +28,10 @@ urlpatterns += patterns("",
 )
 
 if settings.SERVE_MEDIA:
-    urlpatterns += patterns("",
-        url(r"", include("staticfiles.urls")),
-    )
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    urlpatterns += patterns('django.views.static',
+        url(r'^media/(?P<path>.*)$',
+            'serve',
+            { 'document_root': settings.MEDIA_ROOT, },
+        ),
+    ) + staticfiles_urlpatterns()
