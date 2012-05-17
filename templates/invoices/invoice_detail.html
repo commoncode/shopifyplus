@@ -2,11 +2,7 @@
 
 {% block content %}
 
-	<section class="invoices">
-    
-        <header>
-            <h2>#{{ invoice }} - {{ invoice.packing.order.customer }} - {{ invoice.packing.order.shipping_address }}</h2>    
-        </header>
+	<section class="invoices">    
 
         {% include "invoices/includes/_invoice_item.html" %}
 
