@@ -29,9 +29,6 @@ urlpatterns += patterns("",
 )
 
 if settings.SERVE_MEDIA:
-    urlpatterns += patterns("",
-        url(r"", include("staticfiles.urls")),
-    )
 
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
     urlpatterns += patterns('django.views.static',

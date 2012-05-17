@@ -5,13 +5,18 @@
 
 --extra-index-url=http://dist.pinaxproject.com/dev/
 
-Django==1.4
+django==1.4
+
+# Django admin
+git+git://github.com/sehmaschine/django-grappelli.git@d2cb43c53873a2d9a7a3acb0fe08945d9b4bf260
+git+git://github.com/sehmaschine/django-filebrowser.git@f00203d47cef66d71ac90b333f2d3b4edf8a519b
+
 PIL==1.1.7
 Pillow==1.7.7
 South==0.7.5
 django-extensions==0.8
-django-filebrowser==3.4.2
-django-grappelli==2.3.8
+#django-filebrowser==3.4.2
+#django-grappelli==2.3.8
 django-taggit==0.9.3
 ipdb==0.6.1
 ipython==0.12.1
