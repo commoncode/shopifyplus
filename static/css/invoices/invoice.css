@@ -1,0 +1,136 @@
+body {
+    margin-top: 20px;
+    font-family:''Lucida Sans Unicode','Lucida Grande','Lucida Sans','DejaVu Sans Condensed'',sans-serif;
+}
+
+a          { color:#444; text-decoration:none; }
+a:visited  { color:#777; }
+a:hover, a:focus, a:active { color:#444; }
+
+
+ /* ----------------------------------------- */
+
+.invoice {
+    width: 1000px;
+    border: 1px solid #777;
+    margin-bottom: 20px;
+    padding: 30px 30px 30px 30px;
+    margin-left:auto;
+    margin-right:auto;
+    min-width: 750px;
+}
+
+.invoice header {
+    position: relative;
+    min-width: 750px;
+ }
+
+.invoice header .note {
+    position: absolute;
+    top: 40px;
+    width: 200px;
+}
+
+.invoice header .left {
+    right: 200px;
+}
+
+.invoice header .right {
+    right: 0px;
+}
+
+.invoice header h2 {
+    position: absolute;
+    right: 10px;
+    top: -30px;
+    font-size: 1.4em;
+}
+
+.invoice .total-border {
+    border-top: 1px solid #B6C9A3;
+}
+
+.invoice .invoice-info {
+    position: relative;
+    margin: 50px 0px 10px 0px;
+    height: 100px;
+}
+
+
+.invoice .invoice-info h1 {
+    padding-left: 10px;
+    font-size: 4.4em;
+    letter-spacing: 2px;
+    color: #777;
+}
+
+.invoice .invoice-info h2 {
+    padding: 5px 0px 0px 20px;
+    font-size: 1.0em;
+    color: #000;
+}
+
+.invoice .invoice-table {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Table styling */
+
+.invoice-table .main-table td {
+    border: 1px solid #B6C9A3;
+}
+
+.invoice-table .main-table thead td {
+    background-color: #C1DEC8;
+    font-weight: bold;
+}
+
+.invoice-table .main-table td {
+    font-size: 0.8em;
+}
+
+.invoice-table .right {
+    text-align: right !important;
+}
+
+.invoice-table .quantity {
+    text-align: center !important;
+}
+
+
+/* ----------------------------------------- */
+
+.totals {
+    margin-left: auto;
+}
+.totals th {
+    font-weight:normal;
+}
+.totals th, td {
+    padding: 4px 5px;
+    line-height: 18px;
+    text-align: right;
+}
+.totals td {
+    padding-left: 100px;
+}
+
+small {
+	float: right;
+	font-size: 8px;
+}    
+@media print {
+    table {
+        page-break-after:always
+    }
+}
+hr {
+    color: #B6C9A3;
+    background-color: #B6C9A3;
+    margin: 1px;
+    height: 3px;
+
+}
+

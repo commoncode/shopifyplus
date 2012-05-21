@@ -1,5 +1,108 @@
 {% load custom_filters %}
 
+    <article class="invoice">
+            <header>
+                <h2>{% if page == "list" %} <a href="{% url invoice-detail invoice.id %}"> {% endif %}
+                Order #{{ invoice }} - {{ invoice.packing.order.customer }}{% comment %} - {{ invoice.packing.order.shipping_address }} {% endcomment %}
+                {% if page == "list" %}</a>{% endif %}
+                </h2>
+
+                <div class="logo">
+                    {% for logo in invoice.packing.order.shop.shoplogo_set.all %}
+                        <img src="{{ MEDIA_URL }}{{ logo.image }}" />
+                    {% endfor %}
+                </div>
+
+                <div class="note left">
+                Thank you for choosing<br/>
+                <strong>Organic Origins</strong>, our<br/>
+                intention is to bring you the<br/>
+                very best in quality and<br/>
+                service. Enjoy the bounty!<br/>
+                </div>
+                <div class="note right">
+                Please leave your box and<br/>
+                any ice packs or cooler bags<br/>
+                out for collection next time<br/>
+                you order.
+                </div>
+            </header>
+
+            <div class="invoice-info">
+                <h1>Invoice</h1>
+                <h2>{{ invoice.signed_off_at|date:'l, dS F Y' }}</h2>
+            </div>
+
+            <div class="invoice-table">
+                <table cellspacing="0" cellpadding="0" class="table main-table">
+
+                    <tr class="invoice-table-header">
+                        <thead>
+                            <td class="quantity"  width="5%">Qty</td>                     
+                            <td width="30%">Product</td>
+                            <td class="right">Item Price</td>
+                            <td class="right">Order Cost</td>
+                        </thead>
+                    </tr>
+
+                
+                {% for invoice_item in invoice.invoiceitem_set.all %}
+                
+                    <tr>
+                        <td class="quantity">{{ invoice_item.invoice_quantity|default:"&nbsp;" }}</td>
+                        <td>{{ invoice_item.packing_item.order_item.short_name|default:"&nbsp;" }}</td>
+                        <td class="right">{{ invoice_item.invoice_unit_price|currency_filter:1|default:"&nbsp;" }}</td>
+                        <td class="right"><strong>{{ invoice_item.invoice_item_cost|currency_filter:1|default:"&nbsp;" }}<strong></td>
+                    </tr>
+
+                {% endfor %}
+                
+                </table>
+
+                <table cellspacing="0" cellpadding="0" class="totals">
+                    
+                    {% if invoice.packing.order.discountcode_set.all %}
+                    <tr>
+                        <th valign="top">Discounts:</th>
+                        <td>
+                            {% for discount_code in invoice.packing.order.discountcode_set.all %}
+                                <span style="font-size: 12px;">({{ discount_code.code }}): {{ discount_code.amount|currency_filter:1 }}</span><br/>
+                            {% endfor %}
+                            <hr/>
+                            <span style="font-size: 12px; font-weight:bold;">Total: {{ invoice.packing.order.total_discounts|currency_filter:1 }}</span>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    <tr>
+                        <th>Subtotal:</th><td>{{ invoice.packing.order.subtotal_price|currency_filter:1|default:"&nbsp;" }}</td>
+                    </tr>
+                    <tr>
+                        <th valign="top">Shipping:</th>
+                        <td>
+                            {% for shipping_line in invoice.packing.order.shippingline_set.all %}
+                                <span style="font-size: 12px;">({{ shipping_line.title }}): {{ shipping_line.price|currency_filter:1 }}</span><br/>
+                            {% endfor %}
+                        </td>
+                    </tr>
+
+                    {% for tax_line in invoice.packing.order.taxline_set.all %}
+                    
+                        <tr>
+                            <th>{{ tax_line.title }}:</th><td>{{ tax_line.price|currency_filter:1 }}</td>
+                        </tr>
+
+                    {% endfor %}
+
+                    <tr class="total-border">
+                        <th>Total:</th><td><strong>{{ invoice.packing.order.total_price|currency_filter:1 }}</strong></td>                
+                    </tr>
+                </table>
+            </div>
+    </article>
+
+
+        {% comment %}
         <article class="invoice">
 
             <header>
@@ -84,3 +187,4 @@
                 </tr>
             </table>
         </article>
+        {% endcomment %}
