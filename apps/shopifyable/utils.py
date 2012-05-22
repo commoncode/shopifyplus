@@ -186,10 +186,13 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                 
             print '(%s): Server: %s, Ours: %s' % (obj, obj.updated_at, db_obj.updated_at)
             # If date is different, update the object
-            
-            if obj.updated_at != db_obj.updated_at:
-               obj.save()
-               print "Updated object"
+
+            try:         
+                if obj.updated_at != db_obj.updated_at:
+                   obj.save()
+                   print "Updated object"
+            except TypeError:
+                obj.save()
                
         for rel_obj in rel_objs:
             """
@@ -209,10 +212,14 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                         pass
                     else:
                         rel_obj.updated_at = rel_obj.updated_at.replace(tzinfo=None)
-                        test_obj.updated_at = test_obj.updated_at.replace(tzinfo=None)
-                        if rel_obj.updated_at != test_obj.updated_at:
-                            print "rel_obj updated"
-                            rel_obj.save() # replaces the test_obj?
+
+                        try:
+                            if rel_obj.updated_at != test_obj.updated_at:
+                                print "rel_obj updated"
+                                rel_obj.save() # replaces the test_obj?
+                                continue
+                        except TypeError:
+                            rel_obj.save()
                             continue
             else:
                 try:

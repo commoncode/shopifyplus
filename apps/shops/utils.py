@@ -13,7 +13,6 @@ def fetch_orders(shops):
             orders.append(parse_shop_object(shop, Order, _order))
 
     # Close orders that weren't fetched from the shopify server
-    # TODO: Check if this works
     Order.objects.exclude(id__in=[order.id for order in orders]).update(opened=False)
 
     return orders

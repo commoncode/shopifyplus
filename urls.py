@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
+from django.conf.urls.static import static
 
 from django.contrib import admin
 admin.autodiscover()
@@ -28,9 +29,10 @@ urlpatterns += patterns("",
 )
 
 if settings.SERVE_MEDIA:
+
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
     urlpatterns += patterns('django.views.static',
-        url(r'^media/(?P<path>.*)$',
+        url(r'^site_media/media/(?P<path>.*)$',
             'serve',
             { 'document_root': settings.MEDIA_ROOT, },
         ),

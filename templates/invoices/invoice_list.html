@@ -4,18 +4,10 @@
 {% block content %}
 
 <section class="invoices">
-    
-    <header>
-        <h1>Invoices</h1>
-    </header>
 
     {% for invoice in object_list %}
         
-        <header>
-            <h2><a href="{% url invoice-detail invoice.id %}">#{{ invoice }} - {{ invoice.packing.order.customer }} - {{ invoice.packing.order.shipping_address }}</a></h2>    
-        </header>
-
-        {% include "invoices/includes/_invoice_item.html" %}
+        {% include "invoices/includes/_invoice_item.html" with page="list" %}
         
     {% endfor %}
     
