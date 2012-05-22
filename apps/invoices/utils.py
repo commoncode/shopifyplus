@@ -26,7 +26,10 @@ def process_packings(queryset):
             
         invoice = Invoice(**invoice_kwargs)
         invoice.save()
-        print u'%s' % invoice
+        try:
+            print u'%s' % invoice
+        except:
+            pass
 
         packing_item_count = 0
         
@@ -50,7 +53,10 @@ def process_packings(queryset):
                 else:
                     invoice_item.save()
                     packing_item_count += 1
-                    print u'    %s' % invoice_item
+                    try:
+                        print u'    %s' % invoice_item
+                    except:
+                        pass
             else:
                 break
 
