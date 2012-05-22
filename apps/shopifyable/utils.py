@@ -2,8 +2,11 @@ import urllib
 import urllib2
 import urlparse
 
+from pytz import timezone
+
 from dateutil.parser import parse
 
+from django.conf import settings
 from django.core.exceptions import ValidationError, MultipleObjectsReturned, ObjectDoesNotExist
 from django.db.models import get_model
 from django.utils import simplejson
@@ -179,9 +182,11 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
 
             # Remove timezone information for date comparison
             obj.updated_at = obj.updated_at.replace(tzinfo=None)
+            db_obj.updated_at = db_obj.updated_at.replace(tzinfo=None)
                 
             print '(%s): Server: %s, Ours: %s' % (obj, obj.updated_at, db_obj.updated_at)
             # If date is different, update the object
+            
             if obj.updated_at != db_obj.updated_at:
                obj.save()
                print "Updated object"
@@ -204,6 +209,7 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                         pass
                     else:
                         rel_obj.updated_at = rel_obj.updated_at.replace(tzinfo=None)
+                        test_obj.updated_at = test_obj.updated_at.replace(tzinfo=None)
                         if rel_obj.updated_at != test_obj.updated_at:
                             print "rel_obj updated"
                             rel_obj.save() # replaces the test_obj?
