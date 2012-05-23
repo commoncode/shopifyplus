@@ -206,7 +206,7 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                     except ObjectDoesNotExist:
                         pass
                     else:
-                        rel_obj.updated_at = rel_obj.updated_at.replace(tzinfo=None)
+                        #rel_obj.updated_at = rel_obj.updated_at.replace(tzinfo=None)
 
                         try:
                             if rel_obj.updated_at != test_obj.updated_at:
