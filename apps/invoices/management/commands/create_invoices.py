@@ -15,15 +15,15 @@ class Command(BaseCommand):
         Process Procurement Orders
         """
         
-        invoices = Invoice.objects.all()
-        for invoice in invoices:
-            print u'%s deleted' % invoice
-            invoice.delete()
+        Invoice.objects.all().delete()
+        # for invoice in invoices:
+        #     print u'%s deleted' % invoice
+        #     invoice.delete()
             
             
         packings = Packing.objects.all()
         process_packings(packings)
         
-        invoices = Invoice.objects.all()
-        create_invoices(invoices)
+        # invoices = Invoice.objects.all()
+        # create_invoices(invoices)
         

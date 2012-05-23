@@ -183,9 +183,7 @@ def packing_item_csv(queryset):
         
         product_variant = ProductVariant.objects.get(shopify_product_variant_id=packing_item.order_item.shopify_product_variant_id)
         
-        import ipdb; ipdb.set_trace()
 
-        shopify_product_variant_idshp
         order_number = packing_item.order_item.order.name
         sku = packing_item.order_item.sku
         quantity = packing_item.packing_quantity if product_variant.option2 not in ['loose'] else ' '
