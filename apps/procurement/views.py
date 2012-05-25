@@ -3,10 +3,14 @@ import csv
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 
-from procurement.models import Procurement
+from invoices.models import Invoice, InvoiceItem
+from fulfilment.models import Packing, PackingItem
+from procurement.models import Procurement, ProcurementItem, ProcurementOrder
 from procurement.utils import procurement_orders
 from ordering.models import Order
 from shops.models import Shop
+
+from procurement.utils import procurement_item_defaults
 
 def procurement_csv(request, procurement_id):
     
@@ -45,8 +49,28 @@ def create_procurement_orders(request):
     Generates procurements from open orders
     """
 
-    shop = Shop.objects.get()        
+    shop = Shop.objects.get()
+
+    # Delete previous procurement/packing/invoices
+    # TODO: Keep them! But make sure they get closed
+    invoices = Invoice.objects.filter(packing__order__shop=shop)
+    InvoiceItem.objects.filter(invoice__in=invoices).delete()
+    invoices.delete()
+
+    packing = Packing.objects.filter(order__shop=shop)
+    proc_order = ProcurementOrder.objects.filter(order__shop=shop)
+    packing.delete()
+    proc_order.delete()
+
+    # TODO: Delete these for the current shop ONLY.
+    ProcurementItem.objects.all().delete()
+    Procurement.objects.all().delete()
+
     orders = Order.objects.filter(opened=True, shop=shop)
-    procurement_orders(orders)
+    procurement_items = procurement_orders(orders)
+
+    # Set procurement defaults
+    print "Setting item defaults"
+    procurement_item_defaults(procurement_items)
 
     return HttpResponseRedirect('/')

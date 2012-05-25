@@ -18,5 +18,9 @@ urlpatterns = patterns("fulfilment.views",
     url(r"^shippings/",
         'shipping_list',
         name='shipping-list'),
-    
+    url(
+        r'^create/$',
+        'create_packing_orders',
+        name='create_packing_orders',
+    ),    
 )

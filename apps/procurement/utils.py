@@ -47,19 +47,25 @@ def procurement_item_defaults(queryset):
 
 
 
-def procurement_orders(queryset):
-    
+def procurement_orders(queryset, allow_closed_orders=False):
     """
     Create a new Procurement
     """
     procurement = Procurement()
     procurement.save()
 
+    items = []
+
     """
     First, loop through the queryset and save the Orders
     to the ProcurementOrder model.
     """
     for order in queryset:
+        if allow_closed_orders == False:
+            if order.opened == False:
+                import ipdb; ipdb.set_trace()
+                continue
+
         procurement_order = ProcurementOrder(procurement=procurement, order=order)
         try:
             procurement_order.full_clean()
@@ -109,3 +115,7 @@ def procurement_orders(queryset):
         else:
             procurement_item.save()
             print "Saved procurement item", procurement_item
+
+        items.append(procurement_item)
+
+    return items

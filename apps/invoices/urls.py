@@ -12,5 +12,10 @@ urlpatterns = patterns("invoices.views",
     #url(r"^invoice/(?P<order_number>[-\d]+)/$",
     url (r"^detail/(?P<slug>[-\d]+)/$",
     	'invoice_detail',
-        name='invoice-detail'),   
+        name='invoice-detail'),
+    url(
+        r'^create/$',
+        'create_invoices',
+        name='create_invoices',
+    ),      
 )

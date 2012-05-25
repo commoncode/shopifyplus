@@ -46,6 +46,9 @@ class Order(Order):
         except IndexError:
             return ''
     
+    class Meta:
+        ordering = ['-opened',]
+
 
 class OrderItem(OrderItem):
     """

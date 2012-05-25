@@ -66,6 +66,7 @@ def process_procurement_orders(queryset):
     """
     
     procurements = queryset
+    packings = []
     
     for procurement in procurements:
         
@@ -77,7 +78,9 @@ def process_procurement_orders(queryset):
             
             packing = Packing(order=procurement_order.order)
             packing.save()
-            
+
+            packings.append(packing)
+
             for order_item in order_items:
                 
                 try:
@@ -138,6 +141,7 @@ def process_procurement_orders(queryset):
                         else:
                             packing_item.save()
                             print packing_item
+    return packings
 
 def packing_defaults(queryset):
 

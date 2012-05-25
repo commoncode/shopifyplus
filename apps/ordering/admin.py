@@ -46,6 +46,12 @@ class OrderAdmin(admin.ModelAdmin):
         DiscountCodeInline,
         TaxLineInline, ]
         
+    def order(self, object):
+        return object
+
     actions = [procurement_orders]
+
+    list_display = ('order', 'opened')
+    list_filter = ('opened',)
 
 admin.site.register(get_model('ordering', 'order'), OrderAdmin)

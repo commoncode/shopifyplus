@@ -88,17 +88,27 @@ class CustomIndexDashboard(Dashboard):
                     'external': False,
                 },
                 {
-                    'title': _('3. Create Procurement Orders'),
+                    'title': _('3. Create Procurement Orders (defaults)'),
                     'url': '/procurement/create',
                     'external': False,
                 },
                 {
-                    'title': _('4. Download Procurement CSV'),
-                    'url': '/procurement/csv?defaults=true',
+                    'title': _('4. Create Packing Orders (defaults)'),
+                    'url': '/fulfilment/create',
                     'external': False,
                 },
                 {
-                    'title': _('5. Clear & Generate Procurements'),
+                    'title': _('5. Create Invoices'),
+                    'url': '/invoices/create',
+                    'external': False,
+                },
+                # {
+                #     'title': _('4. Download Procurement CSV'),
+                #     'url': '/procurement/csv?defaults=true',
+                #     'external': False,
+                # },
+                {
+                    'title': _('6. Clear & Generate Procurements'),
                     'url': '/shops/clear_and_gen_procurements/',
                     'external': False,
                 },

@@ -3,6 +3,7 @@ from django.db.models import get_model
 
 from procurement.utils import procurement_item_defaults as set_procurement_item_defaults
 from fulfilment.utils import generate_packing_from_procurement
+from procurement.models import ProcurementOrder
 
 class ProcurementItemAdmin(admin.ModelAdmin):
     list_filter = (
@@ -53,8 +54,9 @@ class ProcurementAdmin(admin.ModelAdmin):
         
     def order_numbers(self, obj):
         html = ''
-        for order_number in obj._order_numbers():
-            html += '<a href="%s">%s</a> ' % ('ordering/order/%s' % obj.id, order_number)
+        proc_orders = ProcurementOrder.objects.filter(procurement=obj)
+        for proc_order in proc_orders:
+            html += '<a href="%s">%s</a> ' % ('/ordering/order/%s' % proc_order.order.id, proc_order.order.order_number)
         return html
     order_numbers.allow_tags=True
     

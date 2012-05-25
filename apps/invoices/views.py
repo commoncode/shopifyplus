@@ -4,7 +4,10 @@ from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 
+from shops.models import Shop
 from invoices.models import Invoice, InvoiceItem
+from fulfilment.models import Packing
+from invoices.utils import process_packings, create_invoices
 
 class InvoiceMixin(object):
     model = Invoice
@@ -46,4 +49,17 @@ class InvoiceDetailView(generic.DetailView):
 
 invoice_detail = InvoiceDetailView.as_view()
 
+def create_invoices(request):
+    """
+    Generates packing from procurements
+    """
 
+    shop = Shop.objects.get()
+    
+    # TODO: Select from shop only
+    packings = Packing.objects.all()
+
+    process_packings(packings)
+
+
+    return HttpResponseRedirect('/')
