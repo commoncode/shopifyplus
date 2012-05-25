@@ -174,8 +174,8 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             pass
 
         # Save object if it doesn't exist or has no updated_at time
-        if (db_obj is None) or (obj.updated_at is None) \
-            or (db_obj.updated_at is None):
+        if (hasattr(obj, 'updated_at') == False) or (db_obj is None) or (obj.updated_at is None) \
+            or (hasattr(db_obj, 'updated_at') == False) or (db_obj.updated_at is None):
             #print obj, ": Doesn't exist, creating new object"
 
             obj.save()
@@ -219,13 +219,12 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             else:
                 try:
                     # Save object if it doesn't exist or has no update_at time
-                            
-                    if (db_obj is None) or (obj.updated_at is None) \
-                        or (db_obj.updated_at is None):
+                    if (hasattr(rel_obj, 'updated_at') == False) or (db_obj is None) or (rel_obj.updated_at is None) \
+                        or (hasattr(db_obj, 'updated_at') == False) or (db_obj.updated_at is None):
                         rel_obj.save()
                         #print "Created rel obj:  %s" % rel_obj 
                     else: # Update object if the date is different
-                        if (db_obj.updated_at != obj.updated_at):
+                        if (db_obj.updated_at != rel_obj.updated_at):
                             rel_obj.save()
                             #print "Updated rel obj: %s" % rel_obj
                         else:
