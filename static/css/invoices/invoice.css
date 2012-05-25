@@ -1,19 +1,16 @@
 body {
     margin-top: 20px;
-    font-family:''Lucida Sans Unicode','Lucida Grande','Lucida Sans','DejaVu Sans Condensed'',sans-serif;
 }
 
 a          { color:#444; text-decoration:none; }
-a:visited  { color:#777; }
-a:hover, a:focus, a:active { color:#444; }
+a:visited, a:hover, a:focus, a:active { color:#444; }
 
 
  /* ----------------------------------------- */
 
 .invoice {
-    width: 1000px;
-    border: 1px solid #777;
-    margin-bottom: 20px;
+    width: 750px;
+    margin-bottom: 100px;
     padding: 30px 30px 30px 30px;
     margin-left:auto;
     margin-right:auto;
@@ -42,7 +39,7 @@ a:hover, a:focus, a:active { color:#444; }
 .invoice header h2 {
     position: absolute;
     right: 10px;
-    top: -30px;
+    top: -50px;
     font-size: 1.4em;
 }
 
@@ -79,13 +76,14 @@ a:hover, a:focus, a:active { color:#444; }
 /* Table styling */
 
 .invoice-table .main-table td {
-    border: 1px solid #B6C9A3;
+    border: 1px solid #AAA;
 }
 
 .invoice-table .main-table thead td {
-    background-color: #C1DEC8;
+    background-color: #CCC;
     font-weight: bold;
 }
+
 
 .invoice-table .main-table td {
     font-size: 0.8em;
@@ -99,6 +97,31 @@ a:hover, a:focus, a:active { color:#444; }
     text-align: center !important;
 }
 
+/* ----------------------------------------- */
+/* Works differently in diff. browsers       */
+/* For printing invoices.                    */
+/* ----------------------------------------- */
+
+.invoice-table .main-table {
+    page-break-inside: auto;
+}
+
+.invoice-table .main-table tr, td {
+    page-break-inside: avoid;
+    page-break-after: auto;
+}
+
+.invoice-table .main-table thead {
+    display: table-header-group;
+}
+
+
+@media print {
+
+    .page-break-after {
+        page-break-after:always
+    }
+}
 
 /* ----------------------------------------- */
 
@@ -121,10 +144,7 @@ small {
 	float: right;
 	font-size: 8px;
 }    
-@media print {
-    table {
-        page-break-after:always
-    }
+
 }
 hr {
     color: #B6C9A3;

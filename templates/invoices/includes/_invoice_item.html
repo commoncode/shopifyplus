@@ -1,16 +1,14 @@
 {% load custom_filters %}
 
-    <article class="invoice">
+    <article class="invoice page-break-after">
             <header>
                 <h2>{% if page == "list" %} <a href="{% url invoice-detail invoice.id %}"> {% endif %}
-                Order #{{ invoice }} - {{ invoice.packing.order.customer }}{% comment %} - {{ invoice.packing.order.shipping_address }} {% endcomment %}
+                Order #{{ invoice }} - {{ invoice.packing.order.customer }} - {{ invoice.packing.order.shipping_address }}
                 {% if page == "list" %}</a>{% endif %}
                 </h2>
 
                 <div class="logo">
-                    {% for logo in invoice.packing.order.shop.shoplogo_set.all %}
-                        <img src="{{ MEDIA_URL }}{{ logo.image }}" />
-                    {% endfor %}
+                    <img src="{{ MEDIA_URL }}{{ invoice.packing.order.shop.logo.image }}" />
                 </div>
 
                 <div class="note left">
@@ -37,11 +35,13 @@
                 <table cellspacing="0" cellpadding="0" class="table main-table">
 
                     <tr class="invoice-table-header">
-                        <thead>
-                            <td class="quantity"  width="5%">Qty</td>                     
+                          <thead>                     
                             <td width="30%">Product</td>
-                            <td class="right">Item Price</td>
-                            <td class="right">Order Cost</td>
+                            <td class="quantity"  width="5%">Qty</td>
+                            <td class="right" width="15%">Order Weight</td>
+                            <td class="right" width="10%">$ per kg</td>
+                            <td class="right" width="10%">Unit Price</td>
+                            <td class="right" width="40%">Order Cost</td>
                         </thead>
                     </tr>
 
@@ -49,11 +49,14 @@
                 {% for invoice_item in invoice.invoiceitem_set.all %}
                 
                     <tr>
-                        <td class="quantity">{{ invoice_item.invoice_quantity|default:"&nbsp;" }}</td>
                         <td>{{ invoice_item.packing_item.order_item.short_name|default:"&nbsp;" }}</td>
+                        <td class="quantity">{{ invoice_item.invoice_quantity|default:"&nbsp;" }}</td>
+                        <td class="right">{{ invoice_item.invoice_weight|default:"&nbsp;" }}</td>
+                        <td class="right">{{ invoice_item.invoice_weight_price|currency_filter:1|default:"&nbsp;" }}</td>
                         <td class="right">{{ invoice_item.invoice_unit_price|currency_filter:1|default:"&nbsp;" }}</td>
-                        <td class="right"><strong>{{ invoice_item.invoice_item_cost|currency_filter:1|default:"&nbsp;" }}<strong></td>
+                        <td class="right">{{ invoice_item.invoice_item_cost|currency_filter:1|default:"&nbsp;" }}</td>
                     </tr>
+
 
                 {% endfor %}
                 
