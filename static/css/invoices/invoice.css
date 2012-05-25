@@ -17,6 +17,10 @@ a:visited, a:hover, a:focus, a:active { color:#444; }
     min-width: 750px;
 }
 
+header h2 {
+    font-size: 1.1em !important;
+}
+
 .invoice header {
     position: relative;
     min-width: 750px;
