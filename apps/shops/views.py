@@ -22,6 +22,8 @@ def shops_support_commands(request):
     python manage.py create_procurement_items
     """
     
+    import time; x = time.time()
+
     management.call_command('reset', 'products', noinput=True, verbosity=0, interactive=False);
     management.call_command('get_products', verbosity=0, interactive=False);
     management.call_command('reset', 'ordering', noinput=True, verbosity=0, interactive=False);
@@ -32,6 +34,8 @@ def shops_support_commands(request):
     management.call_command('process_procurement_orders', verbosity=0, interactive=False);
     management.call_command('packing_item_defaults', verbosity=0, interactive=False);
     management.call_command('create_invoices', verbosity=0, interactive=False);
+
+    print "Time took:", time.time() - x
     
     return HttpResponseRedirect('/')
 

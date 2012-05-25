@@ -6,7 +6,7 @@ from django.db.models import Min, Max
 
 from shops.models import Shop
 
-import datetime
+from django.utils import timezone
 
 class Procurement(models.Model):
     """
@@ -29,7 +29,7 @@ class Procurement(models.Model):
         
     def save(self, *args, **kwargs):
         if not self.id:
-            self.created_at = datetime.datetime.now()
+            self.created_at = timezone.now()
         super(Procurement, self).save(*args, **kwargs)
         
         # shop_kwargs = {

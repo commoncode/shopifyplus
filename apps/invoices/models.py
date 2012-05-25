@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from fulfilment.models import Packing, PackingItem
 
-import datetime
+from django.utils import timezone
 
 class Invoice(models.Model):
     
@@ -26,7 +26,7 @@ class Invoice(models.Model):
         null=True)
     signed_off_at = models.DateTimeField(
         blank=True,
-        default=datetime.datetime.now(),
+        default=timezone.now(),
         null=True)
     
     def __unicode__(self):

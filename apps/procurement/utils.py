@@ -6,8 +6,7 @@ from ordering.models import OrderItem, Order
 from procurement.models import Procurement, ProcurementOrder, ProcurementItem
 from products.models import ProductVariant
 
-
-import datetime
+from django.utils import timezone
 
 def procurement_item_defaults(queryset):
     """
@@ -41,7 +40,7 @@ def procurement_item_defaults(queryset):
             procurement_item.procurement_unit_price = procurement_item.product_variant.price
             procurement_item.procured = True
             procurement_item.procured_by = User.objects.get(pk=1)
-            procurement_item.procured_at = datetime.datetime.now()
+            procurement_item.procured_at = timezone.now()
             procurement_item.save()
             
         return procurement_items

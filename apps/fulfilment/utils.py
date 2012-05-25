@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from ordering.models import OrderItem, Order
 from procurement.models import Procurement, ProcurementOrder, ProcurementItem
@@ -10,7 +11,7 @@ from fulfilment.models import Packing, PackingItem
 from django.db.models import Sum
 
 import math
-import datetime
+import django.utils
 
 def calculate_packing_variable(procurement_order_variable,
                                procurement_variable, 
@@ -169,7 +170,7 @@ def packing_item_defaults(queryset):
         packing_item.fulfilment_unit_price = product_variant.price
         packing_item.fulfilled = True
         packing_item.fulfilled_by = User.objects.get(pk=1)
-        packing_item.fulfilled_at = datetime.datetime.now()
+        packing_item.fulfilled_at = timezone.now()
         packing_item.save()
                     
 def packing_item_csv(queryset):

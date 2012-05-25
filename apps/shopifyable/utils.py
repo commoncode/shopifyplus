@@ -124,6 +124,8 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
         then change.
     """
     
+    import time; x = time.time()
+
     obj_dict = {}
     rel_objs = []
 
@@ -159,7 +161,7 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             obj = klass(**obj_dict)
             obj.shop = shop
         except TypeError, e:
-            import ipdb; ipdb.set_trace()
+            print e
 
         db_obj = None
 
@@ -174,23 +176,18 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
         # Save object if it doesn't exist or has no updated_at time
         if (db_obj is None) or (obj.updated_at is None) \
             or (db_obj.updated_at is None):
-            print obj, ": Doesn't exist, creating new object"
+            #print obj, ": Doesn't exist, creating new object"
 
             obj.save()
         else: # Update object if the date is different
-            # TODO: Convert into local timezone if possible
-
-            # Remove timezone information for date comparison
-            obj.updated_at = obj.updated_at.replace(tzinfo=None)
-            db_obj.updated_at = db_obj.updated_at.replace(tzinfo=None)
-                
+               
             print '(%s): Server: %s, Ours: %s' % (obj, obj.updated_at, db_obj.updated_at)
             # If date is different, update the object
 
             try:         
                 if obj.updated_at != db_obj.updated_at:
                    obj.save()
-                   print "Updated object"
+                   #print "Updated object"
             except TypeError:
                 obj.save()
                
@@ -200,7 +197,7 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             """
             setattr(rel_obj, obj._meta.module_name, obj)
             try:
-                rel_obj.full_clean()
+                rel_obj.full_clean(exclude='id')
             except ValidationError, e:
                 print e
 
@@ -211,11 +208,9 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                     except ObjectDoesNotExist:
                         pass
                     else:
-                        #rel_obj.updated_at = rel_obj.updated_at.replace(tzinfo=None)
-
                         try:
                             if rel_obj.updated_at != test_obj.updated_at:
-                                print "rel_obj updated"
+                                #print "rel_obj updated"
                                 rel_obj.save() # replaces the test_obj?
                                 continue
                         except TypeError:
@@ -228,17 +223,18 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                     if (db_obj is None) or (obj.updated_at is None) \
                         or (db_obj.updated_at is None):
                         rel_obj.save()
-                        print "Created rel obj:  %s" % rel_obj 
+                        #print "Created rel obj:  %s" % rel_obj 
                     else: # Update object if the date is different
                         if (db_obj.updated_at != obj.updated_at):
                             rel_obj.save()
-                            print "Updated rel obj: %s" % rel_obj
+                            #print "Updated rel obj: %s" % rel_obj
                         else:
-                            print "Rel obj not changed: %s" % rel_obj                
+                            #print "Rel obj not changed: %s" % rel_obj  
+                            pass              
 
                 except Exception, e:
                     print e
-
+    print klass, "Time took:", time.time() - x
     return obj
 
 def parse_shop_objects(shop, klass, objs_json):
