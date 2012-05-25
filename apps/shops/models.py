@@ -10,7 +10,11 @@ class Shop(Shop):
     """
     A  Shop/Store
     """
-    pass
+    
+    @property
+    def logo(self):
+        if self.shoplogo_set.count > 0:
+            return self.shoplogo_set.all()[0]
 
 class ShopLogo(models.Model):
     """
