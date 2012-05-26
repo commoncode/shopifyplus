@@ -32,6 +32,10 @@ class Invoice(models.Model):
     def __unicode__(self):
         return u'%s' % self.packing
     
+    @property
+    def logo(self):
+        return self.packing.order.shop.logo.image.url
+
 class InvoiceItem(models.Model):
     
     invoice = models.ForeignKey(

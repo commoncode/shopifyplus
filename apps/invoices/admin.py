@@ -62,5 +62,5 @@ class InvoiceAdmin(admin.ModelAdmin):
     
     readonly_fields = (
         'packing',) 
-        
+       
 admin.site.register(get_model('invoices', 'invoice'), InvoiceAdmin)
