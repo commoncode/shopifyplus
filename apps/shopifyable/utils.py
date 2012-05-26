@@ -197,7 +197,7 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             """
             setattr(rel_obj, obj._meta.module_name, obj)
             try:
-                rel_obj.full_clean(exclude='id')
+                rel_obj.full_clean(exclude=['id',])
             except ValidationError, e:
                 print e
 

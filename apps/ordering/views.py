@@ -7,6 +7,7 @@ def ordering_sync_command(request):
 
     python manage.py get_orders
     """
+    management.call_command('reset', 'ordering', noinput=True, verbosity=0, interactive=False);
     management.call_command('get_orders', verbosity=0, interactive=False);
 
     return HttpResponseRedirect('/')
