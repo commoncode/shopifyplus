@@ -3,7 +3,7 @@
     <article class="invoice page-break-after">
             <header>
                 <h2>{% if page == "list" %} <a href="{% url invoice-detail invoice.id %}"> {% endif %}
-                Order #{{ invoice }} - {{ invoice.packing.order.customer }} - {{ invoice.packing.order.shipping_address }}
+                Order #{{ invoice }} - {{ invoice.packing.order.billing_name }} - {{ invoice.packing.order.billing_address }}
                 {% if page == "list" %}</a>{% endif %}
                 </h2>
 
