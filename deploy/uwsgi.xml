@@ -5,9 +5,9 @@
     
     <pythonpath>/home/shopifyplus/webapps/alpha.shopifyplus/shopifyplus/</pythonpath>
     <pythonpath>/home/shopifyplus/webapps/alpha.shopifyplus/shopifyplus/deploy/</pythonpath>
-    <pythonpath>/home/shopifyplus/webapps/alpha.shopifyplus/pinax-env/lib/python2.6/site-packages/</pythonpath>
+    <pythonpath>/home/shopifyplus/webapps/alpha.shopifyplus/shopifyplus-env/lib/python2.6/site-packages/</pythonpath>
     <socket>/tmp/shopifyplus.sock</socket>
-    <home>/home/shopifyplus/webapps/alpha.shopifyplus/pinax-env/</home>
+    <home>/home/shopifyplus/webapps/alpha.shopifyplus/shopifyplus-env/</home>
     
     <logto>/home/shopifyplus/webapps/alpha.shopifyplus/uwsgi_log</logto>
     <pidfile>/home/shopifyplus/webapps/alpha.shopifyplus/pidfile_shopifyplus</pidfile>
