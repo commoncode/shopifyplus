@@ -28,6 +28,7 @@ def shops_support_commands(request):
     management.call_command('get_products', verbosity=0, interactive=False);
     management.call_command('reset', 'ordering', noinput=True, verbosity=0, interactive=False);
     management.call_command('get_orders', verbosity=0, interactive=False);
+    management.call_command('reset', 'procurement', noinput=True, verbosity=0, interactive=False);
     management.call_command('create_procurement_items', verbosity=0, interactive=False);
     
     management.call_command('procurement_item_defaults', verbosity=0, interactive=False);
