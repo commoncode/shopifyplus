@@ -12,7 +12,7 @@
     {% for packing in object_list %}
     
         <header>
-            <h2><a href="{% url packing-detail packing.id %}">#{{ packing }} - {{ packing.order.customer }} - {{ packing.order.shipping_address }}</a></h2>
+            <h2><a href="{% url packing-detail packing.id %}">#{{ packing }} - {{ packing.order.billing_name }} - {{ packing.order.billing_address }}</a></h2>
         </header>
         
         {% include "fulfilment/includes/_packing_item.html" %}
