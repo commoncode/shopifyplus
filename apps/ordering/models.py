@@ -45,6 +45,15 @@ class Order(Order):
                 sa.city)
         except IndexError:
             return ''
+
+    @property
+    def billing_name(self):
+        try:
+            sa = self.billingaddress_set.all()[0]
+            return '%s' % (
+                sa.name)
+        except IndexError:
+            return ''
     
     class Meta:
         ordering = ['-opened',]
