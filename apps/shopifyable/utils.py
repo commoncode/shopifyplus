@@ -186,53 +186,36 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
 
             try:         
                 if obj.updated_at != db_obj.updated_at:
-                   obj.save()
-                   #print "Updated object"
+
+                    # Delete all foreign key objects in preparation
+                    links = [_obj.get_accessor_name() for _obj in obj._meta.get_all_related_objects()]
+                    for link in links:
+                        _obj_class = getattr(obj, link).all()
+                        _obj_class.delete()
+
+                    obj.save()
+                    print "Updated object"
+                else:
+                    print "No change to object"
             except TypeError:
                 obj.save()
                
-        for rel_obj in rel_objs:
-            """
-            Set the value of the rel_obj.parent_obj
-            """
-            setattr(rel_obj, obj._meta.module_name, obj)
-            try:
-                rel_obj.full_clean(exclude=['id',])
-            except ValidationError, e:
-                print e
-
-                if hasattr(rel_obj, 'updated_at'):
-                    
-                    try:
-                        test_obj = rel_obj.__class__.objects.get(id=rel_obj.id)
-                    except ObjectDoesNotExist:
-                        pass
-                    else:
-                        try:
-                            if rel_obj.updated_at != test_obj.updated_at:
-                                #print "rel_obj updated"
-                                rel_obj.save() # replaces the test_obj?
-                                continue
-                        except TypeError:
-                            rel_obj.save()
-                            continue
-            else:
+        # Update relative objects if the main object has a different date
+        if obj.updated_at != db_obj.updated_at:
+            for rel_obj in rel_objs:
+                """
+                Set the value of the rel_obj.parent_obj
+                """
+                setattr(rel_obj, obj._meta.module_name, obj)
                 try:
-                    # Save object if it doesn't exist or has no update_at time
-                    if (hasattr(rel_obj, 'updated_at') == False) or (db_obj is None) or (rel_obj.updated_at is None) \
-                        or (hasattr(db_obj, 'updated_at') == False) or (db_obj.updated_at is None):
-                        rel_obj.save()
-                        #print "Created rel obj:  %s" % rel_obj 
-                    else: # Update object if the date is different
-                        if (db_obj.updated_at != rel_obj.updated_at):
-                            rel_obj.save()
-                            #print "Updated rel obj: %s" % rel_obj
-                        else:
-                            #print "Rel obj not changed: %s" % rel_obj  
-                            pass              
-
-                except Exception, e:
+                    rel_obj.full_clean()
+                except ValidationError, e:
                     print e
+                else:
+                    try:
+                        rel_obj.save()
+                    except Exception, e:
+                        print e
     print klass, "Time took:", time.time() - x
     return obj
 
