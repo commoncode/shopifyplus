@@ -1,4 +1,5 @@
 from django.views import generic
+from django.core import management
 from django.views.generic.detail import SingleObjectMixin
 from django.core.urlresolvers import reverse
 from django.db.models import Count
@@ -58,12 +59,8 @@ def create_packing_orders(request):
 
     # Delete previous packing/invoices
     # TODO: Keep them! But make sure they get closed
-    invoices = Invoice.objects.filter(packing__order__shop=shop)
-    InvoiceItem.objects.filter(invoice__in=invoices).delete()
-    invoices.delete()
-
-    packing = Packing.objects.filter(order__shop=shop)
-    packing.delete()
+    management.call_command('reset', 'fulfilment', noinput=True, verbosity=0, interactive=False);
+    management.call_command('reset', 'invoices', noinput=True, verbosity=0, interactive=False);
 
     # Create packing
     # TODO: Select the shop only
