@@ -40,8 +40,8 @@
                           <thead>                     
                             <td width="30%">Product</td>
                             <td class="quantity"  width="5%">Qty</td>
-                            <td class="right" width="15%">Order Weight</td>
-                            <td class="right" width="10%">$ per kg</td>
+                            {% comment %}<td class="right" width="15%">Order Weight</td>{% endcomment %}
+                            {% comment %}<td class="right" width="10%">$ per kg</td>{% endcomment %}
                             <td class="right" width="10%">Unit Price</td>
                             <td class="right" width="40%">Order Cost</td>
                         </thead>
@@ -53,8 +53,8 @@
                     <tr>
                         <td>{{ invoice_item.packing_item.order_item.short_name|default:"&nbsp;" }}</td>
                         <td class="quantity">{{ invoice_item.invoice_quantity|default:"&nbsp;" }}</td>
-                        <td class="right">{{ invoice_item.invoice_weight|default:"&nbsp;" }}</td>
-                        <td class="right">{{ invoice_item.invoice_weight_price|currency_filter:1|default:"&nbsp;" }}</td>
+                        {% comment %}<td class="right">{{ invoice_item.invoice_weight|default:"&nbsp;" }}</td>{% endcomment %}
+                        {% comment %}<td class="right">{{ invoice_item.invoice_weight_price|currency_filter:1|default:"&nbsp;" }}</td>{% endcomment %}
                         <td class="right">{{ invoice_item.invoice_unit_price|currency_filter:1|default:"&nbsp;" }}</td>
                         <td class="right">{{ invoice_item.invoice_item_cost|currency_filter:1|default:"&nbsp;" }}</td>
                     </tr>
