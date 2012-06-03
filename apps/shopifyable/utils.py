@@ -128,6 +128,7 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
 
     obj_dict = {}
     rel_objs = []
+    doRelObjects = False
 
     if hasattr(klass, 'Shopify'):
 
@@ -179,6 +180,7 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             #print obj, ": Doesn't exist, creating new object"
 
             obj.save()
+            doRelObjects = True
         else: # Update object if the date is different
                
             print '(%s): Server: %s, Ours: %s' % (obj, obj.updated_at, db_obj.updated_at)
@@ -194,6 +196,8 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                         _obj_class.delete()
 
                     obj.save()
+
+                    doRelObjects = True
                     print "Updated object"
                 else:
                     print "No change to object"
@@ -201,7 +205,7 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                 obj.save()
                
         # Update relative objects if the main object has a different date
-        if obj.updated_at != db_obj.updated_at:
+        if doRelObjects:
             for rel_obj in rel_objs:
                 """
                 Set the value of the rel_obj.parent_obj
