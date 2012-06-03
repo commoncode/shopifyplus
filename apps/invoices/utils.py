@@ -64,7 +64,7 @@ def process_packings(queryset):
             packing_count += 1
 
     # Delete empty invoices
-    if packing_count == 0:
+    if packing_count == 0 and invoice:
         invoice.delete()
     return packing_count
                 
