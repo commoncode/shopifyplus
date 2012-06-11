@@ -86,15 +86,16 @@ def process_procurement_orders(queryset):
                 try:
                     product_variant = ProductVariant.objects.get(shopify_product_variant_id=order_item.shopify_product_variant_id)
                 except Exception, e:
-                    print u'*** ERROR :: Product variant not found for order item :: %s' % order_item
+                    # print u'*** ERROR :: Product variant not found for order item :: %s' % order_item
                     try:
                         product_variants = ProductVariant.objects.filter(title__startswith=order_item.variant_title[0:8])
-                        print '    searched on :: %s' % order_item.variant_title[0:8]
-                        print '    found %s product variants' % product_variants.count()
-                        print '    taking %s' % product_variants[0]
+                        #print '    searched on :: %s' % order_item.variant_title[0:8]
+                        #print '    found %s product variants' % product_variants.count()
+                        #print '    taking %s' % product_variants[0]
                         product_variant = product_variants[0]
                     except IndexError:
-                        print u'*** STILL NOT FOUND :: Product variant not found for order item :: %s' % order_item
+                        pass
+                        #print u'*** STILL NOT FOUND :: Product variant not found for order item :: %s' % order_item
                     except TypeError:
                         print u'    ++++ NO REPLACEMENT FOUND ++++'
                     else:
