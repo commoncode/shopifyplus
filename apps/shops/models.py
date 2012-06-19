@@ -11,10 +11,16 @@ class Shop(Shop):
     A  Shop/Store
     """
     
+    invoices_blurb = models.TextField(
+        blank=True,
+        help_text="A note that appears on all invoices")
+
     @property
     def logo(self):
-        if self.shoplogo_set.count > 0:
+        try:
             return self.shoplogo_set.all()[0]
+        except IndexError:
+            return None
 
 class ShopLogo(models.Model):
     """

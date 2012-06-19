@@ -1,3 +1,5 @@
+/* @override http://localhost:8000/site_media/static/css/invoices/invoice.css */
+
 body {
     margin-top: 20px;
 }
@@ -17,34 +19,20 @@ a:visited, a:hover, a:focus, a:active { color:#444; }
     min-width: 750px;
 }
 
-header h2 {
-    font-size: 1.1em !important;
-}
-
 .invoice header {
     position: relative;
     min-width: 750px;
- }
-
-.invoice header .note {
-    position: absolute;
-    top: 40px;
-    width: 200px;
+    height: 50px;
 }
 
-.invoice header .left {
-    right: 200px;
+.invoice header .invoice-address {
+	float: left;
 }
 
-.invoice header .right {
-    right: 0px;
-}
-
-.invoice header h2 {
-    position: absolute;
-    right: 10px;
-    top: -50px;
-    font-size: 1.4em;
+.invoice header .logo {
+	float: right;
+	margin-top: -30px;
+	text-align: right;
 }
 
 .invoice .total-border {
@@ -54,7 +42,7 @@ header h2 {
 .invoice .invoice-info {
     position: relative;
     margin: 50px 0px 10px 0px;
-    height: 100px;
+
 }
 
 
@@ -65,14 +53,7 @@ header h2 {
     color: #777;
 }
 
-.invoice .invoice-info h2 {
-    padding: 5px 0px 0px 20px;
-    font-size: 1.0em;
-    color: #000;
-}
-
 .invoice .invoice-table {
-    width: 95%;
     margin-left: auto;
     margin-right: auto;
 }

@@ -11,7 +11,8 @@ class InvoiceItemAdmin(admin.ModelAdmin):
         'invoice_quantity',
         'invoice_unit_weight',
         'invoice_weight_price',
-        'invoice_unit_price',)
+        'invoice_unit_price',
+        'notes',)
     
     list_filter = (
         'invoice__signed_off',
@@ -25,14 +26,16 @@ class InvoiceItemAdmin(admin.ModelAdmin):
         'invoice_quantity',
         'invoice_unit_weight',
         'invoice_weight_price',
-        'invoice_unit_price',)
+        'invoice_unit_price',
+        'notes',)
         
     list_editable = (
         'invoice_weight',
         'invoice_quantity',
         'invoice_unit_weight',
         'invoice_weight_price',
-        'invoice_unit_price',) 
+        'invoice_unit_price',
+        'notes',) 
 
     readonly_fields = (
         'invoice',
@@ -41,12 +44,13 @@ class InvoiceItemAdmin(admin.ModelAdmin):
     def invoice_item_name (self, obj):
         return obj.packing_item
 
-
 admin.site.register(get_model('invoices', 'invoiceitem'), InvoiceItemAdmin)
+
 
 class InvoiceItemInline(admin.StackedInline):
     model = get_model('invoices', 'invoiceitem')
     extra = 0
+
     
 class InvoiceAdmin(admin.ModelAdmin):
     
@@ -55,7 +59,8 @@ class InvoiceAdmin(admin.ModelAdmin):
         'signed_off',
         'signed_off_by',
         'signed_off_key',
-        'signed_off_at',)
+        'signed_off_at',
+        'notes',)
     
     inlines = [ 
         InvoiceItemInline, ]

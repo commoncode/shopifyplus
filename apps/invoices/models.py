@@ -29,6 +29,9 @@ class Invoice(models.Model):
         default=timezone.now(),
         null=True)
     
+    notes = models.TextField(
+        blank=True)
+
     def __unicode__(self):
         return u'%s' % self.packing
     
