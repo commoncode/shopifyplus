@@ -26,11 +26,18 @@
                 <h2>#{{ packing }} - {{ packing.order.customer }} - {{ packing.order.shipping_address }}</h2>
             </header>
             <aside>
+
+
 				<dl>
-					{% if packing.order.customer.shipping_notes %}
-					<dt>Customer Shipping notes:</dt>
-					<dd>{{ packing.order.customer.shipping_notes }}</dd>
-					{% endif %}
+					{% if packing.order.note %}
+                    <dt>Order note:</dt>
+                    <dd>{{ packing.order.note }}</dd>
+                    {% endif %}
+                    
+                    {% if packing.order.customer.shipping_notes %}
+                    <dt>Customer Shipping notes:</dt>
+                    <dd>{{ packing.order.customer.shipping_notes }}</dd>
+                    {% endif %}
 				</dl>
             </aside>
 		</article>
