@@ -64,8 +64,21 @@ class InvoiceAdmin(admin.ModelAdmin):
     
     inlines = [ 
         InvoiceItemInline, ]
-    
+
+    list_display = (
+        'packing',
+        'signed_off',
+        'signed_off_by',
+        'signed_off_at',
+        'notes',)
+
+    list_editable = (
+        'signed_off',
+        'signed_off_by',
+        'signed_off_at',
+        'notes',)
+
     readonly_fields = (
-        'packing',) 
-       
+        'packing',)
+
 admin.site.register(get_model('invoices', 'invoice'), InvoiceAdmin)
