@@ -62,7 +62,7 @@ a:visited, a:hover, a:focus, a:active { color:#444; }
 
 .invoice-table .main-table td {
     border: 1px solid #AAA;
-    padding: 4px 5px;
+    padding: 2px 3px;
 }
 
 .invoice-table .main-table thead td {
