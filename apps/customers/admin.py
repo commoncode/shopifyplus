@@ -7,6 +7,12 @@ class CustomerInline(admin.StackedInline):
     extra = 0
 
 class CustomerAdmin(admin.ModelAdmin):
-    pass
+    
+    list_display = (
+    	'first_name',
+    	'last_name',
+    	'email',
+    	'id',
+    	'note')
 
 admin.site.register(get_model('customers', 'customer'), CustomerAdmin)
