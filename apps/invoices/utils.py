@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.utils import timezone
 
 from invoices.models import Invoice, InvoiceItem
 from fulfilment.models import Packing, PackingItem
@@ -43,6 +44,7 @@ def process_packings(queryset):
                     'invoice_unit_weight': packing_item.fulfilment_unit_weight,
                     'invoice_weight_price': packing_item.fulfilment_weight_price,
                     'invoice_unit_price': packing_item.fulfilment_unit_price,
+                    'signed_off_at': timezone.now(),
                     'notes': packing_item.notes, }
                 invoice_item = InvoiceItem(**invoice_item_kwargs)
                 
