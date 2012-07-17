@@ -3,8 +3,6 @@
 # project specific not listed here use project.txt. You can, of course, update
 # versions of distributions here if needed.
 
---extra-index-url=http://dist.pinaxproject.com/dev/
-
 django==1.4
 
 # Django admin
@@ -20,6 +18,5 @@ ipython==0.12.1
 python-dateutil==2.1
 pytz==2012c
 six==1.1.0
-wsgiref==0.1.2
 ssh==1.7.14
 wsgiref==0.1.2
