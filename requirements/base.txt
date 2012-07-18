@@ -20,3 +20,5 @@ pytz==2012c
 six==1.1.0
 ssh==1.7.14
 wsgiref==0.1.2
+
+gunicorn==0.14.5
