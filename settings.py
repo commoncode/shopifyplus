@@ -7,6 +7,8 @@ import sys
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 PROJECT_DIR = os.path.dirname(__file__).split('/')[-1]
 
+sys.path.insert(0, os.path.join(PROJECT_ROOT, "apps"))
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
