@@ -175,7 +175,7 @@ FILEBROWSER_VERSIONS_BASEDIR = "versions"
 # Grappelli
 GRAPPELLI_ADMIN_TITLE = 'Shopify Plus' 
 GRAPPELLI_ADMIN_URL = '/admin'
-GRAPPELLI_INDEX_DASHBOARD = 'shopifyplus.dashboard.CustomIndexDashboard'
+GRAPPELLI_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 
 # Shopify
 SHOPIFY_API_KEY = '1a2c8995ba9a2ff76bf32fecebd23bb5'
