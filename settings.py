@@ -97,7 +97,7 @@ MIDDLEWARE_CLASSES = [
     # "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
-ROOT_URLCONF = "%s.urls" % PROJECT_DIR
+ROOT_URLCONF = "urls"
 
 TEMPLATE_DIRS = [
     os.path.join(PROJECT_ROOT, "templates"),
