@@ -10,7 +10,7 @@ urlpatterns = patterns("fulfilment.views",
         'packing_list',
         name='packing-list'),
 
-    url (r"^/packing/detail/(?P<slug>[-\d]+)/$",
+    url (r"^packing/detail/(?P<slug>[-\d]+)/$",
         'packing_detail',
         name='packing-detail'),   
     
