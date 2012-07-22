@@ -2,6 +2,7 @@ import csv
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from procurement.models import Procurement
 from shops.models import Shop
@@ -10,6 +11,8 @@ from products.models import Product
 
 from django.core import management
 
+
+@login_required
 def shops_support_commands(request):
     """
     Chains together managment commands
