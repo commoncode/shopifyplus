@@ -65,6 +65,20 @@
             
             </table>
 
+            <table class="check-list" cellpadding="2px">
+
+                <tr>
+                    <td class="check-list-box">&nbsp;</td><td>CHECKED CUTOMER &amp; ORDER NOTES</td>
+                </tr>
+                <tr>
+                    <td class="check-list-box">&nbsp;</td><td>INCLUDED BONUS &amp; RECURRING BONUS IF REQUIRED</td>
+                </tr>
+                <tr>
+                    <td class="check-list-box">&nbsp;</td><td>DOUBLE CHECKED ORDER &amp; HAPPY ITS RIGHT!</td>
+                </tr>
+
+            </table>
+
             <table cellspacing="0" cellpadding="0" class="totals">                    
                     {% if packing.order.discountcode_set.all %}
                     <tr>
@@ -102,6 +116,7 @@
                     <tr class="total-border">
                         <th>Total:</th><td><strong>{{ packing.order.total_price|currency_filter:1 }}</strong></td>                
                     </tr>
+
                 </table>
 
             {% comment %}<table cellspacing="0" cellpadding="0" class="totals page-break-after">

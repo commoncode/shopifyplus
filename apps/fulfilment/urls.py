@@ -6,16 +6,16 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns("fulfilment.views",
-    url(r"^packings/",
+    url(r"^packings/$",
         'packing_list',
         name='packing-list'),
 
-    url (r"^packing/detail/(?P<slug>[-\d]+)/$",
+    url (r"^packings/(?P<pk>[-\d]+)/$",
         'packing_detail',
         name='packing-detail'),   
     
     # Shipping    
-    url(r"^shippings/",
+    url(r"^shippings/$",
         'shipping_list',
         name='shipping-list'),
     url(

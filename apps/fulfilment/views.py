@@ -41,7 +41,6 @@ shipping_list = ShippingList.as_view()
 class PackingDetailView(generic.DetailView):
 
     model = Packing
-    slug_field = "id"
 
     def render(self, context):
         context['packing'] = object
