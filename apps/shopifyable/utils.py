@@ -123,8 +123,6 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
         compare the updated_at datetime, and which ever is more recent
         then change.
     """
-    
-    import time; x = time.time()
 
     obj_dict = {}
     rel_objs = []
@@ -183,7 +181,7 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
             doRelObjects = True
         else: # Update object if the date is different
                
-            print '(%s): Server: %s, Ours: %s' % (obj, obj.updated_at, db_obj.updated_at)
+            # print '(%s): Server: %s, Ours: %s' % (obj, obj.updated_at, db_obj.updated_at)
             # If date is different, update the object
 
             try:         
@@ -198,9 +196,10 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                     obj.save()
 
                     doRelObjects = True
-                    print "Updated object"
+                    # print "Updated object"
                 else:
-                    print "No change to object"
+                    # print "No change to object"
+                    pass
             except TypeError:
                 obj.save()
                
@@ -220,7 +219,6 @@ def parse_shop_object(shop, klass, obj_json, sync=False):
                         rel_obj.save()
                     except Exception, e:
                         print e
-    print klass, "Time took:", time.time() - x
     return obj
 
 def parse_shop_objects(shop, klass, objs_json):
