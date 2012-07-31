@@ -33,8 +33,10 @@
 
                 <tr>
                     <thead>
+                        <td class="quantity" width="5%">&#10004;</td>
                         <td width="30%">Item</td>
                         <td class="quantity" width="5%">Qty</td>
+                        <td class="quantity" width="5%">&#10004;</td>
                         <td class="rightalign" width="10%">Order weight</td>
                         <td class="rightalign" width="10%">$ per kg</td>
                         <td class="rightalign" width="10%">U Price</td>
@@ -45,6 +47,7 @@
             {% for packing_item in packing.packingitem_set.all %}
             
                 <tr>
+                    <td class="check-list-box">&nbsp;</td>
                     <td>
                         {% comment %} If there is a variant short title, use that  {% endcomment %}
                         {% if packing_item.order_item.variant_short_title %}
@@ -55,6 +58,7 @@
                         <small>{{ packing_item.order_item.sku|default:"&nbsp;" }}</small>
                     </td>
                     <td class="quantity">{{ packing_item.packing_quantity|default:"&nbsp;" }}</td>
+                    <td class="check-list-box">&nbsp;</td>
                     <td class="rightalign">{{ packing_item.packing_weight|default:"&nbsp;" }}</td>
                     <td class="rightalign">{{ packing_item.packing_weight_price|currency_filter:1|default:"&nbsp;" }}</td>
                     <td class="rightalign">{{ packing_item.packing_unit_price|currency_filter:1|default:"&nbsp;" }}</td>
