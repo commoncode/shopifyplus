@@ -6,8 +6,8 @@
 
                 <div class="invoice-address">
                     <p>
-                        {% if page == "list" %} 
-                            <a href="{% url invoice-detail invoice.id %}"> 
+                        {% if page == "list" %}
+                            <a href="{% url invoice-detail invoice.id %}">
                         {% endif %}
                             Order #{{ invoice }}<br>
                             {{ invoice.packing.order.billing_name|title }}<br>
@@ -41,7 +41,7 @@
                 <table cellspacing="0" cellpadding="0" class="table main-table">
 
                     <tr class="invoice-table-header">
-                          <thead>                     
+                          <thead>
                             <td width="30%">Product</td>
                             <td class="quantity"  width="5%">Qty</td>
                             {% comment %}<td class="right" width="15%">Order Weight</td>{% endcomment %}
@@ -52,9 +52,9 @@
                         </thead>
                     </tr>
 
-                
+
                 {% for invoice_item in invoice.invoiceitem_set.all %}
-                
+
                     <tr>
                         <td>{{ invoice_item.packing_item.order_item.short_name|default:"&nbsp;" }}</td>
                         <td class="quantity">{{ invoice_item.invoice_quantity|default:"&nbsp;" }}</td>
@@ -70,11 +70,11 @@
 
 
                 {% endfor %}
-                
+
                 </table>
 
                 <table cellspacing="0" cellpadding="0" class="totals">
-                    
+
                     {% if invoice.packing.order.discountcode_set.all %}
                     <tr>
                         <th valign="top">Discounts:</th>
@@ -89,7 +89,7 @@
                     {% endif %}
 
                     <tr>
-                        <th>Subtotal:</th><td>{{ invoice.packing.order.subtotal_price|currency_filter:1|default:"&nbsp;" }}</td>
+                        <th>Subtotal:</th><td>{{ invoice.subtotal_price|currency_filter:1|default:"&nbsp;" }}</td>
                     </tr>
                     <tr>
                         <th valign="top">Shipping:</th>
@@ -101,7 +101,7 @@
                     </tr>
 
                     {% for tax_line in invoice.packing.order.taxline_set.all %}
-                    
+
                         <tr>
                             <th>{{ tax_line.title }}:</th><td>{{ tax_line.price|currency_filter:1 }}</td>
                         </tr>
@@ -109,7 +109,7 @@
                     {% endfor %}
 
                     <tr class="total-border">
-                        <th>Total:</th><td><strong>{{ invoice.packing.order.total_price|currency_filter:1 }}</strong></td>                
+                        <th>Total:</th><td><strong>{{ invoice.total_price|currency_filter:1 }}</strong></td>
                     </tr>
                 </table>
             </div>
