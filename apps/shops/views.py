@@ -25,7 +25,8 @@ def shops_support_commands(request):
     python manage.py get_orders
     python manage.py create_procurement_items
     """
-    shops_support_commands_task()
+
+    shops_support_commands_task.delay()
 
     return HttpResponseRedirect('/')
 
