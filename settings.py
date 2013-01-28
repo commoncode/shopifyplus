@@ -32,7 +32,7 @@ DATABASES = {
         "USER": "",                             # Not used with sqlite3.
         "PASSWORD": "",                         # Not used with sqlite3.
         "HOST": "",                             # Set to empty string for localhost. Not used with sqlite3.
-        "PORT": "",     
+        "PORT": "",
                                 # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -114,12 +114,12 @@ TEMPLATE_CONTEXT_PROCESSORS = [
 ]
 
 INSTALLED_APPS = [
-    
+
     # Grappelli & Admin-tools
     'grappelli.dashboard',
     'grappelli',
     'filebrowser',
-    
+
     # Django
     "django.contrib.admin",
     "django.contrib.auth",
@@ -129,27 +129,34 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.humanize",
     "django.contrib.staticfiles",
-    
+
     # Developer
     # "debug_toolbar",
     "django_extensions",
-    
+
     # External
     "taggit",
     "south",
-    
+    "djcelery",
+    "kombu.transport.django",
+
     # Shopify Plus
     'customers',
     'fulfilment',
     'invoices',
-    'procurement', 
+    'procurement',
     'products',
     'ordering',
     'shopifyable',
     'shops',
     # 'vendors',
-    
+
 ]
+
+# Celery
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = 'django://'
 
 FIXTURE_DIRS = [
     os.path.join(PROJECT_ROOT, "fixtures"),
@@ -173,7 +180,7 @@ FILEBROWSER_SAVE_FULL_URL = False
 FILEBROWSER_VERSIONS_BASEDIR = "versions"
 
 # Grappelli
-GRAPPELLI_ADMIN_TITLE = 'Shopify Plus' 
+GRAPPELLI_ADMIN_TITLE = 'Shopify Plus'
 GRAPPELLI_ADMIN_URL = '/admin'
 GRAPPELLI_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 
