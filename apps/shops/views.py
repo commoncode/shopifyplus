@@ -1,5 +1,6 @@
 import csv
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core import management
 from django.core.urlresolvers import reverse
@@ -25,6 +26,8 @@ def shops_support_commands(request):
     python manage.py get_orders
     python manage.py create_procurement_items
     """
+
+    messages.add_message(request, messages.INFO, 'Starting Procurements.  An SMS will be sent to 0402 231 007 when complete.')
 
     shops_support_commands_task.delay()
 
