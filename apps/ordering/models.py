@@ -1,6 +1,5 @@
-import simplejson
-
 from django.db import models
+from django.utils.simplejson import loads
 from shopifyable.models import BillingAddress, Order, OrderItem, ShippingLine, \
     ShippingAddress, DiscountCode
 from shopifyable.models.order import TaxLine
@@ -59,7 +58,7 @@ class Order(Order):
 
     @property
     def note_attributes_dict(self):
-        return simplejson.loads('[%s]' % self.note_attributes[:-1])
+        return loads('[%s]' % self.note_attributes[:-1])
 
     class Meta:
         ordering = ['-opened',]
