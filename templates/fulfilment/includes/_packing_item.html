@@ -7,26 +7,21 @@
                     <dt>Customer note:</dt>
                     <dd>{{ packing.order.customer.note }}</dd>
                     {% endif %}
-                    
+
                     {% if packing.order.note %}
                     <dt>Order note:</dt>
                     <dd>{{ packing.order.note }}</dd>
                     {% endif %}
-                    
+
                     {% if packing.order.customer.shipping_notes %}
                     <dt>Customer Shipping notes:</dt>
                     <dd>{{ packing.order.customer.shipping_notes }}</dd>
                     {% endif %}
-                                        
-                    {% comment %}
-                        {% if packing.order.note_attributes %}
-                            {{ packing.order.note_attributes }}
-                            {% for note_attr in packing.order.note_attributes %}
-                                <dt>{{ note_attr }}</dt>
-                                <dd>{{ note_attr }}</dd>
-                            {% endfor %}
-                        {% endif %}
-                    {% endcomment %}
+
+                    {% if packing.order.note_attributes %}
+                    <dt>Customer Shipping notes:</dt>
+                    <dd class="json">{{ packing.order.note_attributes }}</dd>
+                    {% endif %}
                 </dl>
             </aside>
             <table cellspacing="0" cellpadding="0" class="table table-striped table-bordered table-condensed" >
@@ -45,13 +40,13 @@
                 </tr>
 
             {% for packing_item in packing.packingitem_set.all %}
-            
+
                 <tr>
                     <td class="check-list-box">&nbsp;</td>
                     <td>
                         {% comment %} If there is a variant short title, use that  {% endcomment %}
                         {% if packing_item.order_item.variant_short_title %}
-                            {{ packing_item.order_item.variant_short_title|default:"&nbsp;" }}                          
+                            {{ packing_item.order_item.variant_short_title|default:"&nbsp;" }}
                         {% else %}
                             {{ packing_item.order_item.short_name|default:"&nbsp;" }}
                         {% endif %}
@@ -64,9 +59,9 @@
                     <td class="rightalign">{{ packing_item.packing_unit_price|currency_filter:1|default:"&nbsp;" }}</td>
                     <td class="rightalign">{{ packing_item.packing_item_cost|currency_filter:1|default:"&nbsp;" }}</td>
                 </tr>
-            
+
             {% endfor %}
-            
+
             </table>
 
             <table class="check-list" cellpadding="2px">
@@ -83,7 +78,7 @@
 
             </table>
 
-            <table cellspacing="0" cellpadding="0" class="totals">                    
+            <table cellspacing="0" cellpadding="0" class="totals">
                     {% if packing.order.discountcode_set.all %}
                     <tr>
                         <th valign="top">Discounts:</th>
@@ -110,7 +105,7 @@
                     </tr>
 
                     {% for tax_line in packing.order.taxline_set.all %}
-                    
+
                         <tr>
                             <th>{{ tax_line.title }}:</th><td>{{ tax_line.price|currency_filter:1 }}</td>
                         </tr>
@@ -118,14 +113,14 @@
                     {% endfor %}
 
                     <tr class="total-border">
-                        <th>Total:</th><td><strong>{{ packing.order.total_price|currency_filter:1 }}</strong></td>                
+                        <th>Total:</th><td><strong>{{ packing.order.total_price|currency_filter:1 }}</strong></td>
                     </tr>
 
                 </table>
 
             {% comment %}<table cellspacing="0" cellpadding="0" class="totals page-break-after">
                 <tr>
-                    <th><b>Total:</b></th><td>{{ packing.packing_order_cost|currency_filter:1 }}</td>                    
+                    <th><b>Total:</b></th><td>{{ packing.packing_order_cost|currency_filter:1 }}</td>
                 </tr>
             </table>{% endcomment %}
         </article>
