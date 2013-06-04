@@ -4,21 +4,41 @@
 {% block content %}
 
 <section class="packings">
-    
+
     <header>
         <h1>Packings</h1>
     </header>
 
     {% for packing in object_list %}
-    
+
         <header>
             <h2><a href="{% url packing-detail packing.id %}">#{{ packing }} - {{ packing.order.billing_name }} - {{ packing.order.billing_address }}</a></h2>
         </header>
-        
+
         {% include "fulfilment/includes/_packing_item.html" %}
-        
+
     {% endfor %}
-    
+
 </section>
-    
+
+<script type="text/javascript">
+(function () {
+	"use strict";
+
+	var i, j, si, sj, orders, order, attrs, attr;
+
+	orders = $$('dd.json');
+
+	for (i = 0, j = orders.length; i < j; i += 1) {
+		order = orders[i];
+		attrs = eval(order.innerHTML.replace(/\su\'/gi, '\''));
+
+		order.innerHTML = '';
+
+		for (si = 0, sj = attrs.length; si < sj; si += 1) {
+			order.innerHTML += attrs[si].name.replace('_', ' ') + ': ' + attrs[si].value;
+		}
+	}
+}());
+</script>
 {% endblock %}
