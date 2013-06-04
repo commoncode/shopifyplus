@@ -27,7 +27,7 @@
 
 	var i, j, si, sj, orders, order, attrs, attr;
 
-	orders = $$('dd.json');
+	orders = document.getElementsByClassName('json');
 
 	for (i = 0, j = orders.length; i < j; i += 1) {
 		order = orders[i];
@@ -36,7 +36,7 @@
 		order.innerHTML = '';
 
 		for (si = 0, sj = attrs.length; si < sj; si += 1) {
-			order.innerHTML += attrs[si].name.replace('_', ' ') + ': ' + attrs[si].value;
+			order.innerHTML += attrs[si].name.replace('_', ' ') + ': ' + attrs[si].value + '<br />';
 		}
 	}
 }());

@@ -18,7 +18,7 @@
                     <dd>{{ packing.order.customer.shipping_notes }}</dd>
                     {% endif %}
 
-                    {% if packing.order.note_attributes %}
+                    {% if packing.order.note_attributes|length > 5 %}
                     <dt>Customer Shipping notes:</dt>
                     <dd class="json">{{ packing.order.note_attributes }}</dd>
                     {% endif %}
