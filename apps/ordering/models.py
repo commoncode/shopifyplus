@@ -1,3 +1,5 @@
+import simplejson
+
 from django.db import models
 from shopifyable.models import BillingAddress, Order, OrderItem, ShippingLine, \
     ShippingAddress, DiscountCode
@@ -18,7 +20,7 @@ class Order(Order):
     #     'customers.Customer',
     #     blank=True,
     #     null=True)
-    
+
     @property
     def customer(self):
         try:
@@ -54,7 +56,11 @@ class Order(Order):
                 sa.name)
         except IndexError:
             return ''
-    
+
+    @property
+    def note_attributes_dict(self):
+        return simplejson.loads('[%s]' % self.note_attributes[:-1])
+
     class Meta:
         ordering = ['-opened',]
 
@@ -65,15 +71,15 @@ class OrderItem(OrderItem):
     """
     order = models.ForeignKey(
         Order)
-    
+
     @property
     def variant_short_title(self):
         return self.variant_title.split('/')[0]
-    
+
     @property
     def short_name(self):
         return self.name.split('/')[0]
-    
+
 
 class BillingAddress(BillingAddress):
 
@@ -89,11 +95,11 @@ class ShippingLine(ShippingLine):
 
     order = models.ForeignKey(
         Order)
-        
+
 class DiscountCode(DiscountCode):
 
     order = models.ForeignKey(
-        Order)    
+        Order)
 
 class TaxLine(TaxLine):
 
