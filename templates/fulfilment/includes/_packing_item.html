@@ -21,6 +21,13 @@
                     {% if packing.order.note_attributes %}
                     <dt>Customer Shipping notes:</dt>
                     <dd class="json">{{ packing.order.note_attributes }}</dd>
+                    <dd>
+                        <ul>
+                            {% for attr in packing.order.note_attributes %}
+                                <li><strong>{{ attr.name }}:</strong> {{ attr.value }}</li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
                     {% endif %}
                 </dl>
             </aside>
