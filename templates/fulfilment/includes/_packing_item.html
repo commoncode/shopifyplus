@@ -1,7 +1,7 @@
 {% load custom_filters %}
 
         <article class="packing page-break-after">
-            <aside>
+            <aside style="float: left; width: 50%;">
                 <dl>
                     {% if packing.order.customer.note %}
                     <dt>Customer note:</dt>
@@ -24,6 +24,21 @@
                     {% endif %}
                 </dl>
             </aside>
+
+            <table class="check-list" cellpadding="2px">
+
+                <tr>
+                    <td class="check-list-box">&nbsp;</td><td>Notes done &amp; ticked</td>
+                </tr>
+                <tr>
+                    <td class="check-list-box">&nbsp;</td><td>Number of bonuses included _________</td>
+                </tr>
+                <tr>
+                    <td class="check-list-box">&nbsp;</td><td>Order checked by _________</td>
+                </tr>
+
+            </table>
+
             <table cellspacing="0" cellpadding="0" class="table table-striped table-bordered table-condensed" >
 
                 <tr>
@@ -61,20 +76,6 @@
                 </tr>
 
             {% endfor %}
-
-            </table>
-
-            <table class="check-list" cellpadding="2px">
-
-                <tr>
-                    <td class="check-list-box">&nbsp;</td><td>CHECKED CUTOMER &amp; ORDER NOTES</td>
-                </tr>
-                <tr>
-                    <td class="check-list-box">&nbsp;</td><td>INCLUDED BONUS &amp; RECURRING BONUS IF REQUIRED</td>
-                </tr>
-                <tr>
-                    <td class="check-list-box">&nbsp;</td><td>DOUBLE CHECKED ORDER &amp; HAPPY ITS RIGHT!</td>
-                </tr>
 
             </table>
 
