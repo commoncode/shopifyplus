@@ -1,7 +1,7 @@
 {% load custom_filters %}
 
         <article class="packing page-break-after">
-            <aside style="float: left; width: 50%;">
+            <aside class="span6">
                 <dl>
                     {% if packing.order.customer.note %}
                     <dt>Customer note:</dt>
@@ -23,9 +23,49 @@
                     <dd class="json">{{ packing.order.note_attributes }}</dd>
                     {% endif %}
                 </dl>
+
+                <table cellspacing="0" cellpadding="0">
+                    {% if packing.order.discountcode_set.all %}
+                    <tr>
+                        <th valign="top">Discounts:</th>
+                        <td>
+                            {% for discount_code in packing.order.discountcode_set.all %}
+                                <span style="font-size: 12px;">({{ discount_code.code }}): {{ discount_code.amount|currency_filter:1 }}</span><br/>
+                            {% endfor %}
+                            <hr/>
+                            <span style="font-size: 12px; font-weight:bold;">Total: {{ packing.order.total_discounts|currency_filter:1 }}</span>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    <tr>
+                        <th>Subtotal:</th><td>{{ packing.order.subtotal_price|currency_filter:1|default:"&nbsp;" }}</td>
+                    </tr>
+                    <tr>
+                        <th valign="top">Shipping:</th>
+                        <td>
+                            {% for shipping_line in packing.order.shippingline_set.all %}
+                                <span style="font-size: 12px;">({{ shipping_line.title }}): {{ shipping_line.price|currency_filter:1 }}</span><br/>
+                            {% endfor %}
+                        </td>
+                    </tr>
+
+                    {% for tax_line in packing.order.taxline_set.all %}
+
+                        <tr>
+                            <th>{{ tax_line.title }}:</th><td>{{ tax_line.price|currency_filter:1 }}</td>
+                        </tr>
+
+                    {% endfor %}
+
+                    <tr class="total-border">
+                        <th>Total:</th><td><strong>{{ packing.order.total_price|currency_filter:1 }}</strong></td>
+                    </tr>
+
+                </table>
             </aside>
 
-            <table class="check-list" cellpadding="2px" style="float: right;">
+            <table class="check-list span6 pull-right" cellpadding="2px">
                 <tr>
                     <td>Packed by</td>
                     <td>____________</td>
@@ -102,49 +142,11 @@
 
             </table>
 
-            <table cellspacing="0" cellpadding="0" class="totals">
-                    {% if packing.order.discountcode_set.all %}
-                    <tr>
-                        <th valign="top">Discounts:</th>
-                        <td>
-                            {% for discount_code in packing.order.discountcode_set.all %}
-                                <span style="font-size: 12px;">({{ discount_code.code }}): {{ discount_code.amount|currency_filter:1 }}</span><br/>
-                            {% endfor %}
-                            <hr/>
-                            <span style="font-size: 12px; font-weight:bold;">Total: {{ packing.order.total_discounts|currency_filter:1 }}</span>
-                        </td>
-                    </tr>
-                    {% endif %}
-
-                    <tr>
-                        <th>Subtotal:</th><td>{{ packing.order.subtotal_price|currency_filter:1|default:"&nbsp;" }}</td>
-                    </tr>
-                    <tr>
-                        <th valign="top">Shipping:</th>
-                        <td>
-                            {% for shipping_line in packing.order.shippingline_set.all %}
-                                <span style="font-size: 12px;">({{ shipping_line.title }}): {{ shipping_line.price|currency_filter:1 }}</span><br/>
-                            {% endfor %}
-                        </td>
-                    </tr>
-
-                    {% for tax_line in packing.order.taxline_set.all %}
-
-                        <tr>
-                            <th>{{ tax_line.title }}:</th><td>{{ tax_line.price|currency_filter:1 }}</td>
-                        </tr>
-
-                    {% endfor %}
-
-                    <tr class="total-border">
-                        <th>Total:</th><td><strong>{{ packing.order.total_price|currency_filter:1 }}</strong></td>
-                    </tr>
-
-                </table>
-
-            {% comment %}<table cellspacing="0" cellpadding="0" class="totals page-break-after">
+            {% comment %}
+            <table cellspacing="0" cellpadding="0" class="totals page-break-after">
                 <tr>
                     <th><b>Total:</b></th><td>{{ packing.packing_order_cost|currency_filter:1 }}</td>
                 </tr>
-            </table>{% endcomment %}
+            </table>
+            {% endcomment %}
         </article>
