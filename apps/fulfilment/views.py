@@ -15,6 +15,8 @@ from fulfilment.utils import packing_item_defaults, process_procurement_orders
 
 class PackingMixin(object):
     model = Packing
+    paginate_by = 50
+
     def get_queryset(self):
         return super(PackingMixin, self).get_queryset().select_related().filter()
 
@@ -28,7 +30,7 @@ class PackingList(PackingMixin, generic.ListView):
     pass
 packing_list = PackingList.as_view()
 
-    
+
 class ShippingList(PackingMixin, generic.ListView):
     template_name = "fulfilment/shipping_list.html"
 shipping_list = ShippingList.as_view()
