@@ -15,7 +15,7 @@ from fulfilment.utils import packing_item_defaults, process_procurement_orders
 
 class PackingMixin(object):
     model = Packing
-    paginate_by = 50
+    paginate_by = 250
 
     def get_queryset(self):
         return super(PackingMixin, self).get_queryset().select_related().filter()
