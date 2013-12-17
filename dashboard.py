@@ -16,10 +16,10 @@ class CustomIndexDashboard(Dashboard):
     """
     Custom index dashboard for www.
     """
-    
+
     def init_with_context(self, context):
         site_name = get_admin_site_name(context)
-        
+
         # append a group for "Administration" & "Applications"
         self.children.append(modules.Group(
             _('Shopify Plus'),
@@ -33,15 +33,15 @@ class CustomIndexDashboard(Dashboard):
                     models=(
                         'customers.*',
                         'fulfilment.*',
-                        'invoices.*', 
+                        'invoices.*',
                         'ordering.models.Order',
                         'procurement.*',
                         'products.*',
                         'shops.*', ),
-                ),    
+                ),
             ]
         ))
-        
+
         # append an app list module for "Applications"
         self.children.append(modules.AppList(
             _('AppList: Applications'),
@@ -50,7 +50,7 @@ class CustomIndexDashboard(Dashboard):
             css_classes=('collapse closed',),
             exclude=('django.contrib.*',),
         ))
-        
+
         # append an app list module for "Administration"
         self.children.append(modules.ModelList(
             _('ModelList: Administration'),
@@ -58,7 +58,7 @@ class CustomIndexDashboard(Dashboard):
             collapsible=False,
             models=('django.contrib.*',),
         ))
-        
+
         # append another link list module for "support".
         self.children.append(modules.LinkList(
             _('Media Management'),
@@ -71,7 +71,20 @@ class CustomIndexDashboard(Dashboard):
                 },
             ]
         ))
-        
+
+        # append another link list module for "support".
+        self.children.append(modules.LinkList(
+            _('Fulfilments'),
+            column=2,
+            children=[
+                {
+                    'title': _('Fulfilment Packings List'),
+                    'url': '/fulfilment/packings/',
+                    'external': False,
+                },
+            ]
+        ))
+
         # append another link list module for "support".
         self.children.append(modules.LinkList(
             _('Procurement Work Flow'),
@@ -114,7 +127,7 @@ class CustomIndexDashboard(Dashboard):
                 },
             ]
         ))
-        
+
         # append a recent actions module
         self.children.append(modules.RecentActions(
             _('Recent Actions'),
