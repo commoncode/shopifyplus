@@ -17,10 +17,14 @@ ipdb==0.6.1
 ipython==0.12.1
 python-dateutil==2.1
 pytz==2012c
-six==1.1.0
+six>=1.5.2
 ssh==1.7.14
 wsgiref==0.1.2
 
 gunicorn==0.14.5
 
 django-celery
+
+pyOpenSSL
+ndg-httpsclient
+pyasn1
