@@ -20,7 +20,7 @@ class HTTPSConnectionV3(httplib.HTTPSConnection):
             self.sock = sock
             self._tunnel()
         try:
-            self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_SSLv3)
+            self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_TLSv1)
         except ssl.SSLError, e:
             print("Trying SSLv3.")
             self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_SSLv23)
